@@ -1,5 +1,5 @@
 # Household-App
-# GeoAPP (Name pending)
+
 [Github repo](https://github.com/OdiousCode/Household-App)
 
 ## Projektmedlemmar
