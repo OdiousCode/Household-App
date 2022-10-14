@@ -5,6 +5,7 @@ import { Provider as PaperProvider } from "react-native-paper";
 import { Provider as StoreProvider } from "react-redux";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { store } from "./src/store/store";
+import Navigation from "./src/navigation/Index";
 
 export default function App() {
   return (
@@ -12,7 +13,7 @@ export default function App() {
       <StoreProvider store={store}>
         <PaperProvider>
           <StatusBar style="auto" />
-          {/* navigation */}
+          <Navigation></Navigation>
         </PaperProvider>
       </StoreProvider>
     </SafeAreaProvider>
