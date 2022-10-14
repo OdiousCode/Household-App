@@ -3,6 +3,8 @@ import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
+import { Header } from "react-native/Libraries/NewAppScreen";
+import CustomNavigationBar from "../components/test";
 import TaskOverviewScreen from "../screens/household/TasksOverviewScreen";
 import CreateAccount from "../screens/login/CreateAccountScreen";
 import CreateAvatar from "../screens/login/CreateAvatarScreen";
@@ -35,14 +37,14 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootStackNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Login" component={LoginScreen} />
+    <Stack.Navigator screenOptions={{ header: () => <CustomNavigationBar userEmail="gentrit_ss@hotmail.com" userName="Geni" title={'lala'}/> }}>
+      <Stack.Screen name="Login"  component={LoginScreen} />
       <Stack.Screen name="CreateAccount" component={CreateAccount} />
       <Stack.Screen name="CreateAvatar" component={CreateAvatar} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="RoomApplication" component={RoomApplication} />
 
-      <Stack.Screen
+      <Stack.Screen 
         name="HouseholdStackNavigator"
         component={HouseholdStackNavigator}
       />
