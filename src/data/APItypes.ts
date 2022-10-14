@@ -17,7 +17,7 @@ export interface Profile {
 }
 
 export interface Household {
-  id: string;
+  id: number;
   entrenceCode: string;
   name: string;
 }
@@ -42,7 +42,7 @@ export interface TaskHistory {
   taskId: number;
   profileId: number;
 
-  date: Date;
+  date: number;
 }
 
 export interface Avatar {
