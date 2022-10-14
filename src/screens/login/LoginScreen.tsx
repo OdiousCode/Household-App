@@ -1,9 +1,10 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
+import { RootScreenProps } from "../../navigation/RootStackNavigator";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
   //   const dispatch = useAppDispatch();
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
@@ -11,8 +12,12 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text>Task Screen</Text>
-      {/* <Button title="Set name" onPress={() => dispatch(setName("David"))} /> */}
+      <Text>Login Screen</Text>
+      <Button title="Login" onPress={() => navigation.navigate("Profile")} />
+      <Button
+        title="Create account"
+        onPress={() => navigation.navigate("CreateAccount")}
+      />
     </View>
   );
 }

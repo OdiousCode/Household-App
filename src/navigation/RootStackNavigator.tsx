@@ -4,8 +4,12 @@ import {
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
 import TaskOverviewScreen from "../screens/household/TasksOverviewScreen";
+import CreateAccount from "../screens/login/CreateAccountScreen";
+import CreateAvatar from "../screens/login/CreateAvatarScreen";
 import LoginScreen from "../screens/login/LoginScreen";
-import { HouseholdStackParamList } from "./HouseholdStackNavigator";
+import Profile from "../screens/login/ProfileScreen";
+import RoomApplication from "../screens/login/RoomApplicationScreen";
+import HouseholdStackNavigator, { HouseholdStackParamList } from "./HouseholdStackNavigator";
 
 // import LoginScreen from "../screens/LoginScreen";
 
@@ -17,6 +21,10 @@ declare global {
 
 export type RootStackParamList = {
   Login: undefined;
+  CreateAccount: undefined;
+  CreateAvatar: undefined;
+  Profile: undefined;
+  RoomApplication: undefined;
   HouseholdStackNavigator: NavigatorScreenParams<HouseholdStackParamList>;
 };
 
@@ -29,10 +37,14 @@ export default function RootStackNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="CreateAccount" component={CreateAccount} />
+      <Stack.Screen name="CreateAvatar" component={CreateAvatar} />
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="RoomApplication" component={RoomApplication} />
 
       <Stack.Screen
         name="HouseholdStackNavigator"
-        component={TaskOverviewScreen}
+        component={HouseholdStackNavigator}
       />
     </Stack.Navigator>
   );
