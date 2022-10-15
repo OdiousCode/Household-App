@@ -15,6 +15,8 @@ export default function CreateAccount({
   //   const profile = useAppSelector((state) => state.profile);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
 
 const onHandleSignup = () => {
     if (email !== '' && password !== '') {
@@ -29,9 +31,25 @@ const onHandleSignup = () => {
     <View style={styles.whiteSheet} />
     <SafeAreaView style={styles.form}>
       <Text style={styles.title}>Sign Up</Text>
+      <TextInput
+      style={styles.input}
+      placeholder="First Name"
+      autoCapitalize="words"
+      autoFocus={true}
+      value={firstName}
+      onChangeText={(text) => setFirstName(text)}
+    />
+      <TextInput
+      style={styles.input}
+      autoCapitalize="words"
+      placeholder="Last Name"
+      autoFocus={true}
+      value={lastName}
+      onChangeText={(text) => setLastName(text)}
+    />
        <TextInput
       style={styles.input}
-      placeholder="Enter email"
+      placeholder="E-mail"
       autoCapitalize="none"
       keyboardType="email-address"
       textContentType="emailAddress"
@@ -41,7 +59,7 @@ const onHandleSignup = () => {
     />
     <TextInput
       style={styles.input}
-      placeholder="Enter password"
+      placeholder="Password"
       autoCapitalize="none"
       autoCorrect={false}
       secureTextEntry={true}
