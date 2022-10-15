@@ -1,9 +1,9 @@
-import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
-import { Household, Profile, User, Task, TaskHistory } from "../APItypes";
+import { getAuth } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
 
-const firebaseConfig = {
+ export const firebaseConfig = {
     apiKey: "AIzaSyC1u9K7cEiRiOiOpeTknOZHE_gDPVfQd40",
     authDomain: "group4-ddc4f.firebaseapp.com",
     projectId: "group4-ddc4f",
@@ -13,4 +13,6 @@ const firebaseConfig = {
     measurementId: "G-QDT6SM4R84"
   };
 
-  const app = firebase.initializeApp(firebaseConfig);
+  initializeApp(firebaseConfig);
+  export const auth = getAuth();
+  export const database = getFirestore();
