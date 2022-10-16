@@ -1,8 +1,10 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import React, { useState } from "react";
 import { Button, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { auth } from '../../data/firebase/config';
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
+import { logIn } from '../../store/slices/userSlice';
+
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 
@@ -18,12 +20,34 @@ export default function CreateAccount({
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
-const onHandleSignup = () => {
-    if (email !== '' && password !== '') {
-  createUserWithEmailAndPassword(auth, email, password)
-        .then(() => console.log('Signup success'))
-        .catch((err) => alert( err.message));
+  const onHandleSignup = () => {
+    if (!firstName || !lastName) {
+      return alert('Please enter a full name');
     }
+
+    // Create a new user with Firebase
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userAuth) => {
+      // Update the newly created user with a display name 
+        updateProfile(userAuth.user, {
+          displayName: firstName && lastName,
+        })
+          .then(
+            // Dispatch the user information for persistence in the redux state
+            dispatch(
+              logIn({
+                email: userAuth.user.email,
+                displayName: firstName && lastName,
+              })
+            )
+          )
+          .catch((error) => {
+            console.log('user not updated');
+          });
+      })
+      .catch((err) => {
+        alert(err);
+      });
   };
 
   return (
@@ -131,3 +155,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
 });
+function dispatch(arg0: any): ((value: void) => void | PromiseLike<void>) | null | undefined {
+  throw new Error('Function not implemented.');
+}
+
