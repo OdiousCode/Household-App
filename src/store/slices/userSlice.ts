@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface UserState {
+/*interface UserState {
   //TODO alter
   balance: number;
   transactions: number[];
@@ -9,22 +8,23 @@ interface UserState {
 const initialState: UserState = {
   balance: 0,
   transactions: [],
-};
+};*/
 
 const userSlice = createSlice({
   name: "user",
-  initialState,
+  initialState: {
+    user: null,
+  },
   reducers: {
-    deposit(state, action: PayloadAction<number>) {
-      state.balance += action.payload;
-      state.transactions.push(action.payload);
+    logIn(state, action) {
+      state.user = action.payload;
     },
-    withdrawal(state, action: PayloadAction<number>) {
-      state.balance -= action.payload;
-      state.transactions.push(-action.payload);
+    logOut(state) {
+      state.user = null
     },
   },
 });
 
-export const { deposit, withdrawal } = userSlice.actions;
-export const userReducer = userSlice.reducer;
+export const { logIn, logOut } = userSlice.actions;
+export const selectUser = (state: any) => state.user.user;
+export default userSlice.reducer;

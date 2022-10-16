@@ -5,6 +5,8 @@ import { auth } from "../../data/firebase/config";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";;
 import { BlurView } from 'expo-blur';
 import { TextInput } from "react-native-paper";
+import { useDispatch } from 'react-redux';
+import { logIn } from "../../store/slices/userSlice";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 
@@ -15,12 +17,19 @@ export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
   //   const profile = useAppSelector((state) => state.profile);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const handleSignIn = () => {
     signInWithEmailAndPassword(auth, email, password)
-    .then(userCredentials => {
+    .then(userAuth => {
+      dispatch (
+        logIn({
+          email: userAuth.user.email,
+          displayName: userAuth.user.displayName,
+        })
+      )
       console.log('sign in!');
-      const user = userCredentials.user;
+      const user = userAuth.user;
       console.log(user);
       navigation.navigate("Profile")
       
