@@ -3,6 +3,8 @@ import React from "react";
 import { Appbar, Menu } from "react-native-paper";
 import Navigation from "../navigation/Index";
 import {Text, StyleSheet} from "react-native";
+import { logOut } from "../store/slices/userSlice";
+import { auth } from "../data/firebase/config";
 
 export type Props = {
     title: string,
@@ -33,7 +35,7 @@ function CustomNavigationBar(props :Props) {
           }>
           <Menu.Item title= {props.userName} />
           <Menu.Item title= {props.userEmail} />
-          <Menu.Item onPress={() => {console.log('Option 3 was pressed')}} title="Log Out" disabled />
+          <Menu.Item onPress={auth.signOut} title="Log Out"/>
         </Menu>
       )}
     </Appbar.Header>
