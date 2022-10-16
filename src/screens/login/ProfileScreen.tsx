@@ -1,14 +1,27 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
+import { useDispatch, useSelector } from 'react-redux';
+import { auth } from '../../data/firebase/config';
+import { logOut, selectUser } from '../../store/slices/userSlice';
+import { useAppDispatch } from "../../store/store";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 
 export default function Profile({ navigation }: RootScreenProps<"Profile">) {
-  //   const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
   //   const profile = useAppSelector((state) => state.profile);
+
+  const logoutOfApp = () => {
+    // dispatch to the store with the logout action
+    dispatch(logOut());
+    // sign out function from firebase
+    auth.signOut();
+  };
+
+  const user = useSelector(selectUser);
 
   return (
     <View style={styles.container}>
@@ -30,7 +43,7 @@ export default function Profile({ navigation }: RootScreenProps<"Profile">) {
         }
       />
 
-      <Button title="Go back" onPress={() => navigation.goBack()} />
+      <Button title="Log out" onPress={(logoutOfApp)} />
     </View>
   );
 }
