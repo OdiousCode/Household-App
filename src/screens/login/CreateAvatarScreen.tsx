@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
-import { Colors } from "../../constants/Colors";
+import { avatarColors } from "../../constants/Colors";
 import { avatars } from "../../constants/Layout";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
