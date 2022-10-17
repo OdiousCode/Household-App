@@ -22,10 +22,9 @@ function CustomNavigationBar(props :Props) {
   
   return (
     <Appbar.Header style={styles.header}>
-      {<Appbar.BackAction onPress={sayHello} />}
       <Appbar.Content style={styles.title} title={props.title} />
-      <Appbar.Action onPress={sayHello} icon={'arrow-left-bold'}/>
-      {<Appbar.Action icon={'arrow-right-bold'}/>}
+      <Appbar.Action style={styles.arrowright} onPress={sayHello} icon={'arrow-left-bold'}/>
+      {<Appbar.Action style={styles.arrowleft} icon={'arrow-right-bold'}/>}
       { (
         <Menu 
           visible={visible}
@@ -52,8 +51,23 @@ const styles = StyleSheet.create({
     marginBottom: 30 ,
     
   },
+
+   arrowright:{
+    justifyContent: "center",
+    textAlign: 'left',
+  },
+
+  arrowleft:{
+    justifyContent: "center",
+    textAlign: 'left',
+  },
+
   header:{
-    backgroundColor: 'orange'
+    height: 80,
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		flexDirection: 'row',
+		backgroundColor: 'orange'
   },
   container: {
     flex: 1,
