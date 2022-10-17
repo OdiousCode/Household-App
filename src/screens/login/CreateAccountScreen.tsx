@@ -24,27 +24,7 @@ export default function CreateAccount({
     if (!firstName || !lastName) {
       return alert('Please enter a full name');
     }
-
-    // Create a new user with Firebase
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userAuth) => {
-      // Update the newly created user with a display name 
-        updateProfile(userAuth.user, {
-          displayName: firstName && lastName,
-        })
-          .then(
-            // Dispatch the user information for persistence in the redux state
-            dispatch(
-              logIn({
-                email: userAuth.user.email,
-                displayName: firstName && lastName,
-              })
-            )
-          )
-          .catch((error) => {
-            console.log('user not updated');
-          });
-      })
       .catch((err) => {
         alert(err);
       });

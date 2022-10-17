@@ -19,23 +19,24 @@ export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
-  const handleSignIn = () => {
+  const loginToApp = (e: any) => {
+    e.preventDefault();
+
     signInWithEmailAndPassword(auth, email, password)
-    .then(userAuth => {
-      dispatch (
-        logIn({
-          email: userAuth.user.email,
-          displayName: userAuth.user.displayName,
-        })
-      )
-      console.log('sign in!');
-      const user = userAuth.user;
-      console.log(user);
-      navigation.navigate("Profile")
-      
-    })
-    .catch(error => alert(error.message))
-  }
+      .then((userAuth) => {
+        dispatch(
+          logIn({
+            email: userAuth.user.email,
+            uid: userAuth.user.uid,
+            displayName: userAuth.user.displayName,
+            photoUrl: userAuth.user.photoURL,
+          })
+        );
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -68,7 +69,7 @@ export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
                   style={styles.input}
                   onChangeText={(text) => setPassword(text)} placeholder='password'></TextInput>
               </View>
-              <Pressable style={styles.button} onPress={(handleSignIn)}><Text style={styles.text}>Login</Text></Pressable>
+              <Pressable style={styles.button} onPress={(loginToApp)}><Text style={styles.text}>Login</Text></Pressable>
               <Pressable  style={styles.button} onPress={() => navigation.navigate("CreateAccount")}><Text style={styles.text}>Create account</Text></Pressable>
             </View>
           </BlurView>
