@@ -3,7 +3,7 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { useDispatch, useSelector } from "react-redux";
 import { auth, database } from "../../data/firebase/config";
-import { logOut, selectUser } from "../../store/slices/userSlice";
+import { logIn, logOut, selectUser } from "../../store/slices/userSlice";
 import { useAppDispatch } from "../../store/store";
 import {
   addDoc,
@@ -19,7 +19,9 @@ import { Household } from "../../data/APItypes";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 
-export default function Profile({ navigation }: RootScreenProps<"Profile">) {
+export default function CreateHouseHoldScreen({
+  navigation,
+}: RootScreenProps<"CreateHousehold">) {
   const dispatch = useAppDispatch();
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
@@ -46,6 +48,8 @@ export default function Profile({ navigation }: RootScreenProps<"Profile">) {
     ProfileCollectionRef,
     where("id", "==", auth.currentUser?.uid)
   );
+
+  //dispatch(SetMyProfiles(myProfiles));
 
   const getData = async () => {
     const data = await getDocs(HouseholdCollectionRef);

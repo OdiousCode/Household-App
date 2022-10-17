@@ -9,13 +9,16 @@ import CreateAvatar from "../screens/login/CreateAvatarScreen";
 import LoginScreen from "../screens/login/LoginScreen";
 import Profile from "../screens/login/ProfileScreen";
 import RoomApplication from "../screens/login/RoomApplicationScreen";
-import HouseholdStackNavigator, { HouseholdStackParamList } from "./HouseholdStackNavigator";
+import HouseholdStackNavigator, {
+  HouseholdStackParamList,
+} from "./HouseholdStackNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import Navigation from "../navigation/Index";
-import { logIn, logOut, selectUser } from '../store/slices/userSlice';
-import { auth } from '../data/firebase/config';
+import { logIn, logOut, selectUser } from "../store/slices/userSlice";
+import { auth } from "../data/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
+import CreateHousehold from "../screens/login/CreateHouseholdScreen";
 
 // import LoginScreen from "../screens/LoginScreen";
 
@@ -31,6 +34,7 @@ export type RootStackParamList = {
   CreateAvatar: undefined;
   Profile: undefined;
   RoomApplication: undefined;
+  CreateHousehold: undefined;
   HouseholdStackNavigator: NavigatorScreenParams<HouseholdStackParamList>;
 };
 
@@ -40,7 +44,6 @@ export type RootScreenProps<Screen extends keyof RootStackParamList> =
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootStackNavigator() {
-  
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
 
@@ -61,20 +64,25 @@ export default function RootStackNavigator() {
   }, []);
 
   return (
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       {!user ? (
-          <>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="CreateAccount" component={CreateAccount} />
-          </>
-           ) : (
-            <>
-              <Stack.Screen name="Profile" component={Profile} />
-              <Stack.Screen name="CreateAvatar" component={CreateAvatar} />
-              <Stack.Screen name="RoomApplication" component={RoomApplication} />
-              <Stack.Screen name="HouseholdStackNavigator" component={HouseholdStackNavigator} />
-            </>
-        )}
+        <>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="CreateAccount" component={CreateAccount} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="CreateHousehold" component={CreateHousehold} />
+
+          <Stack.Screen name="CreateAvatar" component={CreateAvatar} />
+          <Stack.Screen name="RoomApplication" component={RoomApplication} />
+          <Stack.Screen
+            name="HouseholdStackNavigator"
+            component={HouseholdStackNavigator}
+          />
+        </>
+      )}
     </Stack.Navigator>
   );
 }
