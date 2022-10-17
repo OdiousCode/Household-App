@@ -34,7 +34,7 @@ function CustomNavigationBar(props :Props) {
           }>
           <Menu.Item title= {props.userName} />
           <Menu.Item title= {props.userEmail} />
-          <Menu.Item onPress={auth.signOut} title="Log Out"/>
+          <Menu.Item onPress={()=> auth.signOut()} title="Log Out"/>
         </Menu>
       )}
     </Appbar.Header>

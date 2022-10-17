@@ -46,13 +46,7 @@ export default function RootStackNavigator() {
   
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
-  const account = {
-    name: 'geni',
-    email: 'geni@123.com',
-  }
-
-
-
+  
   
 
   useEffect(() => {
@@ -72,7 +66,7 @@ export default function RootStackNavigator() {
   }, []);
 
   return (
-      <Stack.Navigator screenOptions={{ header: () => <CustomNavigationBar  title={'LogIn'} userEmail={account.email} userName={account.name}/> }}>
+      <Stack.Navigator screenOptions={{ header: () => <CustomNavigationBar  title={'LogIn'} userEmail={auth.currentUser?.email?.toString()}/> }}>
       {!user ? (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
