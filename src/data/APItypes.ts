@@ -12,7 +12,7 @@ export interface Profile {
   name: string;
   role: string; // potential interface
   // Admin - User
-  avatar: Avatar;
+  avatar: number; // 0 - 5
   pending: boolean;
 }
 

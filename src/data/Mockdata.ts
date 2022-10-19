@@ -13,7 +13,7 @@ const mockProfile: Profile[] = [
     id: 7,
     userId: 1,
     householdId: 1,
-    avatar: { color: "#00FF00", icon: "fox" }, // asset url?
+    avatar: 1, // asset url?
     name: "Fillip",
     pending: false,
     role: "Admin",
