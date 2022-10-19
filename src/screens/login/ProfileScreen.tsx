@@ -2,24 +2,29 @@ import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { useDispatch, useSelector } from "react-redux";
-import { auth, database } from "../../data/firebase/config";
+import { auth, app } from "../../data/firebase/config";
 import { selectUser } from "../../store/slices/userSlice";
-import { useAppDispatch } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { getDatabase, onValue, push, ref, set } from "firebase/database";
+
 import {
   addDoc,
   collection,
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   where,
 } from "firebase/firestore";
-import { Household } from "../../data/APItypes";
+import { Household, Profile } from "../../data/APItypes";
 
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 
-export default function Profile({ navigation }: RootScreenProps<"Profile">) {
+export default function ProfileScreen({
+  navigation,
+}: RootScreenProps<"Profile">) {
   const dispatch = useAppDispatch();
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
@@ -37,50 +42,38 @@ export default function Profile({ navigation }: RootScreenProps<"Profile">) {
   // Save CurrentProfile + CurrentHousehold to redux
   ///=========================================================================
 
-  // const HouseholdCollectionRef = collection(database, "Household");
-  // const TaskCollectionRef = collection(database, "Task");
-  // const ProfileCollectionRef = collection(database, "Task");
+  // PROFILER.userId = auth.currentuser.uid
 
-  // // const q = query(TaskCollectionRef, where("householdId", "==", [user.Id]));
-  // const myProfiles = query(
-  //   ProfileCollectionRef,
-  //   where("id", "==", auth.currentUser?.uid)
-  // );
+  const myfakeProfile: Profile = {
+    avatar: 0,
+    householdId: 0,
+    id: 12,
+    name: "obs",
+    pending: false,
+    role: "User",
+    userId: 22,
+  };
 
-  // const getData = async () => {
-  //   const data = await getDocs(HouseholdCollectionRef);
-  //   data.forEach((d) => {
-  //     const docId = d.get("id");
-  //     d.data();
+  // console.log("try to send to moon");
+  // const db = getDatabase(app);
+  const db = getDatabase(app);
 
-  //     if (docId == 2) {
-  //       console.log("This is my Document");
-  //     }
-  //   });
-  // };
+  // const referencePush = ref(db, "app/profiles");
+  // const pushRef = push(referencePush);
+  // set(pushRef, myfakeProfile);
 
-  // // .where('userId', '==', route.params ? route.params.userId : user.uid)
+  const reference = ref(db, "app/profiles");
+  onValue(reference, (snapshot) => {
+    //console.log(snapshot);
+    const allProfiles = Object.values(
+      (snapshot.val() || {}) as Record<string, Profile>
+    );
+    // const allMyProfiles: Profile[] = Object.values(allProfiles);
 
-  // getData();
+    console.log(allProfiles[0].id);
+  });
 
-  // const addData = async () => {
-  //   addDoc(HouseholdCollectionRef, {
-  //     householdid: 2,
-  //     entranceCode: 4321,
-  //     name: "Vattna blommorna",
-  //   });
-  // };
-
-  // // addData();
-
-  // const logoutOfApp = () => {
-  //   // dispatch to the store with the logout action
-  //   dispatch(logOut());
-  //   // sign out function from firebase
-  //   auth.signOut();
-  // };
-
-  const user = useSelector(selectUser);
+  const myProfiles = useAppSelector((state) => state.user.profiles);
 
   return (
     <View style={styles.container}>

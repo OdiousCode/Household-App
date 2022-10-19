@@ -10,10 +10,9 @@ export const firebaseConfig = {
   storageBucket: "group4-ddc4f.appspot.com",
   messagingSenderId: "971823808315",
   appId: "1:971823808315:web:5286fb43c276ea8396411e",
-  databaseURL:
-    "https://bankvalvet-97cac-default-rtdb.europe-west1.firebasedatabase.app",
+  databaseURL: "https://group4-ddc4f-default-rtdb.firebaseio.com/",
 };
 
 initializeApp(firebaseConfig);
-export const auth = getAuth();
-export const database = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);

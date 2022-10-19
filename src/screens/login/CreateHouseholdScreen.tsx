@@ -2,7 +2,7 @@ import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { useDispatch, useSelector } from "react-redux";
-import { auth, database } from "../../data/firebase/config";
+import { auth, app } from "../../data/firebase/config";
 import { logIn, selectUser } from "../../store/slices/userSlice";
 import { useAppDispatch } from "../../store/store";
 import {

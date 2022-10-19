@@ -9,7 +9,7 @@ import TaskOverviewScreen from "../screens/household/TasksOverviewScreen";
 import CreateAccount from "../screens/login/CreateAccountScreen";
 import CreateAvatar from "../screens/login/CreateAvatarScreen";
 import LoginScreen from "../screens/login/LoginScreen";
-import Profile from "../screens/login/ProfileScreen";
+import ProfileScreen from "../screens/login/ProfileScreen";
 import RoomApplication from "../screens/login/RoomApplicationScreen";
 import HouseholdStackNavigator, {
   HouseholdStackParamList,
@@ -86,7 +86,7 @@ export default function RootStackNavigator() {
         </>
       ) : (
         <>
-          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen
             name="CreateHousehold"
             component={CreateHouseHoldScreen}
