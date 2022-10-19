@@ -4,7 +4,7 @@ import {
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
 import { Header } from "react-native/Libraries/NewAppScreen";
-import CustomNavigationBar from "../components/test";
+import CustomNavigationBar from "../components/HeaderComponent";
 import TaskOverviewScreen from "../screens/household/TasksOverviewScreen";
 import CreateAccount from "../screens/login/CreateAccountScreen";
 import CreateAvatar from "../screens/login/CreateAvatarScreen";
@@ -66,7 +66,7 @@ export default function RootStackNavigator() {
   }, []);
 
   return (
-      <Stack.Navigator screenOptions={{ header: () => <CustomNavigationBar  title={'LogIn'} userEmail={auth.currentUser?.email?.toString()}/> }}>
+      <Stack.Navigator screenOptions={{ header: () => <CustomNavigationBar  title={'LogIn'} userEmail={auth.currentUser?.email?.toString()} userName={auth.currentUser?.displayName?.toString()}/> }}>
       {!user ? (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
