@@ -16,7 +16,7 @@ import HouseholdStackNavigator, {
 } from "./HouseholdStackNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import Navigation from "../navigation/Index";
-import { logIn, selectUser } from "../store/slices/userSlice";
+import { logIn, logOut, selectUser } from "../store/slices/userSlice";
 import { auth } from "../data/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
@@ -61,7 +61,8 @@ export default function RootStackNavigator() {
         );
       } else {
         //TODO look at this
-        //dispatch(logOut());
+        auth.signOut();
+        dispatch(logOut);
       }
     });
   }, []);

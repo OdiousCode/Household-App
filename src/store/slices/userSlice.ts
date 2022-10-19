@@ -82,6 +82,10 @@ const userSlice = createSlice({
     logIn(state, action) {
       state.user = action.payload;
     },
+
+    logOut(state) {
+      state.user = undefined;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(signup.pending, (state, action) => {
@@ -114,7 +118,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { logIn } = userSlice.actions;
+export const { logIn, logOut } = userSlice.actions;
 export const selectUser = (state: any) => state.user.user;
 
 export const userReducer = userSlice.reducer;
