@@ -1,7 +1,4 @@
-export const Colors = {
-  background: "#FFFFFF",
-  primary: "#000000",
-  secondary: "#333333",
+export const avatarColors = {
   avatar_Fox: "#FF7E46",
   avatar_Squid: "#CD5D6F",
   avatar_Chicken: "#FCD933",
