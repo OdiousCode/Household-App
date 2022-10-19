@@ -6,8 +6,9 @@ import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { BlurView } from "expo-blur";
 import { TextInput } from "react-native-paper";
 import { useDispatch } from "react-redux";
-import { logIn } from "../../store/slices/userSlice";
+import { logIn, signin } from "../../store/slices/userSlice";
 import { Button } from "react-native-paper";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 
@@ -16,28 +17,30 @@ export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
   //   const profile = useAppSelector((state) => state.profile);
+
+  const { isLoading, errorMessage } = useAppSelector((state) => state.user);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const loginToApp = (e: any) => {
-    e.preventDefault();
+  // const loginToApp = (e: any) => {
+  //   e.preventDefault();
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userAuth) => {
-        dispatch(
-          logIn({
-            email: userAuth.user.email,
-            uid: userAuth.user.uid,
-            displayName: userAuth.user.displayName,
-            photoUrl: userAuth.user.photoURL,
-          })
-        );
-      })
-      .catch((err) => {
-        alert(err);
-      });
-  };
+  //   signInWithEmailAndPassword(auth, email, password)
+  //     .then((userAuth) => {
+  //       dispatch(
+  //         logIn({
+  //           email: userAuth.user.email,
+  //           uid: userAuth.user.uid,
+  //           displayName: userAuth.user.displayName,
+  //           photoUrl: userAuth.user.photoURL,
+  //         })
+  //       );
+  //     })
+  //     .catch((err) => {
+  //       alert(err);
+  //     });
+  // };
 
   return (
     <View style={styles.container}>
@@ -106,7 +109,12 @@ export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
                 placeholder="password"
               ></TextInput>
             </View>
-            <Pressable style={styles.button} onPress={loginToApp}>
+            <Pressable
+              style={styles.button}
+              onPress={() =>
+                dispatch(signin({ username: email, password: password }))
+              }
+            >
               <Text style={styles.text}>Login</Text>
             </Pressable>
             <Pressable

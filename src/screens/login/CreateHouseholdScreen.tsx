@@ -3,7 +3,7 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { useDispatch, useSelector } from "react-redux";
 import { auth, database } from "../../data/firebase/config";
-import { logIn, logOut, selectUser } from "../../store/slices/userSlice";
+import { logIn, selectUser } from "../../store/slices/userSlice";
 import { useAppDispatch } from "../../store/store";
 import {
   addDoc,
@@ -39,50 +39,43 @@ export default function CreateHouseHoldScreen({
   // Save CurrentProfile + CurrentHousehold to redux
   ///=========================================================================
 
-  const HouseholdCollectionRef = collection(database, "Household");
-  const TaskCollectionRef = collection(database, "Task");
-  const ProfileCollectionRef = collection(database, "Task");
+  // const HouseholdCollectionRef = collection(database, "Household");
+  // const TaskCollectionRef = collection(database, "Task");
+  // const ProfileCollectionRef = collection(database, "Task");
 
   // const q = query(TaskCollectionRef, where("householdId", "==", [user.Id]));
-  const myProfiles = query(
-    ProfileCollectionRef,
-    where("id", "==", auth.currentUser?.uid)
-  );
+  // const myProfiles = query(
+  //   ProfileCollectionRef,
+  //   where("id", "==", auth.currentUser?.uid)
+  // );
 
   //dispatch(SetMyProfiles(myProfiles));
 
-  const getData = async () => {
-    const data = await getDocs(HouseholdCollectionRef);
-    data.forEach((d) => {
-      const docId = d.get("id");
-      d.data();
+  // const getData = async () => {
+  //   const data = await getDocs(HouseholdCollectionRef);
+  //   data.forEach((d) => {
+  //     const docId = d.get("id");
+  //     d.data();
 
-      if (docId == 2) {
-        console.log("This is my Document");
-      }
-    });
-  };
+  //     if (docId == 2) {
+  //       console.log("This is my Document");
+  //     }
+  //   });
+  // };
 
   // .where('userId', '==', route.params ? route.params.userId : user.uid)
 
-  getData();
+  // getData();
 
-  const addData = async () => {
-    addDoc(HouseholdCollectionRef, {
-      householdid: 2,
-      entranceCode: 4321,
-      name: "Vattna blommorna",
-    });
-  };
+  // const addData = async () => {
+  //   addDoc(HouseholdCollectionRef, {
+  //     householdid: 2,
+  //     entranceCode: 4321,
+  //     name: "Vattna blommorna",
+  //   });
+  // };
 
   // addData();
-
-  const logoutOfApp = () => {
-    // dispatch to the store with the logout action
-    dispatch(logOut());
-    // sign out function from firebase
-    auth.signOut();
-  };
 
   const user = useSelector(selectUser);
 
@@ -105,8 +98,6 @@ export default function CreateHouseHoldScreen({
           })
         }
       />
-
-      <Button title="Log out" onPress={logoutOfApp} />
     </View>
   );
 }

@@ -16,10 +16,11 @@ import HouseholdStackNavigator, {
 } from "./HouseholdStackNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import Navigation from "../navigation/Index";
-import { logIn, logOut, selectUser } from "../store/slices/userSlice";
+import { logIn, selectUser } from "../store/slices/userSlice";
 import { auth } from "../data/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
+import CreateHouseHoldScreen from "../screens/login/CreateHouseholdScreen";
 
 // import LoginScreen from "../screens/LoginScreen";
 
@@ -59,7 +60,8 @@ export default function RootStackNavigator() {
           })
         );
       } else {
-        dispatch(logOut());
+        //TODO look at this
+        //dispatch(logOut());
       }
     });
   }, []);
@@ -84,7 +86,10 @@ export default function RootStackNavigator() {
       ) : (
         <>
           <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="CreateHousehold" component={CreateHousehold} />
+          <Stack.Screen
+            name="CreateHousehold"
+            component={CreateHouseHoldScreen}
+          />
 
           <Stack.Screen name="CreateAvatar" component={CreateAvatar} />
           <Stack.Screen name="RoomApplication" component={RoomApplication} />
