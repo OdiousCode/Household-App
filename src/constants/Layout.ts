@@ -1,5 +1,6 @@
-import { Colors } from "./Colors";
+import { avatarColors } from "./Colors";
 import { Avatar } from "../data/APItypes";
+
 export const AvatarIcon = {
   icon_Fox: "🦊",
   icon_Frog: "🐸",
@@ -9,28 +10,29 @@ export const AvatarIcon = {
   icon_Pig: "🐷",
 };
 
-export const avatars: Avatar[] = [ {
-    color: Colors.avatar_Fox,
+export const avatars: Avatar[] = [
+  {
+    color: avatarColors.avatar_Fox,
     icon: AvatarIcon.icon_Fox,
- }, 
- {
-    color: Colors.avatar_Frog,
+  },
+  {
+    color: avatarColors.avatar_Frog,
     icon: AvatarIcon.icon_Frog,
- }, 
- {
-    color: Colors.avatar_Squid,
+  },
+  {
+    color: avatarColors.avatar_Squid,
     icon: AvatarIcon.icon_Squid,
- }, 
- {
-    color: Colors.avatar_Whale,
+  },
+  {
+    color: avatarColors.avatar_Whale,
     icon: AvatarIcon.icon_Whale,
- }, 
- {
-    color: Colors.avatar_Chicken,
+  },
+  {
+    color: avatarColors.avatar_Chicken,
     icon: AvatarIcon.icon_Chicken,
- }, 
- {
-    color: Colors.avatar_Pig,
+  },
+  {
+    color: avatarColors.avatar_Pig,
     icon: AvatarIcon.icon_Pig,
- }, 
-]
+  },
+];
