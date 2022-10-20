@@ -79,7 +79,7 @@ export const getUserTasks = createAsyncThunk<
   }
 });
 
-const profileSlice = createSlice({
+const taskSlice = createSlice({
   name: "profile",
   initialState,
   reducers: {},
@@ -101,4 +101,4 @@ const profileSlice = createSlice({
   },
 });
 
-export const profileReducer = profileSlice.reducer;
+export const taskReducer = taskSlice.reducer;

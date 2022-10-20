@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { app } from "../../data/firebase/config";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
-import { getHouseholdByEntrenceCode } from "../../store/slices/householdSlice";
+import {} from "../../store/slices/householdSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 
 import {
@@ -17,6 +17,7 @@ import {
   where,
 } from "firebase/firestore";
 import { Household, Profile } from "../../data/APItypes";
+import { selectUserProfiles } from "../../store/slices/profileSlice";
 
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
@@ -57,26 +58,7 @@ export default function ProfileScreen({
     userId: "22",
   };
 
-  // console.log("try to send to moon");
-  // const db = getDatabase(app);
-  const db = getDatabase(app);
-
-  // const referencePush = ref(db, "app/profiles");
-  // const pushRef = push(referencePush);
-  // set(pushRef, myfakeProfile);
-
-  const reference = ref(db, "app/profiles");
-  onValue(reference, (snapshot) => {
-    //console.log(snapshot);
-    const allProfiles = Object.values(
-      (snapshot.val() || {}) as Record<string, Profile>
-    );
-    // const allMyProfiles: Profile[] = Object.values(allProfiles);
-
-    console.log(allProfiles[0].id);
-  });
-
-  const myProfiles = useAppSelector((state) => state.user.profiles);
+  const myProfiles = useAppSelector(selectUserProfiles);
 
   return (
     <View style={styles.container}>
@@ -95,12 +77,7 @@ export default function ProfileScreen({
         placeholder="entrance code"
         value={entrenceCode}
       ></TextInput>
-      <Button
-        title="Gå med hushåll"
-        onPress={() =>
-          console.log(dispatch(getHouseholdByEntrenceCode(entrenceCode)))
-        }
-      />
+      <Button title="Gå med hushåll" />
       <Button
         title="Create household"
         onPress={() => navigation.navigate("CreateHousehold")}
@@ -108,7 +85,7 @@ export default function ProfileScreen({
       <Button
         title="Enter household"
         onPress={() =>
-          navigation.navigate("HouseholdStackNavigator", {
+          navigation.navigate("HouseholdTopTabNavigator", {
             screen: "TaskScreen",
           })
         }

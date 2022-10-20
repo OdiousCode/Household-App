@@ -73,6 +73,33 @@ export const getUserProfiles = createAsyncThunk<
   }
 });
 
+export const createProfile = createAsyncThunk<
+  Profile,
+  void,
+  { rejectValue: string; state: AppState }
+>("profiles/getUserProfiles", async (profile, thunkApi) => {
+  try {
+    const state = thunkApi.getState();
+    state.user.user?.uid;
+
+    const db = getDatabase(app);
+
+    const reference = ref(db, "app/profiles");
+    await set(ref(db, "app/profiles"), profile);
+
+    // mby dosent work
+    throw "Snapshot does not exists";
+  } catch (error) {
+    console.error(error);
+    if (error instanceof FirebaseError) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+    return thunkApi.rejectWithValue(
+      "Could not signup please contact our support."
+    );
+  }
+});
+
 // export const setProfiles = createAsyncThunk<Profile, { rejectValue: string }>(
 //   "profiles/setProfiles",
 //   async (profile, thunkApi) => {

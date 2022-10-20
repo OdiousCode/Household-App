@@ -4,12 +4,14 @@ import { profileReducer } from "./slices/profileSlice";
 import { userReducer } from "./slices/userSlice";
 // import { profileReducer } from "./bankSlice";
 import { householdReducer } from "./slices/householdSlice";
+import { taskReducer } from "./slices/taskSlice";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     profiles: profileReducer,
-    household: householdReducer,
+    households: householdReducer,
+    tasks: taskReducer,
   },
 });
 
