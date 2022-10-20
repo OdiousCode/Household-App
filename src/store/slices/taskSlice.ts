@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
 import { get, getDatabase, push, query, ref, set } from "firebase/database";
-import { Task } from "react-native";
-import { Household, Profile, TaskHistory } from "../../data/APItypes";
+import { Household, Profile, Task, TaskHistory } from "../../data/APItypes";
 import { app } from "../../data/firebase/config";
 import { AppState, useAppSelector } from "../store";
 
@@ -18,8 +17,24 @@ const initialState: TaskState = {
   isLoading: false,
   error: "",
 
-  householdTasks: undefined,
-  hoseholdtaskHistory: undefined,
+  householdTasks: [
+    {
+      id: 1,
+      difficulty: 3,
+      frequency: 4,
+      householdId: 1,
+      isArchived: false,
+      name: "Diska",
+    },
+  ],
+  hoseholdtaskHistory: [
+    {
+      date: Date.now(),
+      id: 77,
+      profileId: 1,
+      taskId: 1,
+    },
+  ],
 };
 
 //TODO https://redux.js.org/usage/deriving-data-selectors
