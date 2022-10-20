@@ -8,6 +8,8 @@ import { Appbar, Menu } from "react-native-paper";
 import Navigation from "../navigation/Index";
 import { Text, StyleSheet } from "react-native";
 import { auth } from "../data/firebase/config";
+import { logOut } from "../store/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "../store/store";
 
 export type Props = {
   title: string;
@@ -21,6 +23,12 @@ function CustomNavigationBar(props: Props) {
   const closeMenu = () => setVisible(false);
   const sayHello = () => navigation.goBack();
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
+
+  function logOutOfapp() {
+    dispatch(logOut());
+    auth.signOut();
+  }
 
   return (
     <Appbar.Header style={styles.header}>
@@ -41,7 +49,7 @@ function CustomNavigationBar(props: Props) {
         >
           <Menu.Item title={props.userName} />
           <Menu.Item title={props.userEmail} />
-          <Menu.Item onPress={() => auth.signOut()} title="Log Out" />
+          <Menu.Item onPress={(logOutOfapp)} title="Log Out" />
         </Menu>
       }
     </Appbar.Header>

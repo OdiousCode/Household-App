@@ -1,11 +1,10 @@
-import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { getDatabase, onValue, ref } from "firebase/database";
+import React, { useState } from "react";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { app } from "../../data/firebase/config";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
-import { useDispatch, useSelector } from "react-redux";
-import { auth, app } from "../../data/firebase/config";
-import { selectUser } from "../../store/slices/userSlice";
+import {} from "../../store/slices/householdSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { getDatabase, onValue, push, ref, set } from "firebase/database";
 
 import {
   addDoc,
@@ -27,6 +26,10 @@ export default function ProfileScreen({
   navigation,
 }: RootScreenProps<"Profile">) {
   const dispatch = useAppDispatch();
+  const [entrenceCode, setEntranceCode] = useState("");
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
   //   const profile = useAppSelector((state) => state.profile);
@@ -68,6 +71,17 @@ export default function ProfileScreen({
         title="Apply to room"
         onPress={() => navigation.navigate("RoomApplication")}
       />
+      <TextInput
+        style={styles.input}
+        onChangeText={(code) => setEntranceCode(code)}
+        placeholder="entrance code"
+        value={entrenceCode}
+      ></TextInput>
+      <Button title="Gå med hushåll" />
+      <Button
+        title="Create household"
+        onPress={() => navigation.navigate("CreateHousehold")}
+      />
       <Button
         title="Enter household"
         onPress={() =>
@@ -88,5 +102,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  input: {
+    color: "black",
+    margin: 10,
   },
 });

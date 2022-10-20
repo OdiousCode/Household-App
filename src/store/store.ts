@@ -3,12 +3,15 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { profileReducer } from "./slices/profileSlice";
 import { userReducer } from "./slices/userSlice";
 // import { profileReducer } from "./bankSlice";
-// import { householdReducer } from "./bankSlice";
+import { householdReducer } from "./slices/householdSlice";
+import { taskReducer } from "./slices/taskSlice";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     profiles: profileReducer,
+    households: householdReducer,
+    tasks: taskReducer,
   },
 });
 

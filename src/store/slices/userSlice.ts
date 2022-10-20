@@ -59,15 +59,12 @@ export const signin = createAsyncThunk<
   { rejectValue: string }
 >("user/signin", async ({ username, password }, thunkApi) => {
   try {
-    //const auth = getAuth(app);
     const userCredential = await signInWithEmailAndPassword(
       auth,
       username,
       password
     );
     console.log(userCredential);
-    thunkApi.dispatch(getUserProfiles() as any);
-
     return userCredential.user.toJSON() as User;
   } catch (error) {
     console.error(error);
