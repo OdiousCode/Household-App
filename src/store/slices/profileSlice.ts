@@ -21,7 +21,7 @@ const initialState: ProfileState = {
       avatar: 3,
       householdId: 1,
       id: 1,
-      name: "Familjen 4a",
+      name: "VerkligtNamn",
       pending: false,
       role: "User",
       userId: "123",
