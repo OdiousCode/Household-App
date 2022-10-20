@@ -72,15 +72,15 @@ export default function RootStackNavigator() {
 
   return (
     <Stack.Navigator
-    // screenOptions={{
-    //   header: () => (
-    //     <CustomNavigationBar
-    //       title={"LogIn"}
-    //       userEmail={auth.currentUser?.email?.toString()}
-    //       userName={auth.currentUser?.displayName?.toString()}
-    //     />
-    //   ),
-    // }}
+      screenOptions={{
+        header: () => (
+          <CustomNavigationBar
+            title={"LogIn"}
+            userEmail={auth.currentUser?.email?.toString()}
+            userName={auth.currentUser?.displayName?.toString()}
+          />
+        ),
+      }}
     >
       {!user ? (
         <>
