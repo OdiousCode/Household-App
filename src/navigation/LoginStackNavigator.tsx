@@ -29,11 +29,11 @@ import HouseholdTopTabNavigator, {
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
+    interface RootParamList extends LoginStackParamList {}
   }
 }
 
-export type RootStackParamList = {
+export type LoginStackParamList = {
   Login: undefined;
   CreateAccount: undefined;
   CreateAvatar: undefined;
@@ -43,12 +43,12 @@ export type RootStackParamList = {
   HouseholdTopTabNavigator: NavigatorScreenParams<HouseholdTopTabParamList>;
 };
 
-export type RootScreenProps<Screen extends keyof RootStackParamList> =
-  NativeStackScreenProps<RootStackParamList, Screen>;
+export type RootScreenProps<Screen extends keyof LoginStackParamList> =
+  NativeStackScreenProps<LoginStackParamList, Screen>;
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<LoginStackParamList>();
 
-export default function RootStackNavigator() {
+export default function LoginStackNavigator() {
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
 
