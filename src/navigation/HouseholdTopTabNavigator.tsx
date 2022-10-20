@@ -33,7 +33,7 @@ export type HouseholdScreenProps<
   NativeStackScreenProps<RootStackParamList>
 >;
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createMaterialTopTabNavigator<HouseholdTopTabParamList>();
 // const Stack = createNativeStackNavigator<HouseholdStackParamList>();
 
 export default function HouseholdTopTabNavigator() {
