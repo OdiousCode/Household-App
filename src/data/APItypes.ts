@@ -6,7 +6,7 @@ export interface User {
 
 export interface Profile {
   id: number;
-  userId: number;
+  userId: string;
   householdId: number;
 
   name: string;

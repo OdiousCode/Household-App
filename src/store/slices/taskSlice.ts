@@ -1,35 +1,41 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
 import { get, getDatabase, push, query, ref, set } from "firebase/database";
-import { Household, Profile } from "../../data/APItypes";
+import { Household, Profile, Task, TaskHistory } from "../../data/APItypes";
 import { app } from "../../data/firebase/config";
 import { AppState, useAppSelector } from "../store";
 
-interface ProfileState {
+interface TaskState {
   isLoading: boolean;
   error: string;
 
-  profiles: Profile[];
+  householdTasks?: Task[];
+  hoseholdtaskHistory?: TaskHistory[];
 }
 
-const initialState: ProfileState = {
+const initialState: TaskState = {
   isLoading: false,
   error: "",
 
-  profiles: [
+  householdTasks: [
     {
-      avatar: 3,
-      householdId: 1,
       id: 1,
-      name: "VerkligtNamn",
-      pending: false,
-      role: "User",
-      userId: "123",
+      difficulty: 3,
+      frequency: 4,
+      householdId: 1,
+      isArchived: false,
+      name: "Diska",
+    },
+  ],
+  hoseholdtaskHistory: [
+    {
+      date: Date.now(),
+      id: 77,
+      profileId: 1,
+      taskId: 1,
     },
   ],
 };
-
-// export const selectActiveProfile
 
 //TODO https://redux.js.org/usage/deriving-data-selectors
 export const selectUserProfiles = (state: AppState) => {
@@ -41,8 +47,8 @@ export const selectUserProfiles = (state: AppState) => {
 
 //const selectHouseholdProfiles;
 
-export const getUserProfiles = createAsyncThunk<
-  Profile[],
+export const getUserTasks = createAsyncThunk<
+  Task[],
   void,
   { rejectValue: string; state: AppState }
 >("profiles/getUserProfiles", async (_, thunkApi) => {
@@ -73,50 +79,21 @@ export const getUserProfiles = createAsyncThunk<
   }
 });
 
-// export const setProfiles = createAsyncThunk<Profile, { rejectValue: string }>(
-//   "profiles/setProfiles",
-//   async (profile, thunkApi) => {
-//     try {
-//       //const auth = getAuth(app);
-//       const profiles: Profile[] = [];
-
-//       return profiles;
-//     } catch (error) {
-//       console.error(error);
-//       if (error instanceof FirebaseError) {
-//         return thunkApi.rejectWithValue(error.message);
-//       }
-//       return thunkApi.rejectWithValue(
-//         "Could not signup please contact our support."
-//       );
-//     }
-//   }
-// );
-
-// export const setProfiles = createAsyncThunk<
-//   Profile[],
-//   string,
-//   { rejectValue: string }
-// >("profile/setProfiles", async (profile, thunkApi) => {
-//   return thunkApi.rejectWithValue("Could not save name");
-//   return profile;
-// });
-
 const profileSlice = createSlice({
   name: "profile",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getUserProfiles.pending, (state) => {
+    builder.addCase(getUserTasks.pending, (state) => {
       state.isLoading = true;
       console.log("pending");
     });
-    builder.addCase(getUserProfiles.fulfilled, (state, action) => {
+    builder.addCase(getUserTasks.fulfilled, (state, action) => {
       console.log("fulfilled");
       state.isLoading = false;
-      state.profiles = action.payload;
+      state.householdTasks = action.payload;
     });
-    builder.addCase(getUserProfiles.rejected, (state, action) => {
+    builder.addCase(getUserTasks.rejected, (state, action) => {
       console.log("rejected");
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
