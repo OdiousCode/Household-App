@@ -10,14 +10,13 @@ export interface Profile {
   householdId: number;
 
   name: string;
-  role: string; // potential interface
-  // Admin - User
+  role: "Admin" | "User";
   avatar: number; // 0 - 5
   pending: boolean;
 }
 
 export interface Household {
-  id: number;
+  id: string;
   entrenceCode: string;
   name: string;
 }
