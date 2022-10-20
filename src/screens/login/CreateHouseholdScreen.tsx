@@ -36,7 +36,7 @@ export default function CreateHouseHoldScreen({
       <Button
         title="Enter household"
         onPress={() =>
-          navigation.navigate("HouseholdStackNavigator", {
+          navigation.navigate("HouseholdTopTabNavigator", {
             screen: "TaskScreen",
           })
         }

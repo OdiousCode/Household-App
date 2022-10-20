@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { HouseholdScreenProps } from "../../navigation/HouseholdStackNavigator";
+import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 

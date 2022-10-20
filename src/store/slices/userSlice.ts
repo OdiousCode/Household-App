@@ -9,6 +9,7 @@ import {
 import { getDatabase, push, ref, set } from "firebase/database";
 import { Profile } from "../../data/APItypes";
 import { app, auth } from "../../data/firebase/config";
+import { getUserProfiles } from "./profileSlice";
 
 type User = Omit<
   FirebaseUser,
@@ -17,14 +18,12 @@ type User = Omit<
 
 interface UserState {
   user?: User;
-  profiles: Profile[];
   isLoading: boolean;
   errorMessage: string;
 }
 
 const initialState: UserState = {
-  user: undefined,
-  profiles: [],
+  user: { uid: "123", email: "test@test.com" } as User,
   isLoading: false,
   errorMessage: "",
 };
@@ -65,7 +64,7 @@ export const signin = createAsyncThunk<
       username,
       password
     );
-    ///console.log(userCredential);
+    console.log(userCredential);
     return userCredential.user.toJSON() as User;
   } catch (error) {
     console.error(error);
@@ -112,19 +111,6 @@ const userSlice = createSlice({
     builder.addCase(signin.fulfilled, (state, action) => {
       state.user = action.payload;
       state.isLoading = false;
-
-      //TODO abc
-      // //state.user = {...state, profiles: {asdaasaddasda}}
-      // const db = getDatabase(app);
-
-      // const reference = ref(db, "app/profiles");
-      // const pushRef = push(reference);
-      // set(pushRef, Profile);
-
-      // const profileThatMatch = state.user.uid === reference.whatever.userId;
-      // state.profiles.push(profileThatMatch);
-
-      // const balanceRef = ref(db, "bank/balance");
     });
     builder.addCase(signin.rejected, (state, action) => {
       // Om det är ett firebase fel se till att spara en användarvänlig text
