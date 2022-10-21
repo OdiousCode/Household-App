@@ -25,6 +25,16 @@ const initialState: TaskState = {
       householdId: 1,
       isArchived: false,
       name: "Diska",
+      description: "Gör rent all disk",
+    },
+    {
+      id: 2,
+      difficulty: 2,
+      frequency: 1,
+      householdId: 1,
+      isArchived: false,
+      name: "Tvätta",
+      description: "All vit tvätt",
     },
   ],
   hoseholdtaskHistory: [
