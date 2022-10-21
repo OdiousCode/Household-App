@@ -44,7 +44,6 @@ function CustomNavigationBar(props: Props) {
     <Appbar.Header style={styles.header}>
       {checkIfUserLoged() ? (
         <Appbar.Content style={styles.title} title={props.title} />
-
       ) : (
         <>
           <Appbar.Content style={styles.title} title={props.title} />
@@ -53,12 +52,11 @@ function CustomNavigationBar(props: Props) {
             onDismiss={closeMenu}
             anchor={<Appbar.Action icon="account" color="white" onPress={openMenu} />}
           >
-            <Menu.Item title={props.userName} />
+            <Menu.Item title={props.userName ? null : 'No Nick Name '} />
             <Menu.Item title={props.userEmail} />
             <Menu.Item onPress={(logOutOfapp)} title="Log Out" />
           </Menu>
         </>
-
       )}
     </Appbar.Header>
   );
