@@ -3,13 +3,15 @@ import {
   NavigationProp,
   useNavigation,
 } from "@react-navigation/native";
-import React from "react";
+import React, { useReducer, useState } from "react";
 import { Appbar, Menu } from "react-native-paper";
 import Navigation from "../navigation/Index";
 import { Text, StyleSheet } from "react-native";
 import { auth } from "../data/firebase/config";
-import { logOut } from "../store/slices/userSlice";
-import { useAppDispatch, useAppSelector } from "../store/store";
+import { logOut, userReducer } from "../store/slices/userSlice";
+import { store, useAppDispatch, useAppSelector } from "../store/store";
+import { useStore } from "react-redux";
+import StatisticsScreen from "../screens/household/StatisticsScreen";
 
 export type Props = {
   title: string;
@@ -18,7 +20,7 @@ export type Props = {
 };
 
 function CustomNavigationBar(props: Props) {
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
   const sayHello = () => navigation.goBack();
@@ -30,28 +32,34 @@ function CustomNavigationBar(props: Props) {
     auth.signOut();
   }
 
+  function checkIfUserLoged() {
+    const userEmail = useAppSelector((state) => state.user.user?.email);
+    if (userEmail?.length === undefined || null)
+      return true;
+    else {
+      return false;
+    }
+  }
   return (
     <Appbar.Header style={styles.header}>
-      <Appbar.Content style={styles.title} title={props.title} />
-      <Appbar.Action
-        style={styles.arrowright}
-        onPress={sayHello}
-        icon={"arrow-left-bold"}
-      />
-      {<Appbar.Action style={styles.arrowleft} icon={"arrow-right-bold"} />}
-      {
-        <Menu
-          visible={visible}
-          onDismiss={closeMenu}
-          anchor={
-            <Appbar.Action icon="account" color="white" onPress={openMenu} />
-          }
-        >
-          <Menu.Item title={props.userName} />
-          <Menu.Item title={props.userEmail} />
-          <Menu.Item onPress={(logOutOfapp)} title="Log Out" />
-        </Menu>
-      }
+      {checkIfUserLoged() ? (
+        <Appbar.Content style={styles.title} title={props.title} />
+
+      ) : (
+        <>
+          <Appbar.Content style={styles.title} title={props.title} />
+          <Menu
+            visible={visible}
+            onDismiss={closeMenu}
+            anchor={<Appbar.Action icon="account" color="white" onPress={openMenu} />}
+          >
+            <Menu.Item title={props.userName} />
+            <Menu.Item title={props.userEmail} />
+            <Menu.Item onPress={(logOutOfapp)} title="Log Out" />
+          </Menu>
+        </>
+
+      )}
     </Appbar.Header>
   );
 }
@@ -60,10 +68,9 @@ export default CustomNavigationBar;
 
 const styles = StyleSheet.create({
   title: {
-    position: "relative",
+    alignContent: 'center',
     alignItems: "center",
     display: "flex",
-    marginBottom: 30,
   },
 
   arrowright: {
@@ -76,11 +83,12 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
 
+
   header: {
     height: 80,
     justifyContent: "space-between",
     alignItems: "center",
-    flexDirection: "row",
+    flexDirection: "column",
     backgroundColor: "orange",
   },
   container: {
