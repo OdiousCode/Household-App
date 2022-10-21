@@ -1,6 +1,8 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
+import { getUserTasks } from "../../store/slices/taskSlice";
+import { useAppDispatch } from "../../store/store";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 
@@ -11,7 +13,7 @@ export default function TaskOverviewScreen({
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
   //   const profile = useAppSelector((state) => state.profile);
-
+const data[] = useAppDispatch(getUserTasks);
   return (
     <View style={styles.container}>
       <Text>Task overview Screen</Text>
