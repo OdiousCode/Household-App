@@ -5,9 +5,9 @@ export interface User {
 }
 
 export interface Profile {
-  id: number;
+  id: string;
   userId: string;
-  householdId: number;
+  householdId: string;
 
   name: string;
   role: "Admin" | "User";

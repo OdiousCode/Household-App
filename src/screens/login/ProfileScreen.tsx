@@ -18,6 +18,7 @@ import {
 } from "firebase/firestore";
 import { Household, Profile } from "../../data/APItypes";
 import { selectUserProfiles } from "../../store/slices/profileSlice";
+import { logOut } from "../../store/slices/userSlice";
 
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
@@ -29,6 +30,8 @@ export default function ProfileScreen({
   const [entrenceCode, setEntranceCode] = useState("");
   const [id, setId] = useState("");
   const [name, setName] = useState("");
+
+  dispatch(logOut);
 
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
@@ -50,8 +53,8 @@ export default function ProfileScreen({
 
   const myfakeProfile: Profile = {
     avatar: 0,
-    householdId: 0,
-    id: 12,
+    householdId: "0",
+    id: "12",
     name: "obs",
     pending: false,
     role: "User",

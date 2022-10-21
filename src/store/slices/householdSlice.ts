@@ -35,61 +35,83 @@ const initialState: HouseHoldState = {
   ],
   activeHouseHold: undefined,
 };
+
+export const getHouseholdByEntrenceCode = async (state: AppState) => {
+  const db = getDatabase(app);
+
+  const reference = ref(db, "app/households");
+  const queryResult = query(reference);
+  const snapshot = await get(queryResult);
+
+  if (!snapshot.exists()) {
+    return undefined;
+  }
+  const snapVal = snapshot.val();
+  console.log(snapVal);
+
+  // const householdByEntrenceCode = state.profiles.profiles.filter(
+  //   (p) => p.userId === state.user.user?.uid
+  // );
+  // return householdByEntrenceCode;
+  return undefined;
+};
+
 // Skapa ett hushåll i databasen
 // Skapa en profil, med Id === Uid
 // Profil.pending = false
 export const createHousehold = createAsyncThunk<
   Household,
-  { household: Household },
+  Household,
   { rejectValue: string }
->("household/createHousehold", async ({ household }, thunkApi) => {
+>("household/createHousehold", async (household, thunkApi) => {
   try {
+    //TODO if household is valid
     const db = getDatabase(app);
-    await set(ref(db, "app/households"), household);
+    const reference = ref(db, "app/households");
+    const pushRef = push(reference);
 
-    return household;
+    let newH: Household = {
+      entrenceCode: pushRef.key!,
+      id: pushRef.key!,
+      name: household.name,
+    };
+
+    await set(pushRef, newH);
+
+    return newH;
   } catch (error) {
     //TODO look at davids firebase error thingi
     return thunkApi.rejectWithValue("Could not connect to server");
   }
 });
 
-// UpdateProfile
-// Avatar == avatar
-// name = name
-// updateDb
+export const setActiveHousehold = createAsyncThunk<
+  Household,
+  string,
+  { rejectValue: string }
+>("household/setActiveHousehold", async (entrenceCode, thunkApi) => {
+  try {
+    //TODO if household is valid
+    const db = getDatabase(app);
+    const reference = ref(db, "app/households");
+    const queryResult = query(reference);
+    const snapshot = await get(queryResult);
+
+    console.log(snapshot.val());
+
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else throw "entrence code not found";
+  } catch (error) {
+    //TODO look at davids firebase error thingi
+    return thunkApi.rejectWithValue("Could not connect to server");
+  }
+});
 
 // Entrencode
 // Hämta household med entrencode === entrencode
 // skapa en profil där allt = empty förutom, Id === uid och pending === true, householdid === household
 //export const enterHouseHold
-
-// export const createProfile = createAsyncThunk<
-//   Household,
-//   string,
-//   { rejectValue: string; state: AppState }
-// >("app/household/selectHouseHold", async (entrenceCode, thunkApi) => {
-//   try {
-//     const db = getDatabase(app);
-//     const householdRef = ref(db, "app/households");
-//     const householdQuery = query(
-//       householdRef,
-//       orderByChild("entrenceCode"),
-//       equalTo(entrenceCode)
-//     );
-
-//     const snapshot = await get(householdQuery);
-//     if (snapshot.exists()) {
-//       console.log(snapshot.val());
-//       return snapshot.val();
-//     } else {
-//       console.log("No data available");
-//     }
-//     throw "No Household was found";
-//   } catch (error) {
-//     return thunkApi.rejectWithValue("something went wrong");
-//   }
-// });
 
 export const getUserHouseholds = createAsyncThunk<
   Household[],
@@ -128,6 +150,7 @@ const profileSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    // GET USER HOUSEHOLDS
     builder.addCase(getUserHouseholds.pending, (state) => {
       state.isLoading = true;
       console.log("pending");
@@ -143,16 +166,36 @@ const profileSlice = createSlice({
       state.error = action.payload || "Unknown error";
     });
 
+    //CREATE HOUSEHOLD
     builder.addCase(createHousehold.pending, (state, action) => {
       state.isLoading = true;
       state.error = "";
     });
     builder.addCase(createHousehold.fulfilled, (state, action) => {
+      console.log("fulfilled");
       state.households.push(action.payload);
       state.isLoading = false;
     });
     builder.addCase(createHousehold.rejected, (state, action) => {
       console.log("rejected");
+      state.isLoading = false;
+      state.error = action.payload || "Unknown error";
+    });
+
+    //CREATE SetActiveHousehold
+    builder.addCase(setActiveHousehold.pending, (state, action) => {
+      state.isLoading = true;
+      state.error = "";
+    });
+    builder.addCase(setActiveHousehold.fulfilled, (state, action) => {
+      console.log("fulfilled");
+      console.log("active household");
+      console.log(action.payload);
+      state.activeHouseHold = action.payload;
+      state.isLoading = false;
+    });
+    builder.addCase(setActiveHousehold.rejected, (state, action) => {
+      console.log("rejected " + action.payload);
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
     });

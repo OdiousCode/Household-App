@@ -19,8 +19,8 @@ const initialState: ProfileState = {
   profiles: [
     {
       avatar: 3,
-      householdId: 1,
-      id: 1,
+      householdId: "1",
+      id: "1",
       name: "VerkligtNamn",
       pending: false,
       role: "User",
@@ -75,20 +75,32 @@ export const getUserProfiles = createAsyncThunk<
 
 export const createProfile = createAsyncThunk<
   Profile,
-  void,
+  Profile,
   { rejectValue: string; state: AppState }
->("profiles/getUserProfiles", async (profile, thunkApi) => {
+>("profiles/createProfile", async (profile, thunkApi) => {
   try {
     const state = thunkApi.getState();
-    state.user.user?.uid;
+    if (!state.user.user || state.households.activeHouseHold) {
+      return thunkApi.rejectWithValue(
+        "Must be valid Profile + Household combination"
+      );
+    }
+    profile.userId = state.user.user?.uid;
+    profile.householdId = state.households.activeHouseHold!.id;
+    //profile.id = uid todo.
 
     const db = getDatabase(app);
-
     const reference = ref(db, "app/profiles");
-    await set(ref(db, "app/profiles"), profile);
+    const pushRef = push(reference);
 
-    // mby dosent work
-    throw "Snapshot does not exists";
+    profile.id = pushRef!.key!;
+    // pushRef.key;
+    console.log(profile.id);
+
+    await set(pushRef, profile);
+
+    //TODO look for error?
+    return profile;
   } catch (error) {
     console.error(error);
     if (error instanceof FirebaseError) {
@@ -144,6 +156,21 @@ const profileSlice = createSlice({
       state.profiles = action.payload;
     });
     builder.addCase(getUserProfiles.rejected, (state, action) => {
+      console.log("rejected");
+      state.isLoading = false;
+      state.error = action.payload || "Unknown error";
+    });
+
+    builder.addCase(createProfile.pending, (state) => {
+      state.isLoading = true;
+      console.log("pending");
+    });
+    builder.addCase(createProfile.fulfilled, (state, action) => {
+      console.log("fulfilled");
+      state.isLoading = false;
+      state.profiles.push(action.payload);
+    });
+    builder.addCase(createProfile.rejected, (state, action) => {
       console.log("rejected");
       state.isLoading = false;
       state.error = action.payload || "Unknown error";

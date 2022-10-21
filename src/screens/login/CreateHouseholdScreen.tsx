@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { useSelector } from "react-redux";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
-import { createHousehold } from "../../store/slices/householdSlice";
+import {
+  createHousehold,
+  getUserHouseholds,
+} from "../../store/slices/householdSlice";
 import { selectUser } from "../../store/slices/userSlice";
 import { useAppDispatch } from "../../store/store";
 
@@ -14,11 +17,9 @@ export default function CreateHouseHoldScreen({
 }: RootScreenProps<"CreateHousehold">) {
   const dispatch = useAppDispatch();
 
-
-  const [name, setName] = useState('');
-  const [id, setId] = useState('');
-  const [entrenceCode, setEntranceCode] = useState('');
-
+  const [name, setName] = useState("");
+  const [id, setId] = useState("");
+  const [entrenceCode, setEntranceCode] = useState("");
 
   const user = useSelector(selectUser);
 
@@ -41,26 +42,31 @@ export default function CreateHouseHoldScreen({
           })
         }
       />
-        <TextInput
-          style={styles.input}
-          onChangeText={(name) => setName(name)}
-          placeholder="name"
+      <TextInput
+        style={styles.input}
+        onChangeText={(name) => setName(name)}
+        placeholder="name"
       ></TextInput>
       <TextInput
-          style={styles.input}
-          onChangeText={(code) => setEntranceCode(code)}
-          placeholder="entrance code"
+        style={styles.input}
+        onChangeText={(code) => setEntranceCode(code)}
+        placeholder="entrance code"
       ></TextInput>
-       <TextInput
-          style={styles.input}
-          onChangeText={(id) => setId(id)}
-          placeholder="id"
+      <TextInput
+        style={styles.input}
+        onChangeText={(id) => setId(id)}
+        placeholder="id"
       ></TextInput>
-       <Button
+      <Button
         title="Submit"
-        onPress={() => dispatch(createHousehold({ name: name, entrenceCode: entrenceCode, id: id}))}
+        onPress={
+          () => dispatch(getUserHouseholds())
+          // dispatch(
+          //   createHousehold({ name: name, entrenceCode: entrenceCode, id: id })
+          // )
+        }
       />
-      </View>
+    </View>
   );
 }
 
