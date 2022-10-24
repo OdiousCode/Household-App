@@ -29,7 +29,7 @@ import HouseholdTopTabNavigator, {
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
+    interface RootParamList extends RootStackParamList { }
   }
 }
 
@@ -75,7 +75,7 @@ export default function RootStackNavigator() {
       screenOptions={{
         header: () => (
           <CustomNavigationBar
-            title={"LogIn"}
+            title={"House Hold"}
             userEmail={auth.currentUser?.email?.toString()}
             userName={auth.currentUser?.displayName?.toString()}
           />
