@@ -10,8 +10,8 @@ import { Text, StyleSheet } from "react-native";
 import { auth } from "../data/firebase/config";
 import { logOut, userReducer } from "../store/slices/userSlice";
 import { store, useAppDispatch, useAppSelector } from "../store/store";
-import { useStore } from "react-redux";
-import StatisticsScreen from "../screens/household/StatisticsScreen";
+import { avatars } from "../constants/Layout";
+import { IconSource } from "react-native-paper/lib/typescript/components/Icon";
 
 export type Props = {
   title: string;
@@ -31,10 +31,19 @@ function CustomNavigationBar(props: Props) {
     dispatch(logOut());
     auth.signOut();
   }
+  let icon: IconSource
+  let icons = avatars.map((item, index) => {
+    if (item) {
+      return {
+        name: ` ${item.color}   ${item.icon}`,
+      }
+    }
+  })
+
 
   function checkIfUserLoged() {
     const userEmail = useAppSelector((state) => state.user.user?.email);
-    if (userEmail?.length === undefined || null)
+    if (userEmail?.length === undefined || '')
       return true;
     else {
       return false;
@@ -50,9 +59,10 @@ function CustomNavigationBar(props: Props) {
           <Menu
             visible={visible}
             onDismiss={closeMenu}
-            anchor={<Appbar.Action icon="account" color="white" onPress={openMenu} />}
+            anchor={<Appbar.Action icon={'account'} color="white" onPress={openMenu} />}
           >
-            <Menu.Item title={props.userName ? null : 'No Nick Name '} />
+            <Menu.Item title={props.userName ? null : 'No Nickname '
+            } />
             <Menu.Item title={props.userEmail} />
             <Menu.Item onPress={(logOutOfapp)} title="Log Out" />
           </Menu>
