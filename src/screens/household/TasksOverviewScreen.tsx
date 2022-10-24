@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import { Card, Button } from "react-native-paper";
 import { avatars } from "../../constants/Layout";
 import { Task } from "../../data/APItypes";
@@ -16,6 +16,27 @@ export default function TaskOverviewScreen({
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
   const taskData = useAppSelector((state) => state.tasks.householdTasks);
+  // const showAlert = () =>
+  //   Alert.alert(
+  //     taskData[0].name,
+  //     taskData[0].description,
+  //     [
+  //       {
+  //         text: "Arkivera",
+  //         onPress: () => Alert.alert("Arkiverar syssla"),
+  //         style: "cancel",
+  //       },
+  //       {
+  //         text: "Markera som klar",
+  //         onPress: () => Alert.alert("Syssla markerad som klar"),
+  //         style: "destructive",
+  //       },
+  //     ],
+  //     {
+  //       cancelable: true,
+  //       onDismiss: () => Alert.alert("Avbröt uppdatering av syssla"),
+  //     }
+  //   );
   // const taskData = state
   // const taskData = store.dispatch(getUserTasks());
   // console.log(taskData.toString());
@@ -33,6 +54,33 @@ export default function TaskOverviewScreen({
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <Card
+                onPress={() =>
+                  Alert.alert(
+                    item.name,
+                    item.description,
+                    [
+                      {
+                        text: "Arkivera",
+                        onPress: () =>
+                          Alert.alert('Arkiverar syssla "' + item.name + '"'),
+                        style: "cancel",
+                      },
+                      {
+                        text: "Markera som klar",
+                        onPress: () =>
+                          Alert.alert(
+                            'Syssla "' + item.name + '" markerad som klar'
+                          ),
+                        style: "destructive",
+                      },
+                    ],
+                    {
+                      cancelable: true,
+                      onDismiss: () =>
+                        Alert.alert("Avbröt uppdatering av syssla"),
+                    }
+                  )
+                }
                 style={{
                   backgroundColor: "#fff",
 
