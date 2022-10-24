@@ -121,7 +121,9 @@ export default function TaskOverviewScreen({
                   </View>
                 </Card>
               ) : (
-                <Text>Arkiverad syssla</Text>
+                <Text style={{ textDecorationLine: "line-through" }}>
+                  {item.name} - arkiverad
+                </Text>
               )
             }
           />
