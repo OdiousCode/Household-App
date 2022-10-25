@@ -24,6 +24,7 @@ import CreateHouseHoldScreen from "../screens/login/CreateHouseholdScreen";
 import HouseholdTopTabNavigator, {
   HouseholdTopTabParamList,
 } from "./HouseholdTopTabNavigator";
+import { Profile } from "../data/APItypes";
 
 // import LoginScreen from "../screens/LoginScreen";
 
@@ -36,7 +37,7 @@ declare global {
 export type RootStackParamList = {
   Login: undefined;
   CreateAccount: undefined;
-  CreateAvatar: undefined;
+  CreateAvatar: { profile: Profile } | undefined;
   Profile: undefined;
   RoomApplication: undefined;
   CreateHousehold: undefined;
