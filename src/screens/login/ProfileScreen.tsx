@@ -20,12 +20,12 @@ import {
   where,
 } from "firebase/firestore";
 import { Household, Profile } from "../../data/APItypes";
-import { selectUserProfiles } from "../../store/slices/profileSlice";
+import {
+  getUserProfiles,
+  selectUserProfiles,
+} from "../../store/slices/profileSlice";
 import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
 import { avatars } from "../../constants/Layout";
-
-// import { setName } from "../store/profileSlice";
-// import { useAppDispatch, useAppSelector } from "../store/store";
 
 export default function ProfileScreen({
   navigation,
@@ -46,6 +46,22 @@ export default function ProfileScreen({
   const openMenu = () => setVisible(true);
 
   const closeMenu = () => setVisible(false);
+
+  // {myProfiles.map((p) => {
+  //         return (
+  //           <View key={p.id}>
+  //             <Button
+  //               title={p.name + " " + p.householdId}
+  //               onPress={async () => {
+  //                 navigation.navigate("HouseholdTopTabNavigator", {
+  //                   screen: "PendingApplicationScreen",
+  //                   params: { profile: p },
+  //                 });
+
+  //                 // }
+  //               }}
+  //             />
+
   return (
     <View style={styles.container}>
       <View
@@ -117,7 +133,23 @@ export default function ProfileScreen({
               </Button>
             }
           >
-            <Menu.Item
+            {myProfiles.map((myProf) => {
+              return (
+                <Menu.Item
+                  onPress={() => {
+                    closeMenu();
+                    // set active household
+                    setAvatarNumber(myProf.avatar);
+                    setProfile(myProf);
+                  }}
+                  //TODO get name from householdId
+                  title={myProf.householdId}
+                />
+              );
+            })}
+          </Menu>
+
+          {/* <Menu.Item
               onPress={() => {
                 closeMenu();
                 // set active household
@@ -141,7 +173,7 @@ export default function ProfileScreen({
               }}
               title="Arbete AB"
             />
-          </Menu>
+          </Menu> */}
         </View>
         <View
           style={{
@@ -176,6 +208,20 @@ export default function ProfileScreen({
       </View>
       <View style={{ position: "absolute", bottom: 50 }}>
         <Text>Testing stuff</Text>
+
+        <Button
+          onPress={async () => {
+            console.log("GET DATA RUNNING");
+            const r = await dispatch(getUserProfiles());
+            if (r.meta.requestStatus === "fulfilled") {
+            }
+            const res = await dispatch(getUserHouseholds());
+            if (r.meta.requestStatus === "fulfilled") {
+            }
+          }}
+        >
+          Get Data
+        </Button>
       </View>
     </View>
   );
