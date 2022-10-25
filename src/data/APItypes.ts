@@ -15,6 +15,13 @@ export interface Profile {
   pending: boolean;
 }
 
+export interface ProfileDTO {
+  name: string;
+  role: "Admin" | "User";
+  avatar: number; // 0 - 5
+  pending: boolean;
+}
+
 export interface Household {
   id: string;
   entrenceCode: string;

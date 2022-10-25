@@ -5,14 +5,17 @@ import {
   get,
   getDatabase,
   orderByChild,
+  orderByValue,
   push,
   query,
   ref,
   set,
 } from "firebase/database";
+import { where } from "firebase/firestore";
+import thunk from "redux-thunk";
 import { Household, Profile } from "../../data/APItypes";
 import { app } from "../../data/firebase/config";
-import { AppState, useAppSelector } from "../store";
+import { AppState, useAppDispatch, useAppSelector } from "../store";
 
 interface HouseHoldState {
   isLoading: boolean;
@@ -36,24 +39,14 @@ const initialState: HouseHoldState = {
   activeHouseHold: undefined,
 };
 
-export const getHouseholdByEntrenceCode = async (state: AppState) => {
-  const db = getDatabase(app);
-
-  const reference = ref(db, "app/households");
-  const queryResult = query(reference);
-  const snapshot = await get(queryResult);
-
-  if (!snapshot.exists()) {
-    return undefined;
-  }
-  const snapVal = snapshot.val();
-  console.log(snapVal);
-
-  // const householdByEntrenceCode = state.profiles.profiles.filter(
-  //   (p) => p.userId === state.user.user?.uid
-  // );
-  // return householdByEntrenceCode;
-  return undefined;
+export const selectActiveHouseHold = (
+  state: AppState,
+  entrenceCode: string
+) => {
+  const returnUserProfiles = state.households.households.find(
+    (p) => p.entrenceCode === entrenceCode
+  );
+  state.households.activeHouseHold = returnUserProfiles;
 };
 
 // Skapa ett hushåll i databasen
@@ -61,9 +54,9 @@ export const getHouseholdByEntrenceCode = async (state: AppState) => {
 // Profil.pending = false
 export const createHousehold = createAsyncThunk<
   Household,
-  Household,
+  string,
   { rejectValue: string }
->("household/createHousehold", async (household, thunkApi) => {
+>("household/createHousehold", async (name, thunkApi) => {
   try {
     //TODO if household is valid
     const db = getDatabase(app);
@@ -73,7 +66,7 @@ export const createHousehold = createAsyncThunk<
     let newH: Household = {
       entrenceCode: pushRef.key!,
       id: pushRef.key!,
-      name: household.name,
+      name: name,
     };
 
     await set(pushRef, newH);
@@ -85,28 +78,47 @@ export const createHousehold = createAsyncThunk<
   }
 });
 
-export const setActiveHousehold = createAsyncThunk<
-  Household,
-  string,
-  { rejectValue: string }
->("household/setActiveHousehold", async (entrenceCode, thunkApi) => {
-  try {
-    //TODO if household is valid
-    const db = getDatabase(app);
-    const reference = ref(db, "app/households");
-    const queryResult = query(reference);
-    const snapshot = await get(queryResult);
+// export const setActiveHousehold = createAsyncThunk<
+//   Household,
+//   string,
+//   { rejectValue: string; state: AppState }
+// >("household/setActiveHousehold", async (entrenceCode, thunkApi) => {
+//   try {
+//     //TODO if household is valid
+//     const dispatch = useAppDispatch();
 
-    console.log(snapshot.val());
+//     // let r = await dispatch(getUserHouseholds());
+//     // if (r.meta.requestStatus === "fulfilled") {
+//     const state = thunkApi.getState();
+//     let allH = state.households.households;
+//     let specificHousehold = state.households.households.find(
+//       (p) => p.entrenceCode === entrenceCode
+//     );
 
-    if (snapshot.exists()) {
-      return snapshot.val();
-    } else throw "entrence code not found";
-  } catch (error) {
-    //TODO look at davids firebase error thingi
-    return thunkApi.rejectWithValue("Could not connect to server");
-  }
-});
+//     // return specificHousehold;
+//     // } else throw "Problem using Dispatch";
+
+//     const db = getDatabase(app);
+//     //  const reference = ref(db, "app/households");
+
+//     const queryResult = query(
+//       ref(db, "app/households"),
+//       orderByChild("id"),
+//       equalTo(entrenceCode)
+//     );
+//     console.log(1);
+//     const snapshot = await get(queryResult);
+
+//     if (snapshot.exists()) {
+//       return snapshot.val();
+//     } else {
+//       throw "entrence code not found";
+//     }
+//   } catch (error) {
+//     //TODO look at davids firebase error thingi
+//     return thunkApi.rejectWithValue("Could not connect to server");
+//   }
+// });
 
 // Entrencode
 // Hämta household med entrencode === entrencode
@@ -145,10 +157,18 @@ export const getUserHouseholds = createAsyncThunk<
   }
 });
 
-const profileSlice = createSlice({
-  name: "profile",
+const householdSlice = createSlice({
+  name: "household",
   initialState,
-  reducers: {},
+  reducers: {
+    setActiveHouseHold(state, action) {
+      let allH = state.households;
+      let specificHousehold = state.households.find(
+        (p) => p.entrenceCode === action.payload
+      );
+      state.activeHouseHold = specificHousehold;
+    },
+  },
   extraReducers: (builder) => {
     // GET USER HOUSEHOLDS
     builder.addCase(getUserHouseholds.pending, (state) => {
@@ -157,8 +177,16 @@ const profileSlice = createSlice({
     });
     builder.addCase(getUserHouseholds.fulfilled, (state, action) => {
       console.log("fulfilled");
+      console.log("get user households");
       state.isLoading = false;
-      state.households = action.payload;
+      console.log(action.payload);
+      let allHouseholds: Household[] = [];
+      for (var key in action.payload) {
+        console.log("snapshotkey " + key);
+        console.log("snapshot.val" + action.payload[key]);
+        allHouseholds.push(action.payload[key]);
+      }
+      state.households = allHouseholds;
     });
     builder.addCase(getUserHouseholds.rejected, (state, action) => {
       console.log("rejected");
@@ -182,24 +210,29 @@ const profileSlice = createSlice({
       state.error = action.payload || "Unknown error";
     });
 
-    //CREATE SetActiveHousehold
-    builder.addCase(setActiveHousehold.pending, (state, action) => {
-      state.isLoading = true;
-      state.error = "";
-    });
-    builder.addCase(setActiveHousehold.fulfilled, (state, action) => {
-      console.log("fulfilled");
-      console.log("active household");
-      console.log(action.payload);
-      state.activeHouseHold = action.payload;
-      state.isLoading = false;
-    });
-    builder.addCase(setActiveHousehold.rejected, (state, action) => {
-      console.log("rejected " + action.payload);
-      state.isLoading = false;
-      state.error = action.payload || "Unknown error";
-    });
+    // //CREATE SetActiveHousehold
+    // builder.addCase(setActiveHousehold.pending, (state, action) => {
+    //   state.isLoading = true;
+    //   state.error = "";
+    // });
+    // builder.addCase(setActiveHousehold.fulfilled, (state, action) => {
+    //   console.log("fulfilled");
+    //   console.log("payload household");
+    //   console.log(action.payload);
+    //   state.activeHouseHold = action.payload;
+    //   state.isLoading = false;
+    // });
+    // builder.addCase(setActiveHousehold.rejected, (state, action) => {
+    //   console.log("setActiveHousehold");
+    //   console.log(state.activeHouseHold);
+    //   console.log("rejected " + action.payload);
+    //   state.isLoading = false;
+    //   state.error = action.payload || "Unknown error";
+    // });
   },
 });
 
-export const householdReducer = profileSlice.reducer;
+export const { setActiveHouseHold } = householdSlice.actions;
+export const selectUser = (state: any) => state.user.user;
+
+export const householdReducer = householdSlice.reducer;
