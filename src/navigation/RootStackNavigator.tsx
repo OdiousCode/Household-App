@@ -30,14 +30,14 @@ import { Profile } from "../data/APItypes";
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList { }
+    interface RootParamList extends RootStackParamList {}
   }
 }
 
 export type RootStackParamList = {
   Login: undefined;
   CreateAccount: undefined;
-  CreateAvatar: { profile: Profile } | undefined;
+  CreateAvatar: { profileId: string } | undefined;
   Profile: undefined;
   RoomApplication: undefined;
   CreateHousehold: undefined;

@@ -1,6 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
-import { get, getDatabase, push, query, ref, set } from "firebase/database";
+import {
+  get,
+  getDatabase,
+  orderByChild,
+  push,
+  query,
+  ref,
+  set,
+} from "firebase/database";
 import { Household, Profile, ProfileDTO } from "../../data/APItypes";
 import { app, auth } from "../../data/firebase/config";
 import { AppState, useAppSelector } from "../store";
@@ -53,15 +61,22 @@ export const selectCurrentProfile = (state: AppState) => {
   return currentProfile;
 };
 
+//export const selectHouseHoldbyProfileId()
+
+export const selectProfileById = (id: string) => (state: AppState) => {
+  const returnUserProfiles = state.profiles.profiles.find((p) => p.id === id);
+
+  return returnUserProfiles;
+};
+
+//TODO
 //TODO https://redux.js.org/usage/deriving-data-selectors
 export const selectUserProfiles = (state: AppState) => {
-  if (state.profiles.profiles != undefined) {
-    const returnUserProfiles = state.profiles.profiles.filter(
-      (p) => p.userId === state.user.user?.uid
-    );
+  const returnUserProfiles = state.profiles.profiles.filter(
+    (p) => p.userId === state.user.user?.uid
+  );
 
-    return returnUserProfiles;
-  }
+  return returnUserProfiles;
 };
 
 //const selectHouseholdProfiles;
@@ -186,12 +201,10 @@ const profileSlice = createSlice({
     });
     builder.addCase(getUserProfiles.fulfilled, (state, action) => {
       console.log("fulfilled");
+      console.log("getUserProfiles");
       state.isLoading = false;
-      console.log(action.payload);
       let allProfiles: Profile[] = [];
       for (var key in action.payload) {
-        console.log("snapshotkey " + key);
-        console.log("snapshot.val" + action.payload[key]);
         allProfiles.push(action.payload[key]);
       }
       state.profiles = allProfiles;

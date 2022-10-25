@@ -1,5 +1,5 @@
 import { getDatabase, onValue, ref } from "firebase/database";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { app } from "../../data/firebase/config";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
@@ -22,45 +22,34 @@ import {
 import { Household, Profile } from "../../data/APItypes";
 import {
   getUserProfiles,
+  selectProfileById,
   selectUserProfiles,
 } from "../../store/slices/profileSlice";
 import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
 import { avatars } from "../../constants/Layout";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function ProfileScreen({
   navigation,
 }: RootScreenProps<"Profile">) {
   const dispatch = useAppDispatch();
 
-  console.log("all Profiles?");
-  let allProfiles = useAppSelector((state) => state.profiles.profiles);
-  console.log(allProfiles);
-
-  console.log("My Profile");
-  let uid = useAppSelector((state) => state.user.user?.uid);
-  let myProfiles = allProfiles.filter((p) => p.userId === uid);
+  let myProfiles = useAppSelector(selectUserProfiles);
 
   const [visible, setVisible] = React.useState(false);
   const [avatarNumber, setAvatarNumber] = React.useState(0);
   const [profile, setProfile] = useState({} as Profile);
   const openMenu = () => setVisible(true);
-
   const closeMenu = () => setVisible(false);
 
-  // {myProfiles.map((p) => {
-  //         return (
-  //           <View key={p.id}>
-  //             <Button
-  //               title={p.name + " " + p.householdId}
-  //               onPress={async () => {
-  //                 navigation.navigate("HouseholdTopTabNavigator", {
-  //                   screen: "PendingApplicationScreen",
-  //                   params: { profile: p },
-  //                 });
+  let prof = useAppSelector(selectProfileById("-NFEJ99u7lzjxhCStSzZ"));
 
-  //                 // }
-  //               }}
-  //             />
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getUserProfiles());
+      dispatch(getUserHouseholds());
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -136,6 +125,7 @@ export default function ProfileScreen({
             {myProfiles.map((myProf) => {
               return (
                 <Menu.Item
+                  key={myProf.id}
                   onPress={() => {
                     closeMenu();
                     // set active household
@@ -196,12 +186,15 @@ export default function ProfileScreen({
             width: 150,
             borderColor: "#000",
           }}
-          onPress={() =>
+          onPress={() => {
+            dispatch(setActiveHouseHold(profile.householdId));
+
+            //TODO navigate to correct screen
             navigation.navigate("HouseholdTopTabNavigator", {
               screen: "PendingApplicationScreen",
-              params: { profile: profile },
-            })
-          }
+              params: { profileId: profile.id },
+            });
+          }}
         >
           Gå in
         </Button>

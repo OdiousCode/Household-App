@@ -23,6 +23,8 @@ export default function RoomApplication({
   // );
   let allH = useAppSelector((state) => state.households.households);
 
+  let allProfiles = useAppSelector((state) => state.profiles);
+
   return (
     <View style={styles.container}>
       <Text>Room application Screen</Text>
@@ -49,6 +51,14 @@ export default function RoomApplication({
               role: "User",
             };
 
+            //TODO
+            dispatch(
+              createProfile({
+                profile: profile,
+                houseHoldId: entrenceCode,
+              })
+            );
+
             const r = await dispatch(
               createProfile({
                 profile: profile,
@@ -58,7 +68,7 @@ export default function RoomApplication({
             if (r.meta.requestStatus === "fulfilled") {
               navigation.navigate("HouseholdTopTabNavigator", {
                 screen: "PendingApplicationScreen",
-                params: { profile: r.payload as Profile },
+                params: { profileId: (r.payload as Profile).id },
               });
             }
             console.log("3");

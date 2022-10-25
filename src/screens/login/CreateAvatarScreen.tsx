@@ -5,8 +5,12 @@ import RootStackNavigator, {
 } from "../../navigation/RootStackNavigator";
 import { avatarColors } from "../../constants/Colors";
 import { avatars } from "../../constants/Layout";
-import { useAppDispatch } from "../../store/store";
-import { createProfile, updateProfile } from "../../store/slices/profileSlice";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import {
+  createProfile,
+  selectProfileById,
+  updateProfile,
+} from "../../store/slices/profileSlice";
 import { Profile, ProfileDTO } from "../../data/APItypes";
 import { setActiveHouseHold } from "../../store/slices/householdSlice";
 // import { setName } from "../store/profileSlice";
@@ -17,11 +21,14 @@ export default function CreateAvatar({
   route,
 }: RootScreenProps<"CreateAvatar">) {
   const dispatch = useAppDispatch();
-  let baseProfile = route.params!.profile;
-  console.log(1);
-  console.log(baseProfile);
+  //TODO route.params not optional?
+  let baseProfile = useAppSelector(selectProfileById(route.params!.profileId));
 
   const allAvatars = avatars;
+
+  if (!baseProfile) {
+    return null;
+  }
   return (
     <View style={styles.container}>
       <Text>Create avatar Screen</Text>
@@ -53,15 +60,12 @@ export default function CreateAvatar({
               avatar: 1,
               name: "Nytt namn",
 
-              householdId: baseProfile.householdId,
-              id: baseProfile.id,
-              pending: baseProfile.pending,
-              role: baseProfile.role,
-              userId: baseProfile.userId,
+              householdId: baseProfile!.householdId,
+              id: baseProfile!.id,
+              pending: baseProfile!.pending,
+              role: baseProfile!.role,
+              userId: baseProfile!.userId,
             };
-
-            console.log(2);
-            console.log(newProfile);
 
             const r = await dispatch(
               updateProfile({
@@ -69,6 +73,7 @@ export default function CreateAvatar({
               })
             );
 
+            //TODO take screen as param and move to screen?
             if (r.meta.requestStatus === "fulfilled") {
               navigation.goBack();
             }

@@ -1,5 +1,6 @@
 //TODO late
-import React, { useEffect, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { Profile } from "../../data/APItypes";
 import { auth } from "../../data/firebase/config";
@@ -22,22 +23,49 @@ export default function PendingApplicationScreen({
   route,
 }: HouseholdScreenProps<"PendingApplicationScreen">) {
   //todo usestate mby?
-  let baseProfile = route.params?.profile;
+  let profileId = route.params?.profileId;
   const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   // Update the document title using the browser API
-  //   dispatch(setActiveHouseHold())
-  //   dispatch(getUserProfiles)
-  //   dispatch(getUserHouseholds)
-  // });
-
-  let uid = useAppSelector((state) => state.user.user?.uid);
   let currentProfile = useAppSelector((state) =>
-    state.profiles.profiles.find((p) => p.id === baseProfile?.id)
+    state.profiles.profiles.find((p) => p.id === profileId)
+  );
+  let uid = useAppSelector((state) => state.user.user?.uid);
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getUserProfiles());
+      dispatch(getUserHouseholds());
+    }, [])
   );
 
-  console.log(currentProfile);
+  // useEffect(() => {
+  //   dispatch(getUserProfiles());
+  //   dispatch(getUserHouseholds());
+  //   //dispatch(setActiveHouseHold(route.params?.profile.householdId));
+  // }, []);
+
+  //TODO flytta till profilescreen
+  // useEffect(() => {
+  //   dispatch(setActiveHouseHold(currentProfile?.householdId));
+  // }, [currentProfile]);
+
+  //TODO flytta till profileScreen
+  useEffect(() => {
+    console.log("UseEffect running");
+    console.log(currentProfile);
+    if (
+      currentProfile &&
+      !currentProfile.pending &&
+      currentProfile.avatar !== -1
+    ) {
+      console.log("navigate running");
+      console.log(currentProfile.householdId);
+      navigation.navigate("ProfileOverViewScreen", {
+        householdId: currentProfile!.householdId,
+      });
+    }
+  }, [currentProfile]);
+
   if (currentProfile !== undefined) {
     console.log("1");
     if (currentProfile?.userId === uid) {
@@ -55,6 +83,7 @@ export default function PendingApplicationScreen({
         currentProfile.avatar !== -1
       ) {
         console.log("3");
+
         return (
           <View style={styles.container}>
             <Text>Du har blivit insläptt </Text>
@@ -76,7 +105,7 @@ export default function PendingApplicationScreen({
               title="Skapa Avatar"
               onPress={() => {
                 navigation.navigate("CreateAvatar", {
-                  profile: currentProfile!,
+                  profileId: currentProfile!.id,
                 });
               }}
             />

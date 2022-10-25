@@ -36,3 +36,11 @@ export const avatars: Avatar[] = [
     icon: AvatarIcon.icon_Pig,
   },
 ];
+
+export function getAvatar(index: number) {
+  if (index == -1) {
+    //TODO ? icon
+    return avatars[4];
+  }
+  return avatars[index];
+}
