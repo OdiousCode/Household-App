@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import { Card, Button } from "react-native-paper";
 import { avatars } from "../../constants/Layout";
 import { Task } from "../../data/APItypes";
@@ -16,6 +16,27 @@ export default function TaskOverviewScreen({
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
   const taskData = useAppSelector((state) => state.tasks.householdTasks);
+  // const showAlert = () =>
+  //   Alert.alert(
+  //     taskData[0].name,
+  //     taskData[0].description,
+  //     [
+  //       {
+  //         text: "Arkivera",
+  //         onPress: () => Alert.alert("Arkiverar syssla"),
+  //         style: "cancel",
+  //       },
+  //       {
+  //         text: "Markera som klar",
+  //         onPress: () => Alert.alert("Syssla markerad som klar"),
+  //         style: "destructive",
+  //       },
+  //     ],
+  //     {
+  //       cancelable: true,
+  //       onDismiss: () => Alert.alert("Avbröt uppdatering av syssla"),
+  //     }
+  //   );
   // const taskData = state
   // const taskData = store.dispatch(getUserTasks());
   // console.log(taskData.toString());
@@ -31,27 +52,57 @@ export default function TaskOverviewScreen({
             style={{ flex: 1, width: "100%" }}
             data={taskData}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <Card
-                style={{
-                  backgroundColor: "#fff",
-
-                  borderRadius: 10,
-                  borderColor: "#000",
-
-                  marginBottom: 10,
-                }}
-              >
-                <View
+            renderItem={({ item }) =>
+              !item.isArchived ? (
+                <Card
+                  onPress={() =>
+                    Alert.alert(
+                      item.name,
+                      item.description,
+                      [
+                        {
+                          text: "Arkivera",
+                          onPress: () => {
+                            Alert.alert('Arkiverar syssla "' + item.name + '"');
+                            // Archive it smh
+                          },
+                        },
+                        {
+                          text: "Markera som klar",
+                          onPress: () => {
+                            Alert.alert(
+                              'Syssla "' + item.name + '" markerad som klar'
+                            );
+                            // Mark as finished smh
+                          },
+                        },
+                      ],
+                      {
+                        cancelable: true,
+                        onDismiss: () =>
+                          Alert.alert("Avbröt uppdatering av syssla"),
+                      }
+                    )
+                  }
                   style={{
-                    margin: 10,
-                    alignItems: "center",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+                    backgroundColor: "#fff",
+
+                    borderRadius: 10,
+                    borderColor: "#000",
+
+                    marginBottom: 10,
                   }}
                 >
-                  <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
-                  {/* <View
+                  <View
+                    style={{
+                      margin: 10,
+                      alignItems: "center",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
+                    {/* <View
                     key={avatars[0].icon}
                     style={{
                       backgroundColor: avatars[0].color,
@@ -59,17 +110,22 @@ export default function TaskOverviewScreen({
                       borderRadius: 50,
                     }}
                   > */}
-                  <Text style={{ fontSize: 17 }}>
-                    {avatars[0].icon}
-                    {avatars[2].icon}
-                    {avatars[3].icon}
-                  </Text>
-                  {/* </View> */}
-                  {/* <Text>{item.description}</Text> */}
-                  {/* <Text>Svårighetsgrad: {item.difficulty}</Text> */}
-                </View>
-              </Card>
-            )}
+                    <Text style={{ fontSize: 17 }}>
+                      {avatars[0].icon}
+                      {avatars[2].icon}
+                      {avatars[3].icon}
+                    </Text>
+                    {/* </View> */}
+                    {/* <Text>{item.description}</Text> */}
+                    {/* <Text>Svårighetsgrad: {item.difficulty}</Text> */}
+                  </View>
+                </Card>
+              ) : (
+                <Text style={{ textDecorationLine: "line-through" }}>
+                  {item.name} - arkiverad
+                </Text>
+              )
+            }
           />
         </View>
         <View

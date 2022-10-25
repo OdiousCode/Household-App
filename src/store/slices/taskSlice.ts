@@ -36,6 +36,15 @@ const initialState: TaskState = {
       name: "Tvätta",
       description: "All vit tvätt",
     },
+    {
+      id: 3,
+      difficulty: 5,
+      frequency: 1,
+      householdId: 1,
+      isArchived: true,
+      name: "Programmera",
+      description: "Gör en hushålls-app",
+    },
   ],
   hoseholdtaskHistory: [
     {
