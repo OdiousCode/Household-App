@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { useSelector } from "react-redux";
+import { Household, Profile, ProfileDTO } from "../../data/APItypes";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import {
   createHousehold,
   getUserHouseholds,
 } from "../../store/slices/householdSlice";
+import { createProfile } from "../../store/slices/profileSlice";
 import { selectUser } from "../../store/slices/userSlice";
 import { useAppDispatch } from "../../store/store";
 
@@ -26,10 +28,7 @@ export default function CreateHouseHoldScreen({
   return (
     <View style={styles.container}>
       <Text>Profile Screen</Text>
-      <Button
-        title="Create Avatar"
-        onPress={() => navigation.navigate("CreateAvatar")}
-      />
+
       <Button
         title="Apply to room"
         onPress={() => navigation.navigate("RoomApplication")}
@@ -59,12 +58,34 @@ export default function CreateHouseHoldScreen({
       ></TextInput>
       <Button
         title="Submit"
-        onPress={
-          () => dispatch(getUserHouseholds())
-          // dispatch(
-          //   createHousehold({ name: name, entrenceCode: entrenceCode, id: id })
-          // )
-        }
+        onPress={async () => {
+          const r = await dispatch(createHousehold(name));
+          console.log(r.meta.requestStatus);
+          if (r.meta.requestStatus === "fulfilled") {
+            let householdId = (r.payload as Household).id;
+
+            //TODO
+            // create profile
+            const profile: ProfileDTO = {
+              avatar: -1,
+              name: "",
+              pending: false,
+              role: "Admin",
+            };
+
+            const re = await dispatch(
+              createProfile({
+                profile: profile,
+                houseHoldId: householdId,
+              })
+            );
+            if (re.meta.requestStatus === "fulfilled") {
+              navigation.navigate("CreateAvatar", {
+                profile: re.payload as Profile,
+              });
+            }
+          }
+        }}
       />
     </View>
   );

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
+import { Profile, ProfileDTO } from "../../data/APItypes";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import {
-  getHouseholdByEntrenceCode,
-  setActiveHousehold,
+  getUserHouseholds,
+  setActiveHouseHold,
 } from "../../store/slices/householdSlice";
+import { createProfile } from "../../store/slices/profileSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
@@ -16,6 +18,11 @@ export default function RoomApplication({
   const dispatch = useAppDispatch();
   const [entrenceCode, setEntranceCode] = useState("");
 
+  // const activeHouseHold = useAppSelector(
+  //   (state) => state.households.activeHouseHold
+  // );
+  let allH = useAppSelector((state) => state.households.households);
+
   return (
     <View style={styles.container}>
       <Text>Room application Screen</Text>
@@ -23,9 +30,40 @@ export default function RoomApplication({
 
       <Button
         title="Submit"
-        onPress={() => {
-          console.log("entrence code: " + entrenceCode);
-          dispatch(setActiveHousehold(entrenceCode));
+        onPress={async () => {
+          console.log("1");
+          //TODO change to id, but find based on entrencode?
+          //TODO
+          // change from activeHousehold to activeProfile?
+          // makes more sense right?
+          // everyhwere household is important send as param i guess
+          // make soem sense :)
+          if (allH.find((h) => h.entrenceCode === entrenceCode)) {
+            console.log("2");
+            //dispatch(setActiveHouseHold(entrenceCode));
+            // create profile?
+            const profile: ProfileDTO = {
+              avatar: -1,
+              name: "Elias",
+              pending: true,
+              role: "User",
+            };
+
+            const r = await dispatch(
+              createProfile({
+                profile: profile,
+                houseHoldId: entrenceCode,
+              })
+            );
+            if (r.meta.requestStatus === "fulfilled") {
+              navigation.navigate("HouseholdTopTabNavigator", {
+                screen: "PendingApplicationScreen",
+                params: { profile: r.payload as Profile },
+              });
+            }
+            console.log("3");
+            // dispatch(setActiveHouseHold(entrenceCode));
+          }
         }}
       />
       <TextInput
