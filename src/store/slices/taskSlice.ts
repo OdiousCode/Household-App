@@ -1,6 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
-import { get, getDatabase, push, query, ref, set } from "firebase/database";
+import {
+  equalTo,
+  get,
+  getDatabase,
+  orderByChild,
+  push,
+  query,
+  ref,
+  set,
+} from "firebase/database";
+import { orderBy } from "firebase/firestore";
 import { Household, Profile, Task, TaskHistory } from "../../data/APItypes";
 import { app } from "../../data/firebase/config";
 import { AppState, useAppSelector } from "../store";
@@ -56,29 +66,67 @@ const initialState: TaskState = {
   ],
 };
 
-//TODO https://redux.js.org/usage/deriving-data-selectors
-export const selectUserProfiles = (state: AppState) => {
-  const returnUserProfiles = state.profiles.profiles.filter(
-    (p) => p.userId === state.user.user?.uid
-  );
-  return returnUserProfiles;
-};
+export const getUserTaskHistories = createAsyncThunk<
+  Task[],
+  void,
+  { rejectValue: string; state: AppState }
+>("tasks/getUserTaskHistories", async (_, thunkApi) => {
+  try {
+    const state = thunkApi.getState();
+    state.user.user?.uid;
 
-//const selectHouseholdProfiles;
+    if (!state.households.activeHouseHold) {
+      throw "no active household";
+    }
+
+    const db = getDatabase(app);
+
+    const reference = ref(db, "app/taskHistories");
+    const queryResult = query(
+      reference,
+      orderByChild("householdId"),
+      equalTo(state.households.activeHouseHold!.id)
+    );
+    const snapshot = await get(queryResult);
+
+    if (snapshot.exists()) {
+      return snapshot.val();
+    }
+
+    // mby dosent work
+    throw "Snapshot does not exists";
+  } catch (error) {
+    console.error(error);
+    if (error instanceof FirebaseError) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+    return thunkApi.rejectWithValue(
+      "Could not signup please contact our support."
+    );
+  }
+});
 
 export const getUserTasks = createAsyncThunk<
   Task[],
   void,
   { rejectValue: string; state: AppState }
->("profiles/getUserProfiles", async (_, thunkApi) => {
+>("tasks/getUserTasks", async (_, thunkApi) => {
   try {
     const state = thunkApi.getState();
     state.user.user?.uid;
 
+    if (!state.households.activeHouseHold) {
+      throw "no active household";
+    }
+
     const db = getDatabase(app);
 
-    const reference = ref(db, "app/profiles");
-    const queryResult = query(reference);
+    const reference = ref(db, "app/tasks");
+    const queryResult = query(
+      reference,
+      orderByChild("householdId"),
+      equalTo(state.households.activeHouseHold!.id)
+    );
     const snapshot = await get(queryResult);
 
     if (snapshot.exists()) {
@@ -99,7 +147,7 @@ export const getUserTasks = createAsyncThunk<
 });
 
 const taskSlice = createSlice({
-  name: "profile",
+  name: "task",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

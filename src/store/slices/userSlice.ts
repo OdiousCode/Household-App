@@ -22,6 +22,11 @@ interface UserState {
   errorMessage: string;
 }
 
+// const initialState: UserState = {
+//   user: undefined,
+//   isLoading: false,
+//   errorMessage: "",
+// };
 const initialState: UserState = {
   user: { uid: "123", email: "test@test.com" } as User,
   isLoading: false,

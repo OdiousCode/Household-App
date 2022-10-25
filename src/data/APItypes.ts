@@ -5,10 +5,17 @@ export interface User {
 }
 
 export interface Profile {
-  id: number;
+  id: string;
   userId: string;
-  householdId: number;
+  householdId: string;
 
+  name: string;
+  role: "Admin" | "User";
+  avatar: number; // 0 - 5
+  pending: boolean;
+}
+
+export interface ProfileDTO {
   name: string;
   role: "Admin" | "User";
   avatar: number; // 0 - 5

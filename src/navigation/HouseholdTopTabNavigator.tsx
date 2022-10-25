@@ -15,13 +15,14 @@ import {
   createMaterialTopTabNavigator,
   MaterialTopTabScreenProps,
 } from "@react-navigation/material-top-tabs";
+import { Profile, ProfileDTO } from "../data/APItypes";
 
 // import QuestionScreen from "../screens/QuestionScreen";
 
 export type HouseholdTopTabParamList = {
   TaskScreen: undefined;
-  PendingApplicationScreen: undefined;
-  ProfileOverViewScreen: undefined;
+  PendingApplicationScreen: { profile: Profile } | undefined;
+  ProfileOverViewScreen: { householdId: string } | undefined;
   StatisticsScreen: undefined;
   TaskOverviewScreen: undefined;
 };

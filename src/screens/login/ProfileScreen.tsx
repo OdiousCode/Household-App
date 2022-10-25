@@ -3,7 +3,10 @@ import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { app } from "../../data/firebase/config";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
-import {} from "../../store/slices/householdSlice";
+import {
+  getUserHouseholds,
+  setActiveHouseHold,
+} from "../../store/slices/householdSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 
 import {
@@ -17,55 +20,48 @@ import {
   where,
 } from "firebase/firestore";
 import { Household, Profile } from "../../data/APItypes";
-import { selectUserProfiles } from "../../store/slices/profileSlice";
+import {
+  getUserProfiles,
+  selectUserProfiles,
+} from "../../store/slices/profileSlice";
 import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
 import { avatars } from "../../constants/Layout";
-
-// import { setName } from "../store/profileSlice";
-// import { useAppDispatch, useAppSelector } from "../store/store";
 
 export default function ProfileScreen({
   navigation,
 }: RootScreenProps<"Profile">) {
   const dispatch = useAppDispatch();
-  const [entrenceCode, setEntranceCode] = useState("");
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
 
-  //   const balance = useAppSelector((state) => state.bank.balance);
-  //   const transactions = useAppSelector((state) => state.bank.transactions);
-  //   const profile = useAppSelector((state) => state.profile);
+  console.log("all Profiles?");
+  let allProfiles = useAppSelector((state) => state.profiles.profiles);
+  console.log(allProfiles);
 
-  ///=========================================================================
-  // Get all PROFILES where Profile.userId ===  auth.currentUser?.uid;
-  // Get all HOUSEHOLDS where profile.householdId === household.id
+  console.log("My Profile");
+  let uid = useAppSelector((state) => state.user.user?.uid);
+  let myProfiles = allProfiles.filter((p) => p.userId === uid);
 
-  // // // Save Both of these in redux? ( MyProfiles, MyHouseholds)
-  // WAIT FOR USER TO SELECT A PROFILE
-
-  // then
-  // NAVIGATE to Said Profile
-  // Save CurrentProfile + CurrentHousehold to redux
-  ///=========================================================================
-
-  // PROFILER.userId = auth.currentuser.uid
-
-  const myfakeProfile: Profile = {
-    avatar: 0,
-    householdId: 0,
-    id: 12,
-    name: "obs",
-    pending: false,
-    role: "User",
-    userId: "22",
-  };
-
-  const myProfiles = useAppSelector(selectUserProfiles);
   const [visible, setVisible] = React.useState(false);
   const [avatarNumber, setAvatarNumber] = React.useState(0);
+  const [profile, setProfile] = useState({} as Profile);
   const openMenu = () => setVisible(true);
 
   const closeMenu = () => setVisible(false);
+
+  // {myProfiles.map((p) => {
+  //         return (
+  //           <View key={p.id}>
+  //             <Button
+  //               title={p.name + " " + p.householdId}
+  //               onPress={async () => {
+  //                 navigation.navigate("HouseholdTopTabNavigator", {
+  //                   screen: "PendingApplicationScreen",
+  //                   params: { profile: p },
+  //                 });
+
+  //                 // }
+  //               }}
+  //             />
+
   return (
     <View style={styles.container}>
       <View
@@ -92,7 +88,7 @@ export default function ProfileScreen({
           }}
           onPress={() => navigation.navigate("RoomApplication")}
         >
-          Gå med hushåll
+          Sök åktomst till hushåll
         </Button>
         <Button
           icon="plus-circle-outline"
@@ -137,7 +133,23 @@ export default function ProfileScreen({
               </Button>
             }
           >
-            <Menu.Item
+            {myProfiles.map((myProf) => {
+              return (
+                <Menu.Item
+                  onPress={() => {
+                    closeMenu();
+                    // set active household
+                    setAvatarNumber(myProf.avatar);
+                    setProfile(myProf);
+                  }}
+                  //TODO get name from householdId
+                  title={myProf.householdId}
+                />
+              );
+            })}
+          </Menu>
+
+          {/* <Menu.Item
               onPress={() => {
                 closeMenu();
                 // set active household
@@ -161,7 +173,7 @@ export default function ProfileScreen({
               }}
               title="Arbete AB"
             />
-          </Menu>
+          </Menu> */}
         </View>
         <View
           style={{
@@ -186,7 +198,8 @@ export default function ProfileScreen({
           }}
           onPress={() =>
             navigation.navigate("HouseholdTopTabNavigator", {
-              screen: "TaskScreen",
+              screen: "PendingApplicationScreen",
+              params: { profile: profile },
             })
           }
         >
@@ -195,32 +208,20 @@ export default function ProfileScreen({
       </View>
       <View style={{ position: "absolute", bottom: 50 }}>
         <Text>Testing stuff</Text>
-      </View>
-      <View style={{ flexDirection: "row", position: "absolute", bottom: 0 }}>
-        <Button onPress={() => navigation.navigate("CreateAvatar")}>
-          Create Avatar
-        </Button>
 
-        <TextInput
-          style={styles.input}
-          onChangeText={(code) => setEntranceCode(code)}
-          placeholder="entrance code"
-          value={entrenceCode}
-        ></TextInput>
-        <Button>Gå med hushåll</Button>
-        {/* <Button onPress={() => navigation.navigate("CreateHousehold")}>
-        Create household
-      </Button> */}
-        {/* <Button
-        onPress={() =>
-          navigation.navigate("HouseholdTopTabNavigator", {
-            screen: "TaskScreen",
-          })
-        }
-      >
-        Enter household
-      </Button> */}
-        {/* <Button title="Log out" onPress={logoutOfApp} /> */}
+        <Button
+          onPress={async () => {
+            console.log("GET DATA RUNNING");
+            const r = await dispatch(getUserProfiles());
+            if (r.meta.requestStatus === "fulfilled") {
+            }
+            const res = await dispatch(getUserHouseholds());
+            if (r.meta.requestStatus === "fulfilled") {
+            }
+          }}
+        >
+          Get Data
+        </Button>
       </View>
     </View>
   );

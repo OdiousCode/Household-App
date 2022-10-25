@@ -1,18 +1,26 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { RootScreenProps } from "../../navigation/RootStackNavigator";
+import RootStackNavigator, {
+  RootScreenProps,
+} from "../../navigation/RootStackNavigator";
 import { avatarColors } from "../../constants/Colors";
 import { avatars } from "../../constants/Layout";
+import { useAppDispatch } from "../../store/store";
+import { createProfile, updateProfile } from "../../store/slices/profileSlice";
+import { Profile, ProfileDTO } from "../../data/APItypes";
+import { setActiveHouseHold } from "../../store/slices/householdSlice";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 
 export default function CreateAvatar({
   navigation,
+  route,
 }: RootScreenProps<"CreateAvatar">) {
-  //   const dispatch = useAppDispatch();
-  //   const balance = useAppSelector((state) => state.bank.balance);
-  //   const transactions = useAppSelector((state) => state.bank.transactions);
-  //   const profile = useAppSelector((state) => state.profile);
+  const dispatch = useAppDispatch();
+  let baseProfile = route.params!.profile;
+  console.log(1);
+  console.log(baseProfile);
+
   const allAvatars = avatars;
   return (
     <View style={styles.container}>
@@ -34,6 +42,38 @@ export default function CreateAvatar({
             </View>
           );
         })}
+
+        <Button
+          title="Submit"
+          onPress={async () => {
+            // TODO
+            //update Profile? currentprofile to name + avatar as wished
+
+            let newProfile: Profile = {
+              avatar: 1,
+              name: "Nytt namn",
+
+              householdId: baseProfile.householdId,
+              id: baseProfile.id,
+              pending: baseProfile.pending,
+              role: baseProfile.role,
+              userId: baseProfile.userId,
+            };
+
+            console.log(2);
+            console.log(newProfile);
+
+            const r = await dispatch(
+              updateProfile({
+                profile: newProfile,
+              })
+            );
+
+            if (r.meta.requestStatus === "fulfilled") {
+              navigation.goBack();
+            }
+          }}
+        />
       </View>
 
       {/* <View style={[styles.avatar, { backgroundColor: Colors.avatar_Fox }]}>

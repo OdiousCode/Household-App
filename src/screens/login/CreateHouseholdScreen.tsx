@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { useSelector } from "react-redux";
+import { Household, Profile, ProfileDTO } from "../../data/APItypes";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
-import { createHousehold } from "../../store/slices/householdSlice";
+import {
+  createHousehold,
+  getUserHouseholds,
+} from "../../store/slices/householdSlice";
+import { createProfile } from "../../store/slices/profileSlice";
 import { selectUser } from "../../store/slices/userSlice";
 import { useAppDispatch } from "../../store/store";
 
@@ -14,21 +19,16 @@ export default function CreateHouseHoldScreen({
 }: RootScreenProps<"CreateHousehold">) {
   const dispatch = useAppDispatch();
 
-
-  const [name, setName] = useState('');
-  const [id, setId] = useState('');
-  const [entrenceCode, setEntranceCode] = useState('');
-
+  const [name, setName] = useState("");
+  const [id, setId] = useState("");
+  const [entrenceCode, setEntranceCode] = useState("");
 
   const user = useSelector(selectUser);
 
   return (
     <View style={styles.container}>
       <Text>Profile Screen</Text>
-      <Button
-        title="Create Avatar"
-        onPress={() => navigation.navigate("CreateAvatar")}
-      />
+
       <Button
         title="Apply to room"
         onPress={() => navigation.navigate("RoomApplication")}
@@ -41,26 +41,53 @@ export default function CreateHouseHoldScreen({
           })
         }
       />
-        <TextInput
-          style={styles.input}
-          onChangeText={(name) => setName(name)}
-          placeholder="name"
+      <TextInput
+        style={styles.input}
+        onChangeText={(name) => setName(name)}
+        placeholder="name"
       ></TextInput>
       <TextInput
-          style={styles.input}
-          onChangeText={(code) => setEntranceCode(code)}
-          placeholder="entrance code"
+        style={styles.input}
+        onChangeText={(code) => setEntranceCode(code)}
+        placeholder="entrance code"
       ></TextInput>
-       <TextInput
-          style={styles.input}
-          onChangeText={(id) => setId(id)}
-          placeholder="id"
+      <TextInput
+        style={styles.input}
+        onChangeText={(id) => setId(id)}
+        placeholder="id"
       ></TextInput>
-       <Button
+      <Button
         title="Submit"
-        onPress={() => dispatch(createHousehold({ name: name, entrenceCode: entrenceCode, id: id}))}
+        onPress={async () => {
+          const r = await dispatch(createHousehold(name));
+          console.log(r.meta.requestStatus);
+          if (r.meta.requestStatus === "fulfilled") {
+            let householdId = (r.payload as Household).id;
+
+            //TODO
+            // create profile
+            const profile: ProfileDTO = {
+              avatar: -1,
+              name: "",
+              pending: false,
+              role: "Admin",
+            };
+
+            const re = await dispatch(
+              createProfile({
+                profile: profile,
+                houseHoldId: householdId,
+              })
+            );
+            if (re.meta.requestStatus === "fulfilled") {
+              navigation.navigate("CreateAvatar", {
+                profile: re.payload as Profile,
+              });
+            }
+          }
+        }}
       />
-      </View>
+    </View>
   );
 }
 

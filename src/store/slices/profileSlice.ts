@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
 import { get, getDatabase, push, query, ref, set } from "firebase/database";
-import { Household, Profile } from "../../data/APItypes";
-import { app } from "../../data/firebase/config";
+import { Household, Profile, ProfileDTO } from "../../data/APItypes";
+import { app, auth } from "../../data/firebase/config";
 import { AppState, useAppSelector } from "../store";
 
 interface ProfileState {
@@ -19,24 +19,49 @@ const initialState: ProfileState = {
   profiles: [
     {
       avatar: 3,
-      householdId: 1,
-      id: 1,
+      householdId: "1",
+      id: "1",
       name: "VerkligtNamn",
       pending: false,
       role: "User",
       userId: "123",
     },
+    {
+      avatar: 3,
+      householdId: "1",
+      id: "2",
+      name: "Också bra namn",
+      pending: false,
+      role: "User",
+      userId: "12345",
+    },
   ],
 };
 
 // export const selectActiveProfile
-
-//TODO https://redux.js.org/usage/deriving-data-selectors
-export const selectUserProfiles = (state: AppState) => {
+export const selectCurrentProfile = (state: AppState) => {
+  if (!state.households.activeHouseHold) {
+    return;
+  }
   const returnUserProfiles = state.profiles.profiles.filter(
     (p) => p.userId === state.user.user?.uid
   );
-  return returnUserProfiles;
+
+  const currentProfile = returnUserProfiles.find(
+    (p) => p.householdId === state.households.activeHouseHold?.id
+  );
+  return currentProfile;
+};
+
+//TODO https://redux.js.org/usage/deriving-data-selectors
+export const selectUserProfiles = (state: AppState) => {
+  if (state.profiles.profiles != undefined) {
+    const returnUserProfiles = state.profiles.profiles.filter(
+      (p) => p.userId === state.user.user?.uid
+    );
+
+    return returnUserProfiles;
+  }
 };
 
 //const selectHouseholdProfiles;
@@ -47,6 +72,7 @@ export const getUserProfiles = createAsyncThunk<
   { rejectValue: string; state: AppState }
 >("profiles/getUserProfiles", async (_, thunkApi) => {
   try {
+    console.log(1);
     const state = thunkApi.getState();
     state.user.user?.uid;
 
@@ -75,20 +101,38 @@ export const getUserProfiles = createAsyncThunk<
 
 export const createProfile = createAsyncThunk<
   Profile,
-  void,
+  { profile: ProfileDTO; houseHoldId: string },
   { rejectValue: string; state: AppState }
->("profiles/getUserProfiles", async (profile, thunkApi) => {
+>("profiles/createProfile", async ({ profile, houseHoldId }, thunkApi) => {
   try {
     const state = thunkApi.getState();
-    state.user.user?.uid;
+    if (!state.user.user) {
+      return thunkApi.rejectWithValue(
+        "Must be valid Profile + Household combination"
+      );
+    }
+    //profile.id = uid todo.
 
     const db = getDatabase(app);
-
     const reference = ref(db, "app/profiles");
-    await set(ref(db, "app/profiles"), profile);
+    const pushRef = push(reference);
 
-    // mby dosent work
-    throw "Snapshot does not exists";
+    let returnProfile: Profile = {
+      avatar: profile.avatar,
+      name: profile.name,
+      pending: profile.pending,
+      role: profile.role,
+
+      //householdId:
+      userId: state.user.user.uid,
+      householdId: houseHoldId,
+      id: pushRef!.key!,
+    };
+
+    await set(pushRef, returnProfile);
+
+    //TODO look for error?
+    return returnProfile;
   } catch (error) {
     console.error(error);
     if (error instanceof FirebaseError) {
@@ -100,34 +144,36 @@ export const createProfile = createAsyncThunk<
   }
 });
 
-// export const setProfiles = createAsyncThunk<Profile, { rejectValue: string }>(
-//   "profiles/setProfiles",
-//   async (profile, thunkApi) => {
-//     try {
-//       //const auth = getAuth(app);
-//       const profiles: Profile[] = [];
+export const updateProfile = createAsyncThunk<
+  Profile,
+  { profile: Profile },
+  { rejectValue: string; state: AppState }
+>("profiles/updateProfile", async ({ profile }, thunkApi) => {
+  try {
+    const state = thunkApi.getState();
+    if (!state.user.user) {
+      return thunkApi.rejectWithValue(
+        "Must be valid Profile + Household combination"
+      );
+    }
+    //profile.id = uid todo.
 
-//       return profiles;
-//     } catch (error) {
-//       console.error(error);
-//       if (error instanceof FirebaseError) {
-//         return thunkApi.rejectWithValue(error.message);
-//       }
-//       return thunkApi.rejectWithValue(
-//         "Could not signup please contact our support."
-//       );
-//     }
-//   }
-// );
+    const db = getDatabase(app);
 
-// export const setProfiles = createAsyncThunk<
-//   Profile[],
-//   string,
-//   { rejectValue: string }
-// >("profile/setProfiles", async (profile, thunkApi) => {
-//   return thunkApi.rejectWithValue("Could not save name");
-//   return profile;
-// });
+    await set(ref(db, "app/profiles/" + profile.id), profile);
+
+    //TODO look for error?
+    return profile;
+  } catch (error) {
+    console.error(error);
+    if (error instanceof FirebaseError) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+    return thunkApi.rejectWithValue(
+      "Could not signup please contact our support."
+    );
+  }
+});
 
 const profileSlice = createSlice({
   name: "profile",
@@ -141,10 +187,56 @@ const profileSlice = createSlice({
     builder.addCase(getUserProfiles.fulfilled, (state, action) => {
       console.log("fulfilled");
       state.isLoading = false;
-      state.profiles = action.payload;
+      console.log(action.payload);
+      let allProfiles: Profile[] = [];
+      for (var key in action.payload) {
+        console.log("snapshotkey " + key);
+        console.log("snapshot.val" + action.payload[key]);
+        allProfiles.push(action.payload[key]);
+      }
+      state.profiles = allProfiles;
     });
     builder.addCase(getUserProfiles.rejected, (state, action) => {
       console.log("rejected");
+      state.isLoading = false;
+      state.error = action.payload || "Unknown error";
+    });
+
+    builder.addCase(createProfile.pending, (state) => {
+      state.isLoading = true;
+      console.log("pending");
+    });
+    builder.addCase(createProfile.fulfilled, (state, action) => {
+      console.log("fulfilled");
+      state.isLoading = false;
+      state.profiles.push(action.payload);
+    });
+    builder.addCase(createProfile.rejected, (state, action) => {
+      console.log("rejected " + action.payload);
+      state.isLoading = false;
+      state.error = action.payload || "Unknown error";
+    });
+
+    builder.addCase(updateProfile.pending, (state) => {
+      state.isLoading = true;
+      console.log("pending");
+    });
+    builder.addCase(updateProfile.fulfilled, (state, action) => {
+      console.log("fulfilled");
+      console.log("UpdateProfile");
+      state.isLoading = false;
+      state.profiles = state.profiles.map((item, index) => {
+        if (item.id !== action.payload.id) {
+          return item;
+        } else {
+          return action.payload;
+        }
+      });
+    });
+    builder.addCase(updateProfile.rejected, (state, action) => {
+      console.log("rejected " + action.payload);
+      console.log("UpdateProfile");
+
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
     });
