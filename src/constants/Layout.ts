@@ -39,7 +39,7 @@ export const avatars: Avatar[] = [
 
 export function getAvatar(index: number) {
   if (index == -1) {
-    //TODO ? icon
+    //TODO -?- icon
     return avatars[4];
   }
   return avatars[index];

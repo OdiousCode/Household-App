@@ -26,7 +26,7 @@ import {
   selectUserProfiles,
 } from "../../store/slices/profileSlice";
 import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
-import { avatars } from "../../constants/Layout";
+import { avatars, getAvatar } from "../../constants/Layout";
 import { useFocusEffect } from "@react-navigation/native";
 
 export default function ProfileScreen({
@@ -167,13 +167,13 @@ export default function ProfileScreen({
         </View>
         <View
           style={{
-            backgroundColor: avatars[avatarNumber].color,
+            backgroundColor: getAvatar(avatarNumber).color,
             padding: 50,
             borderRadius: 555,
             margin: 10,
           }}
         >
-          <Text style={{ fontSize: 130 }}>{avatars[avatarNumber].icon}</Text>
+          <Text style={{ fontSize: 130 }}>{getAvatar(avatarNumber).icon}</Text>
         </View>
         <Button
           icon="login"
