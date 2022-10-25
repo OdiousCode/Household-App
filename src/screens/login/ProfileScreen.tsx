@@ -1,7 +1,7 @@
 import { getDatabase, onValue, ref } from "firebase/database";
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { app, auth } from "../../data/firebase/config";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import { app } from "../../data/firebase/config";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import {
   getUserHouseholds,
@@ -20,12 +20,9 @@ import {
   where,
 } from "firebase/firestore";
 import { Household, Profile } from "../../data/APItypes";
-import {
-  getUserProfiles,
-  selectUserProfiles,
-} from "../../store/slices/profileSlice";
-import { logOut } from "../../store/slices/userSlice";
-import { async } from "@firebase/util";
+import { selectUserProfiles } from "../../store/slices/profileSlice";
+import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
+import { avatars } from "../../constants/Layout";
 
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
@@ -34,16 +31,7 @@ export default function ProfileScreen({
   navigation,
 }: RootScreenProps<"Profile">) {
   const dispatch = useAppDispatch();
-  const [entrenceCode, setEntranceCode] = useState("");
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
-  // dispatch(logOut());
-  //   const balance = useAppSelector((state) => state.bank.balance);
-  //   const transactions = useAppSelector((state) => state.bank.transactions);
 
-  //dispatch(getUserProfiles);
-
-  // dispatch(getUserProfiles());
   console.log("all Profiles?");
   let allProfiles = useAppSelector((state) => state.profiles.profiles);
   console.log(allProfiles);
@@ -52,81 +40,143 @@ export default function ProfileScreen({
   let uid = useAppSelector((state) => state.user.user?.uid);
   let myProfiles = allProfiles.filter((p) => p.userId === uid);
 
-  //const profile = useAppSelector((state) => state.profiles.profiles);
+  const [visible, setVisible] = React.useState(false);
+  const [avatarNumber, setAvatarNumber] = React.useState(0);
+  const [profile, setProfile] = useState({} as Profile);
+  const openMenu = () => setVisible(true);
 
-  console.log("All households");
-  console.log(useAppSelector((state) => state.households.households));
-
-  //TODO prob not?
-  // if (activehs) {
-  //   navigation.navigate("HouseholdTopTabNavigator", {
-  //     screen: "PendingApplicationScreen",
-  //   });
-  // }
+  const closeMenu = () => setVisible(false);
   return (
     <View style={styles.container}>
-      <Text>Profile Screen</Text>
-      {/* <Button
-        title="Create Avatar"
-        onPress={() => navigation.navigate("CreateAvatar")}
-      /> */}
-
-      {myProfiles.map((p) => {
-        return (
-          <View key={p.id}>
-            <Button
-              title={p.name + " " + p.householdId}
-              onPress={async () => {
-                navigation.navigate("HouseholdTopTabNavigator", {
-                  screen: "PendingApplicationScreen",
-                  params: { profile: p },
-                });
-
-                // }
-              }}
-            />
-          </View>
-        );
-      })}
-
-      {/* {allAvatars.map((a) => {
-        return (
-          <View
-            key={a.icon}
-            style={{
-              backgroundColor: a.color,
-              padding: 10,
-              borderRadius: 50,
-            }}
-          >
-            <Text style={{ fontSize: 30 }}>{a.icon}</Text>
-          </View>
-        );
-      })} */}
-
-      <Button
-        title="Get Data"
-        onPress={async () => {
-          console.log("GET DATA RUNNING");
-          const r = await dispatch(getUserProfiles());
-          if (r.meta.requestStatus === "fulfilled") {
-          }
-          const res = await dispatch(getUserHouseholds());
-          if (r.meta.requestStatus === "fulfilled") {
-          }
+      <View
+        style={{
+          position: "absolute",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexDirection: "row",
+          width: "100%",
+          top: 0,
+          padding: 10,
         }}
-      />
-
-      <Button
-        title="Apply to room"
-        onPress={() => navigation.navigate("RoomApplication")}
-      />
-      <Button
-        title="Create household"
-        onPress={() => navigation.navigate("CreateHousehold")}
-      />
-
-      {/* <Button title="Log out" onPress={logoutOfApp} /> */}
+      >
+        <Button
+          icon="login"
+          mode="contained"
+          buttonColor="#FFF"
+          textColor="#000"
+          style={{
+            borderRadius: 50,
+            borderWidth: 0.5,
+            width: 150,
+            borderColor: "#000",
+          }}
+          onPress={() => navigation.navigate("RoomApplication")}
+        >
+          Sök åktomst till hushåll
+        </Button>
+        <Button
+          icon="plus-circle-outline"
+          mode="contained-tonal"
+          buttonColor="#FFF"
+          style={{
+            borderRadius: 50,
+            borderWidth: 0.5,
+            width: 150,
+            borderColor: "#000",
+          }}
+          onPress={() => navigation.navigate("CreateHousehold")}
+        >
+          Skapa hushåll
+        </Button>
+      </View>
+      <View style={{ alignItems: "center" }}>
+        <View
+          style={{
+            paddingTop: 5,
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <Menu
+            visible={visible}
+            onDismiss={closeMenu}
+            anchor={
+              <Button
+                icon="chevron-down"
+                mode="contained"
+                buttonColor="#FFF"
+                textColor="#000"
+                style={{
+                  borderRadius: 5,
+                  borderWidth: 2,
+                  width: 350,
+                }}
+                onPress={openMenu}
+              >
+                Välj hushåll
+              </Button>
+            }
+          >
+            <Menu.Item
+              onPress={() => {
+                closeMenu();
+                // set active household
+                setAvatarNumber(1);
+              }}
+              title="Familjen Andersson"
+            />
+            <Menu.Item
+              onPress={() => {
+                closeMenu();
+                // set active household
+                setAvatarNumber(2);
+              }}
+              title="Sportklubben Sport IF"
+            />
+            <Menu.Item
+              onPress={() => {
+                closeMenu();
+                // set active household
+                setAvatarNumber(3);
+              }}
+              title="Arbete AB"
+            />
+          </Menu>
+        </View>
+        <View
+          style={{
+            backgroundColor: avatars[avatarNumber].color,
+            padding: 50,
+            borderRadius: 555,
+            margin: 10,
+          }}
+        >
+          <Text style={{ fontSize: 130 }}>{avatars[avatarNumber].icon}</Text>
+        </View>
+        <Button
+          icon="login"
+          mode="contained"
+          buttonColor="#FFF"
+          textColor="#000"
+          style={{
+            borderRadius: 10,
+            borderWidth: 0.5,
+            width: 150,
+            borderColor: "#000",
+          }}
+          onPress={() =>
+            navigation.navigate("HouseholdTopTabNavigator", {
+              screen: "PendingApplicationScreen",
+              params: { profile: profile },
+            })
+          }
+        >
+          Gå in
+        </Button>
+      </View>
+      <View style={{ position: "absolute", bottom: 50 }}>
+        <Text>Testing stuff</Text>
+      </View>
     </View>
   );
 }
@@ -134,7 +184,7 @@ export default function ProfileScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#ddd",
     alignItems: "center",
     justifyContent: "center",
   },
