@@ -36,33 +36,15 @@ const initialState: HouseHoldState = {
       name: "Fam 4",
     },
   ],
-  //activeHouseHold: undefined,
 };
 
-// export const selectUserHouseholds =
-//   (profiles: Profile[]) => (state: AppState) => {
-//     let returnHouseHold: Household[] = [];
+export const selectActiveHousehold = (state: AppState) => {
+  const activeHousehold = state.households.households.find(
+    (h) => h.id === state.profiles.activeProfile?.id
+  );
 
-//     profiles.forEach((p) => {
-//       if (state.households.households.find((h) => h.id === p.householdId)) {
-//         returnHouseHold.push(state.households.households[p.householdId])
-//       }
-//     });
-
-//     // const returnHouseHold = state.households.households.find((h) => h.id === profiles.c);
-
-//     return returnHouseHold;
-//   };
-
-// export const selectActiveHouseHold = (
-//   state: AppState,
-//   entrenceCode: string
-// ) => {
-//   const returnUserProfiles = state.households.households.find(
-//     (p) => p.entrenceCode === entrenceCode
-//   );
-//   state.households.activeHouseHold = returnUserProfiles;
-// };
+  return activeHousehold;
+};
 
 export const createHousehold = createAsyncThunk<
   Household,
