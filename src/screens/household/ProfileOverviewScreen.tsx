@@ -1,25 +1,83 @@
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
-// import { setName } from "../store/profileSlice";
-// import { useAppDispatch, useAppSelector } from "../store/store";
+import { Card, Button } from "react-native-paper";
+import { store, useAppDispatch, useAppSelector } from "../../store/store";
+import { avatars } from "../../constants/Layout";
 
 export default function ProfileOverViewScreen({
   navigation,
 }: HouseholdScreenProps<"ProfileOverViewScreen">) {
-  //   const dispatch = useAppDispatch();
-  //   const balance = useAppSelector((state) => state.bank.balance);
-  //   const transactions = useAppSelector((state) => state.bank.transactions);
-  //   const profile = useAppSelector((state) => state.profile);
-
+  const profileData = useAppSelector((state) => state.profiles.profiles);
+  const householdData = useAppSelector((state) => state.households);
   return (
-    <View style={styles.container}>
-      <Text>PRofile overview Screen</Text>
+    <>
+      <View style={styles.container}>
+        <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 30 }}>
+          Hushåll: {householdData.households[0].name}
+        </Text>
 
-      <Button title="Go back" onPress={() => navigation.goBack()} />
+        <View style={{ height: 500, width: "90%" }}>
+          <FlatList
+            style={{ flex: 1, width: "100%" }}
+            data={profileData}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View>
+                {item.householdId === householdData.households[0].id && (
+                  <Card
+                    onPress={() =>
+                      Alert.alert(
+                        item.name,
+                        "Tillhör hushåll " + householdData.households[0].name,
+                        [
+                          {
+                            // Om user är profil, visa knapp för lämna hushåll här
+                          },
+                          {},
+                        ],
+                        {
+                          cancelable: true,
+                          onDismiss: () =>
+                            Alert.alert("Avbröt uppdatering av användare"),
+                        }
+                      )
+                    }
+                    style={{
+                      backgroundColor: "#fff",
 
-      {/* <Button title="Set name" onPress={() => dispatch(setName("David"))} /> */}
-    </View>
+                      borderRadius: 10,
+                      borderColor: "#000",
+
+                      marginBottom: 10,
+                    }}
+                  >
+                    <View
+                      style={{
+                        margin: 10,
+                        alignItems: "center",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
+
+                      <Text style={{ fontSize: 17 }}>
+                        {avatars[item.avatar].icon}
+                      </Text>
+                    </View>
+                  </Card>
+                )}
+                {/* Visa bara följande för att se att logik funkar! */}
+                {item.householdId !== householdData.households[0].id && (
+                  <Text>{item.name} tillhör annat hushåll</Text>
+                )}
+              </View>
+            )}
+          />
+        </View>
+      </View>
+    </>
   );
 }
 
