@@ -88,7 +88,7 @@ export default function ProfileScreen({
           }}
           onPress={() => navigation.navigate("RoomApplication")}
         >
-          Sök åktomst till hushåll
+          Anslut hushåll
         </Button>
         <Button
           icon="plus-circle-outline"
