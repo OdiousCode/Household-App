@@ -29,12 +29,38 @@ export default function ProfileOverViewScreen({
                     onPress={() =>
                       Alert.alert(
                         item.name,
-                        "Tillhör hushåll " + householdData.households[0].name,
+                        householdData.households[0].name,
                         [
                           {
-                            // Om user är profil, visa knapp för lämna hushåll här
+                            text: "Lämna hushåll",
+                            onPress: () => {
+                              Alert.alert(
+                                'Lämna hushåll "' +
+                                  householdData.households[0].name +
+                                  '"',
+                                "Är du säker att du vill lämna?",
+                                [
+                                  {
+                                    text: "Ja",
+                                    onPress: () => {
+                                      // Lägg in kod för att faktiskt se till att profilen lämnar hushåll här.
+                                      Alert.alert(
+                                        'Lämnat hushåll "' +
+                                          householdData.households[0].name +
+                                          '"'
+                                      );
+                                    },
+                                  },
+                                  {
+                                    text: "Nej",
+                                  },
+                                ]
+                              );
+                            },
                           },
-                          {},
+                          {
+                            text: "Avbryt",
+                          },
                         ],
                         {
                           cancelable: true,
@@ -44,11 +70,9 @@ export default function ProfileOverViewScreen({
                       )
                     }
                     style={{
-                      backgroundColor: "#fff",
-
+                      backgroundColor: avatars[item.avatar].color,
                       borderRadius: 10,
                       borderColor: "#000",
-
                       marginBottom: 10,
                     }}
                   >
@@ -61,7 +85,6 @@ export default function ProfileOverViewScreen({
                       }}
                     >
                       <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
-
                       <Text style={{ fontSize: 17 }}>
                         {avatars[item.avatar].icon}
                       </Text>
