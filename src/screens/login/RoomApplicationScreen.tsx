@@ -33,20 +33,14 @@ export default function RoomApplication({
       <Button
         title="Submit"
         onPress={async () => {
-          console.log("1");
-          //TODO change to id, but find based on entrencode?
-
           if (allH.find((h) => h.entrenceCode === entrenceCode)) {
-            console.log("2");
-
             const profile: ProfileDTO = {
               avatar: -1,
-              name: "Elias",
+              name: "No Profile",
               pending: true,
               role: "User",
             };
 
-            //TODO
             dispatch(
               createProfile({
                 profile: profile,
@@ -65,8 +59,6 @@ export default function RoomApplication({
                 profileId: (r.payload as Profile).id,
               });
             }
-            console.log("3");
-            // dispatch(setActiveHouseHold(entrenceCode));
           }
         }}
       />

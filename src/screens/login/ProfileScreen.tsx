@@ -160,14 +160,17 @@ export default function ProfileScreen({
 
             //TODO navigate to correct screen
             if (!profile.pending && profile.avatar !== -1) {
+              console.log("Valid Profile");
+
               navigation.navigate("HouseholdTopTabNavigator", {
                 screen: "ProfileOverViewScreen",
               });
+            } else {
+              navigation.navigate("PortalWaiting", {
+                profileId: profile.id,
+              });
             }
             //else go to pending
-            navigation.navigate("PortalWaiting", {
-              profileId: profile.id,
-            });
           }}
         >
           Gå in
