@@ -1,5 +1,12 @@
 import React from "react";
-import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import { Card, Button } from "react-native-paper";
 import { store, useAppDispatch, useAppSelector } from "../../store/store";
@@ -26,49 +33,6 @@ export default function ProfileOverViewScreen({
               <View>
                 {item.householdId === householdData.households[0].id && (
                   <Card
-                    onPress={() =>
-                      Alert.alert(
-                        item.name,
-                        householdData.households[0].name,
-                        [
-                          {
-                            text: "Lämna hushåll",
-                            onPress: () => {
-                              Alert.alert(
-                                'Lämna hushåll "' +
-                                  householdData.households[0].name +
-                                  '"',
-                                "Är du säker att du vill lämna?",
-                                [
-                                  {
-                                    text: "Ja",
-                                    onPress: () => {
-                                      // Lägg in kod för att faktiskt se till att profilen lämnar hushåll här.
-                                      Alert.alert(
-                                        'Lämnat hushåll "' +
-                                          householdData.households[0].name +
-                                          '"'
-                                      );
-                                    },
-                                  },
-                                  {
-                                    text: "Nej",
-                                  },
-                                ]
-                              );
-                            },
-                          },
-                          {
-                            text: "Avbryt",
-                          },
-                        ],
-                        {
-                          cancelable: true,
-                          onDismiss: () =>
-                            Alert.alert("Avbröt uppdatering av användare"),
-                        }
-                      )
-                    }
                     style={{
                       backgroundColor: avatars[item.avatar].color,
                       borderRadius: 10,
@@ -85,6 +49,61 @@ export default function ProfileOverViewScreen({
                       }}
                     >
                       <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
+
+                      {/* This should only be displayed if currentuser === item.id */}
+                      {item.id === "1" && (
+                        <TouchableOpacity
+                          onPress={() =>
+                            Alert.alert(
+                              item.name,
+                              householdData.households[0].name,
+                              [
+                                {
+                                  text: "Lämna hushåll",
+                                  onPress: () => {
+                                    Alert.alert(
+                                      'Lämna hushåll "' +
+                                        householdData.households[0].name +
+                                        '"',
+                                      "Är du säker att du vill lämna?",
+                                      [
+                                        {
+                                          text: "Ja",
+                                          onPress: () => {
+                                            // Lägg in kod för att faktiskt se till att profilen lämnar hushåll här.
+                                            Alert.alert(
+                                              'Lämnat hushåll "' +
+                                                householdData.households[0]
+                                                  .name +
+                                                '"'
+                                            );
+                                          },
+                                        },
+                                        {
+                                          text: "Nej",
+                                        },
+                                      ]
+                                    );
+                                  },
+                                },
+                                {
+                                  text: "Avbryt",
+                                },
+                              ],
+                              {
+                                cancelable: true,
+                                onDismiss: () =>
+                                  Alert.alert(
+                                    "Avbröt uppdatering av användare"
+                                  ),
+                              }
+                            )
+                          }
+                        >
+                          <Text>✒️</Text>
+                        </TouchableOpacity>
+                      )}
+
                       <Text style={{ fontSize: 17 }}>
                         {avatars[item.avatar].icon}
                       </Text>
