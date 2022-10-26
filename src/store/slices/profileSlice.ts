@@ -32,7 +32,7 @@ const initialState: ProfileState = {
       id: "2",
       name: "Också bra namn",
       pending: false,
-      role: "User",
+      role: "Admin",
       userId: "12345",
     },
     {
