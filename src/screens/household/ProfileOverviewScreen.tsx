@@ -31,21 +31,26 @@ export default function ProfileOverViewScreen({
           <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 30 }}>
             Hushåll: {householdData.name}
           </Text>
+          <Text>
+            {currentProfile[12].id}
+            {currentProfile[12].name}
+            {currentProfile[12].role}
+          </Text>
 
           {/* IF current user is a user */}
           <View style={{ height: 500, width: "90%" }}>
             {/* user 0 is normal user, set to 1 to test admin mode, that user is admin */}
-            {currentProfile[0].role === "User" && (
+            {currentProfile[12].role === "User" && (
               <FlatList
                 style={{ flex: 1, width: "100%" }}
                 data={profileData}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
+                keyExtractor={(profile) => profile.id.toString()}
+                renderItem={({ item: profile }) => (
                   <View>
-                    {item.householdId === householdData.id && (
+                    {profile.householdId === householdData.id && (
                       <Card
                         style={{
-                          backgroundColor: getAvatar(item.avatar).color,
+                          backgroundColor: getAvatar(profile.avatar).color,
                           borderRadius: 10,
                           borderColor: "#000",
                           marginBottom: 10,
@@ -60,15 +65,18 @@ export default function ProfileOverViewScreen({
                           }}
                         >
                           <Text style={{ fontWeight: "bold" }}>
-                            {item.name}
+                            {profile.name}
                           </Text>
 
                           {/* This should only be displayed if currentuser === item.id*/}
-                          {item.id === "1" && (
+                          {/* <Text>
+                            {profile.userId} - {currentProfile[12].userId}
+                          </Text> */}
+                          {profile.id === currentProfile[12].id && (
                             <TouchableOpacity
                               onPress={() =>
                                 Alert.alert(
-                                  item.name,
+                                  profile.name,
                                   householdData.name,
                                   [
                                     {
@@ -117,7 +125,7 @@ export default function ProfileOverViewScreen({
                           )}
 
                           <Text style={{ fontSize: 17 }}>
-                            {getAvatar(item.avatar).icon}
+                            {getAvatar(profile.avatar).icon}
                           </Text>
                         </View>
                       </Card>
@@ -133,17 +141,17 @@ export default function ProfileOverViewScreen({
 
             {/* IF current user is a admin */}
             {/* user 0 is normal user, set to 1 to test admin mode, that user is admin */}
-            {currentProfile[0].role === "Admin" && (
+            {currentProfile[12].role === "Admin" && (
               <FlatList
                 style={{ flex: 1, width: "100%" }}
                 data={profileData}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
+                keyExtractor={(profile) => profile.id.toString()}
+                renderItem={({ item: profile }) => (
                   <View>
-                    {item.householdId === householdData.id && (
+                    {profile.householdId === householdData.id && (
                       <Card
                         style={{
-                          backgroundColor: getAvatar(item.avatar).color,
+                          backgroundColor: getAvatar(profile.avatar).color,
                           borderRadius: 10,
                           borderColor: "#000",
                           marginBottom: 10,
@@ -158,14 +166,14 @@ export default function ProfileOverViewScreen({
                           }}
                         >
                           <Text style={{ fontWeight: "bold" }}>
-                            {item.name}
+                            {profile.name}
                           </Text>
 
                           {/* This should only be displayed if currentuser === item.id*/}
                           <TouchableOpacity
                             onPress={() =>
                               Alert.alert(
-                                item.name,
+                                profile.name,
                                 householdData.name,
                                 [
                                   {
@@ -173,7 +181,7 @@ export default function ProfileOverViewScreen({
                                     onPress: () => {
                                       Alert.alert(
                                         "Ta bort " +
-                                          item.name +
+                                          profile.name +
                                           ' ifrån "' +
                                           householdData.name +
                                           '"',
@@ -184,7 +192,7 @@ export default function ProfileOverViewScreen({
                                             onPress: () => {
                                               // Lägg in kod för att faktiskt se till att profilen lämnar hushåll här.
                                               Alert.alert(
-                                                item.name +
+                                                profile.name +
                                                   ' har tagits bort ur hushåll "' +
                                                   householdData.name +
                                                   '"'
@@ -216,7 +224,7 @@ export default function ProfileOverViewScreen({
                           </TouchableOpacity>
 
                           <Text style={{ fontSize: 17 }}>
-                            {getAvatar(item.avatar).icon}
+                            {getAvatar(profile.avatar).icon}
                           </Text>
                         </View>
                       </Card>
