@@ -35,15 +35,10 @@ export default function RoomApplication({
         onPress={async () => {
           console.log("1");
           //TODO change to id, but find based on entrencode?
-          //TODO
-          // change from activeHousehold to activeProfile?
-          // makes more sense right?
-          // everyhwere household is important send as param i guess
-          // make soem sense :)
+
           if (allH.find((h) => h.entrenceCode === entrenceCode)) {
             console.log("2");
-            //dispatch(setActiveHouseHold(entrenceCode));
-            // create profile?
+
             const profile: ProfileDTO = {
               avatar: -1,
               name: "Elias",
@@ -66,9 +61,8 @@ export default function RoomApplication({
               })
             );
             if (r.meta.requestStatus === "fulfilled") {
-              navigation.navigate("HouseholdTopTabNavigator", {
-                screen: "PendingApplicationScreen",
-                params: { profileId: (r.payload as Profile).id },
+              navigation.navigate("PortalWaiting", {
+                profileId: (r.payload as Profile).id,
               });
             }
             console.log("3");

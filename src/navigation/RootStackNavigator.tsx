@@ -25,6 +25,7 @@ import HouseholdTopTabNavigator, {
   HouseholdTopTabParamList,
 } from "./HouseholdTopTabNavigator";
 import { Profile } from "../data/APItypes";
+import PortalWaitingScreen from "../screens/login/PortalWaitingScreen";
 
 // import LoginScreen from "../screens/LoginScreen";
 
@@ -38,6 +39,7 @@ export type RootStackParamList = {
   Login: undefined;
   CreateAccount: undefined;
   CreateAvatar: { profileId: string } | undefined;
+  PortalWaiting: { profileId: string };
   Profile: undefined;
   RoomApplication: undefined;
   CreateHousehold: undefined;
@@ -91,6 +93,8 @@ export default function RootStackNavigator() {
       ) : (
         <>
           <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="PortalWaiting" component={PortalWaitingScreen} />
+
           <Stack.Screen
             name="CreateHousehold"
             component={CreateHouseHoldScreen}

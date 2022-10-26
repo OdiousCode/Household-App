@@ -75,30 +75,20 @@ export default function CreateAvatar({
 
             //TODO take screen as param and move to screen?
             if (r.meta.requestStatus === "fulfilled") {
-              navigation.goBack();
+              if (!newProfile.pending && newProfile.avatar != -1) {
+                console.log("Go To Profile Screen");
+
+                navigation.replace("HouseholdTopTabNavigator", {
+                  screen: "ProfileOverViewScreen",
+                });
+              } else {
+                console.log("Go back");
+                navigation.goBack();
+              }
             }
           }}
         />
       </View>
-
-      {/* <View style={[styles.avatar, { backgroundColor: Colors.avatar_Fox }]}>
-        <Text style={{ fontSize: 30 }}>🦊</Text>
-      </View>
-      <View style={[styles.avatar, { backgroundColor: Colors.avatar_Frog }]}>
-        <Text style={{ fontSize: 30 }}>🐸</Text>
-      </View>
-      <View style={[styles.avatar, { backgroundColor: Colors.avatar_Squid }]}>
-        <Text style={{ fontSize: 30 }}>🐙</Text>
-      </View>
-      <View style={[styles.avatar, { backgroundColor: Colors.avatar_Whale }]}>
-        <Text style={{ fontSize: 30 }}>🐳</Text>
-      </View>
-      <View style={[styles.avatar, { backgroundColor: Colors.avatar_Chicken }]}>
-        <Text style={{ fontSize: 30 }}>🐤</Text>
-      </View>
-      <View style={[styles.avatar, { backgroundColor: Colors.avatar_Pig }]}>
-        <Text style={{ fontSize: 30 }}>🐷</Text>
-      </View> */}
     </View>
   );
 }

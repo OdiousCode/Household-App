@@ -80,7 +80,7 @@ export default function CreateHouseHoldScreen({
               })
             );
             if (re.meta.requestStatus === "fulfilled") {
-              navigation.navigate("CreateAvatar", {
+              navigation.replace("CreateAvatar", {
                 profileId: (re.payload as Profile).id,
               });
             }

@@ -22,7 +22,7 @@ import { Profile, ProfileDTO } from "../data/APItypes";
 export type HouseholdTopTabParamList = {
   TaskScreen: undefined;
   PendingApplicationScreen: { profileId: string } | undefined;
-  ProfileOverViewScreen: { householdId: string } | undefined;
+  ProfileOverViewScreen: undefined;
   StatisticsScreen: undefined;
   TaskOverviewScreen: undefined;
 };

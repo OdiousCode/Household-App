@@ -1,27 +1,15 @@
-import { getDatabase, onValue, ref } from "firebase/database";
 import React, { useCallback, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import { app } from "../../data/firebase/config";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import {
   getUserHouseholds,
   setActiveHouseHold,
 } from "../../store/slices/householdSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
 import { Household, Profile } from "../../data/APItypes";
 import {
   getUserProfiles,
+  selectCurrentProfile,
   selectProfileById,
   selectUserProfiles,
 } from "../../store/slices/profileSlice";
@@ -36,13 +24,15 @@ export default function ProfileScreen({
 
   let myProfiles = useAppSelector(selectUserProfiles);
 
+  //let myCurrentprofile = useAppSelector(selectCurrentProfile);
+
   const [visible, setVisible] = React.useState(false);
   const [avatarNumber, setAvatarNumber] = React.useState(0);
   const [profile, setProfile] = useState({} as Profile);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
 
-  let prof = useAppSelector(selectProfileById("-NFEJ99u7lzjxhCStSzZ"));
+  //let prof = useAppSelector(selectProfileById("-NFEJ99u7lzjxhCStSzZ"));
 
   useFocusEffect(
     useCallback(() => {
@@ -138,32 +128,6 @@ export default function ProfileScreen({
               );
             })}
           </Menu>
-
-          {/* <Menu.Item
-              onPress={() => {
-                closeMenu();
-                // set active household
-                setAvatarNumber(1);
-              }}
-              title="Familjen Andersson"
-            />
-            <Menu.Item
-              onPress={() => {
-                closeMenu();
-                // set active household
-                setAvatarNumber(2);
-              }}
-              title="Sportklubben Sport IF"
-            />
-            <Menu.Item
-              onPress={() => {
-                closeMenu();
-                // set active household
-                setAvatarNumber(3);
-              }}
-              title="Arbete AB"
-            />
-          </Menu> */}
         </View>
         <View
           style={{
@@ -187,12 +151,19 @@ export default function ProfileScreen({
             borderColor: "#000",
           }}
           onPress={() => {
+            //TODO
+            // setActive Profile?
             dispatch(setActiveHouseHold(profile.householdId));
 
             //TODO navigate to correct screen
-            navigation.navigate("HouseholdTopTabNavigator", {
-              screen: "PendingApplicationScreen",
-              params: { profileId: profile.id },
+            if (!profile.pending && profile.avatar !== -1) {
+              navigation.navigate("HouseholdTopTabNavigator", {
+                screen: "ProfileOverViewScreen",
+              });
+            }
+            //else go to pending
+            navigation.navigate("PortalWaiting", {
+              profileId: profile.id,
             });
           }}
         >

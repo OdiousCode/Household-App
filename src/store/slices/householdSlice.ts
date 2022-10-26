@@ -179,11 +179,8 @@ const householdSlice = createSlice({
       console.log("fulfilled");
       console.log("get user households");
       state.isLoading = false;
-      console.log(action.payload);
       let allHouseholds: Household[] = [];
       for (var key in action.payload) {
-        console.log("snapshotkey " + key);
-        console.log("snapshot.val" + action.payload[key]);
         allHouseholds.push(action.payload[key]);
       }
       state.households = allHouseholds;

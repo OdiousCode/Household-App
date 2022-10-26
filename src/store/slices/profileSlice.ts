@@ -18,6 +18,7 @@ interface ProfileState {
   error: string;
 
   profiles: Profile[];
+  activeProfile?: Profile;
 }
 
 const initialState: ProfileState = {
