@@ -22,7 +22,7 @@ interface HouseHoldState {
   error: string;
 
   households: Household[];
-  activeHouseHold?: Household;
+  //activeHouseHold?: Household;
 }
 
 const initialState: HouseHoldState = {
@@ -36,7 +36,7 @@ const initialState: HouseHoldState = {
       name: "Fam 4",
     },
   ],
-  activeHouseHold: undefined,
+  //activeHouseHold: undefined,
 };
 
 // export const selectUserHouseholds =
@@ -54,15 +54,15 @@ const initialState: HouseHoldState = {
 //     return returnHouseHold;
 //   };
 
-export const selectActiveHouseHold = (
-  state: AppState,
-  entrenceCode: string
-) => {
-  const returnUserProfiles = state.households.households.find(
-    (p) => p.entrenceCode === entrenceCode
-  );
-  state.households.activeHouseHold = returnUserProfiles;
-};
+// export const selectActiveHouseHold = (
+//   state: AppState,
+//   entrenceCode: string
+// ) => {
+//   const returnUserProfiles = state.households.households.find(
+//     (p) => p.entrenceCode === entrenceCode
+//   );
+//   state.households.activeHouseHold = returnUserProfiles;
+// };
 
 export const createHousehold = createAsyncThunk<
   Household,
@@ -126,13 +126,12 @@ const householdSlice = createSlice({
   name: "household",
   initialState,
   reducers: {
-    setActiveHouseHold(state, action) {
-      let allH = state.households;
-      let specificHousehold = state.households.find(
-        (p) => p.entrenceCode === action.payload
-      );
-      state.activeHouseHold = specificHousehold;
-    },
+    // setActiveHouseHold(state, action) {
+    //   let specificHousehold = state.households.find(
+    //     (p) => p.id === action.payload
+    //   );
+    //   state.activeHouseHold = specificHousehold;
+    // },
   },
   extraReducers: (builder) => {
     // GET USER HOUSEHOLDS
@@ -194,7 +193,7 @@ const householdSlice = createSlice({
   },
 });
 
-export const { setActiveHouseHold } = householdSlice.actions;
+//export const { setActiveHouseHold } = householdSlice.actions;
 export const selectUser = (state: any) => state.user.user;
 
 export const householdReducer = householdSlice.reducer;

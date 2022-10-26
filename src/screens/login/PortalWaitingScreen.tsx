@@ -6,13 +6,10 @@ import { Profile } from "../../data/APItypes";
 import { auth } from "../../data/firebase/config";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
-import {
-  getUserHouseholds,
-  setActiveHouseHold,
-} from "../../store/slices/householdSlice";
+import { getUserHouseholds } from "../../store/slices/householdSlice";
 import {
   getUserProfiles,
-  selectCurrentProfile,
+  setActiveProfile,
 } from "../../store/slices/profileSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 // import { setName } from "../store/profileSlice";
@@ -47,7 +44,7 @@ export default function PortalWaitingScreen({
       currentProfile.avatar !== -1
     ) {
       setTimeout(function () {
-        dispatch(setActiveHouseHold(currentProfile!.householdId));
+        dispatch(setActiveProfile(currentProfile!.id));
         navigation.replace("HouseholdTopTabNavigator", {
           screen: "ProfileOverViewScreen",
         });
