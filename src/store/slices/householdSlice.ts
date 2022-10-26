@@ -39,6 +39,21 @@ const initialState: HouseHoldState = {
   activeHouseHold: undefined,
 };
 
+// export const selectUserHouseholds =
+//   (profiles: Profile[]) => (state: AppState) => {
+//     let returnHouseHold: Household[] = [];
+
+//     profiles.forEach((p) => {
+//       if (state.households.households.find((h) => h.id === p.householdId)) {
+//         returnHouseHold.push(state.households.households[p.householdId])
+//       }
+//     });
+
+//     // const returnHouseHold = state.households.households.find((h) => h.id === profiles.c);
+
+//     return returnHouseHold;
+//   };
+
 export const selectActiveHouseHold = (
   state: AppState,
   entrenceCode: string
@@ -49,9 +64,6 @@ export const selectActiveHouseHold = (
   state.households.activeHouseHold = returnUserProfiles;
 };
 
-// Skapa ett hushåll i databasen
-// Skapa en profil, med Id === Uid
-// Profil.pending = false
 export const createHousehold = createAsyncThunk<
   Household,
   string,
@@ -77,53 +89,6 @@ export const createHousehold = createAsyncThunk<
     return thunkApi.rejectWithValue("Could not connect to server");
   }
 });
-
-// export const setActiveHousehold = createAsyncThunk<
-//   Household,
-//   string,
-//   { rejectValue: string; state: AppState }
-// >("household/setActiveHousehold", async (entrenceCode, thunkApi) => {
-//   try {
-//     //TODO if household is valid
-//     const dispatch = useAppDispatch();
-
-//     // let r = await dispatch(getUserHouseholds());
-//     // if (r.meta.requestStatus === "fulfilled") {
-//     const state = thunkApi.getState();
-//     let allH = state.households.households;
-//     let specificHousehold = state.households.households.find(
-//       (p) => p.entrenceCode === entrenceCode
-//     );
-
-//     // return specificHousehold;
-//     // } else throw "Problem using Dispatch";
-
-//     const db = getDatabase(app);
-//     //  const reference = ref(db, "app/households");
-
-//     const queryResult = query(
-//       ref(db, "app/households"),
-//       orderByChild("id"),
-//       equalTo(entrenceCode)
-//     );
-//     console.log(1);
-//     const snapshot = await get(queryResult);
-
-//     if (snapshot.exists()) {
-//       return snapshot.val();
-//     } else {
-//       throw "entrence code not found";
-//     }
-//   } catch (error) {
-//     //TODO look at davids firebase error thingi
-//     return thunkApi.rejectWithValue("Could not connect to server");
-//   }
-// });
-
-// Entrencode
-// Hämta household med entrencode === entrencode
-// skapa en profil där allt = empty förutom, Id === uid och pending === true, householdid === household
-//export const enterHouseHold
 
 export const getUserHouseholds = createAsyncThunk<
   Household[],
@@ -179,11 +144,8 @@ const householdSlice = createSlice({
       console.log("fulfilled");
       console.log("get user households");
       state.isLoading = false;
-      console.log(action.payload);
       let allHouseholds: Household[] = [];
       for (var key in action.payload) {
-        console.log("snapshotkey " + key);
-        console.log("snapshot.val" + action.payload[key]);
         allHouseholds.push(action.payload[key]);
       }
       state.households = allHouseholds;
