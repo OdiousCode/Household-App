@@ -23,8 +23,7 @@ export default function ProfileScreen({
   const dispatch = useAppDispatch();
 
   let myProfiles = useAppSelector(selectUserProfiles);
-
-  //let myCurrentprofile = useAppSelector(selectCurrentProfile);
+  let allHouseHolds = useAppSelector((state) => state.households.households);
 
   const [visible, setVisible] = React.useState(false);
   const [avatarNumber, setAvatarNumber] = React.useState(0);
@@ -123,7 +122,11 @@ export default function ProfileScreen({
                     setProfile(myProf);
                   }}
                   //TODO get name from householdId
-                  title={myProf.householdId}
+                  title={
+                    myProf.name +
+                    " - " +
+                    allHouseHolds.find((h) => h.id === myProf.householdId)?.name
+                  }
                 />
               );
             })}
