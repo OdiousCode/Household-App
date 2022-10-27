@@ -1,3 +1,4 @@
+import { getActionFromState } from "@react-navigation/native";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
 import {
@@ -11,6 +12,7 @@ import {
   set,
 } from "firebase/database";
 import { orderBy } from "firebase/firestore";
+import thunk from "redux-thunk";
 import { Household, Profile, Task, TaskHistory } from "../../data/APItypes";
 import { app } from "../../data/firebase/config";
 import { AppState, useAppSelector } from "../store";
@@ -29,28 +31,28 @@ const initialState: TaskState = {
 
   householdTasks: [
     {
-      id: 1,
-      difficulty: 3,
-      frequency: 4,
-      householdId: 1,
+      id: '1',
+      difficulty: '1',
+      frequency: '5',
+      householdId: '1',
       isArchived: false,
       name: "Diska",
       description: "Gör rent all disk",
     },
     {
-      id: 2,
-      difficulty: 2,
-      frequency: 1,
-      householdId: 1,
+      id: '2',
+      difficulty: '1',
+      frequency: '2',
+      householdId: '1',
       isArchived: false,
       name: "Tvätta",
       description: "All vit tvätt",
     },
     {
-      id: 3,
-      difficulty: 5,
-      frequency: 1,
-      householdId: 1,
+      id: '3',
+      difficulty: '1',
+      frequency: '2',
+      householdId: '1',
       isArchived: true,
       name: "Programmera",
       description: "Gör en hushålls-app",
@@ -103,6 +105,35 @@ export const getUserTaskHistories = createAsyncThunk<
     return thunkApi.rejectWithValue(
       "Could not signup please contact our support."
     );
+  }
+});
+
+export const createHouseholdTask = createAsyncThunk<Task, {taskProps: Task},{/*rejectValue:string;*/ state: AppState}>("tasks/createHouseholdTask", async ({taskProps}, thunkApi) => {
+  try {
+    const state = thunkApi.getState();
+    //TODO if household is valid
+    const db = getDatabase(app);
+    const reference = ref(db, "app/tasks");
+    const pushRef = push(reference);
+    
+    
+
+    let newT: Task = {
+      frequency: taskProps.frequency,
+      difficulty: taskProps.difficulty,
+      householdId: taskProps.householdId,
+      id: pushRef.key!,
+      name :taskProps.name,
+      description: taskProps.description,
+      isArchived: false,
+    };
+
+    await set(pushRef, newT);
+
+    return newT;
+  } catch (error) {
+    //TODO look at davids firebase error thingi
+    return thunkApi.rejectWithValue("Could not connect to server");
   }
 });
 
@@ -164,6 +195,21 @@ const taskSlice = createSlice({
       console.log("rejected");
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
+    });
+
+      builder.addCase(createHouseholdTask.pending, (state) => {
+      state.isLoading = true;
+      console.log("pending");
+    });
+    builder.addCase(createHouseholdTask.fulfilled, (state, action) => {
+      console.log("fulfilled");
+      state.isLoading = false;
+      state.householdTasks!.push(action.payload);
+    });
+    builder.addCase(createHouseholdTask.rejected, (state, action) => {
+      console.log("rejected");
+      state.isLoading = false;
+      // state.error = action.payload || "Unknown error";
     });
   },
 });

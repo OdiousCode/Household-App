@@ -28,14 +28,16 @@ export interface Household {
   name: string;
 }
 
+
+
 export interface Task {
-  id: number;
-  householdId: number;
+  id?: string;
+  householdId?: string;
   name: string;
   description?: string;
 
-  difficulty: number;
-  frequency: number;
+  difficulty: "1" | "2" | "3" | "4" | "5" | "6" | "7 ";
+  frequency: "1" | "2" | "3" | "4" | "5" | "6" | "7 ";
 
   voice?: string; // mp3
   img?: string; // img

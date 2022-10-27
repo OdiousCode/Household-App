@@ -124,11 +124,7 @@ export const getUserProfiles = createAsyncThunk<
   }
 });
 
-export const createProfile = createAsyncThunk<
-  Profile,
-  { profile: ProfileDTO; houseHoldId: string },
-  { rejectValue: string; state: AppState }
->("profiles/createProfile", async ({ profile, houseHoldId }, thunkApi) => {
+export const createProfile = createAsyncThunk<Profile, { profile: ProfileDTO; houseHoldId: string },{ rejectValue: string; state: AppState }>("profiles/createProfile", async ({ profile, houseHoldId }, thunkApi) => {
   try {
     const state = thunkApi.getState();
     if (!state.user.user) {
