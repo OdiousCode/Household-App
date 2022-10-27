@@ -17,14 +17,16 @@ export default function TaskScreen({
   //   const profile = useAppSelector((state) => state.profile);
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
-  const [taskDifficulty, setTaskDifficulty] = useState("1");
-  const [taskFrequency, setTaskFrequency] = useState("1");
+  const [taskDifficulty, setTaskDifficulty] = useState('');
+  const [taskFrequency, setTaskFrequency] = useState('');
 
 
   const tasko: Task = {
+    id: '0',
+    householdId: '0',
     description: taskDescription,
-    difficulty: 2,
-    frequency: 1,
+    difficulty: 0,
+    frequency: 0,
     name: taskName,
     isArchived: false,
   }

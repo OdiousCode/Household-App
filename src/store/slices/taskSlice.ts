@@ -66,6 +66,13 @@ const initialState: TaskState = {
   ],
 };
 
+export const selectHousHoldTasks = (state: AppState) => {
+  const returnHouseHTasks = state.tasks.householdTasks?.filter(
+    (p) => p.householdId === state.profiles.activeProfile?.householdId
+  );
+  return returnHouseHTasks;
+};
+
 export const getUserTaskHistories = createAsyncThunk<
   Task[],
   void,
@@ -106,25 +113,25 @@ export const getUserTaskHistories = createAsyncThunk<
 });
 
 
-export const createHouseholdTask = createAsyncThunk<Task , Task,{rejectValue:string; state: AppState}>("tasks/createHouseholdTask", async (p, thunkApi) => {
+export const createHouseholdTask = createAsyncThunk<Task , Task,{rejectValue:string; state: AppState}>("tasks/createHouseholdTask", async (task, thunkApi) => {
   try {
 
     //TODO if household is valid
     const state = thunkApi.getState();
-    const findHouseHold = state.profiles.activeProfile?.householdId
+    const findHouseHold = state.profiles.activeProfile!.householdId
     const db = getDatabase(app);
     const reference = ref(db, "app/tasks");
     const pushRef = push(reference);
 
     
     let newT: Task = {
-      frequency: p.frequency,
-      difficulty: p.difficulty,
+      frequency: task.frequency,
+      difficulty: task.difficulty,
       householdId: findHouseHold,
-      id: pushRef.key!,
-      name : p.name,
-      description: p.description,
-      isArchived: p.isArchived,
+      id: pushRef!.key!,
+      name : task.name,
+      description: task.description,
+      isArchived: task.isArchived,
     };
 
     await set(pushRef, newT);
@@ -152,11 +159,7 @@ export const getUserTasks = createAsyncThunk<
     const db = getDatabase(app);
 
     const reference = ref(db, "app/tasks");
-    const queryResult = query(
-      reference,
-      orderByChild("householdId"),
-      equalTo(state.profiles.activeProfile.householdId)
-    );
+    const queryResult = query(reference);
     const snapshot = await get(queryResult);
 
     if (snapshot.exists()) {
@@ -189,6 +192,12 @@ const taskSlice = createSlice({
       console.log("fulfilled");
       state.isLoading = false;
       state.householdTasks = action.payload;
+      let allTasks: Task[] = [];
+      for (var key in action.payload) {
+        allTasks.push(action.payload[key]);
+      }
+      state.householdTasks = allTasks;
+      console.log('YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYIIIIIIII', allTasks)
     });
     builder.addCase(getUserTasks.rejected, (state, action) => {
       console.log("rejected");
@@ -203,7 +212,8 @@ const taskSlice = createSlice({
     builder.addCase(createHouseholdTask.fulfilled, (state, action) => {
       console.log("fulfilled");
       state.isLoading = false;
-      state.householdTasks!.push(action.payload);
+      if(state.householdTasks !== undefined)
+      state.householdTasks.push(action.payload);
     });
     builder.addCase(createHouseholdTask.rejected, (state, action) => {
       console.log("rejected ");

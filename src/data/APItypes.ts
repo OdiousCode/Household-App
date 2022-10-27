@@ -31,8 +31,8 @@ export interface Household {
 
 
 export interface Task {
-  id?: string;
-  householdId?: string;
+  id: string;
+  householdId: string;
   name: string;
   description?: string;
 
