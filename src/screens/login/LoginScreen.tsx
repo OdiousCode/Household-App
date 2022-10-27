@@ -1,46 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../data/firebase/config";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { BlurView } from "expo-blur";
 import { TextInput } from "react-native-paper";
-import { useDispatch } from "react-redux";
 import { signin } from "../../store/slices/userSlice";
-import { Button } from "react-native-paper";
-import { useAppDispatch, useAppSelector } from "../../store/store";
-// import { setName } from "../store/profileSlice";
-// import { useAppDispatch, useAppSelector } from "../store/store";
+import { useAppDispatch} from "../../store/store";
+import { Formik } from "formik";
+import * as yup from "yup";
+
 
 export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
-  //   const dispatch = useAppDispatch();
-  //   const balance = useAppSelector((state) => state.bank.balance);
-  //   const transactions = useAppSelector((state) => state.bank.transactions);
-  //   const profile = useAppSelector((state) => state.profile);
 
-  const { isLoading, errorMessage } = useAppSelector((state) => state.user);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const loginValidationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email("Please enter valid email")
+      .required("Email Address is Required"),
+    password: yup
+      .string()
+      .min(6, ({ min }) => `Password must be at least ${min} characters`)
+      .required("Password is required"),
+  });
+
   const dispatch = useAppDispatch();
-
-  // const loginToApp = (e: any) => {
-  //   e.preventDefault();
-
-  //   signInWithEmailAndPassword(auth, email, password)
-  //     .then((userAuth) => {
-  //       dispatch(
-  //         logIn({
-  //           email: userAuth.user.email,
-  //           uid: userAuth.user.uid,
-  //           displayName: userAuth.user.displayName,
-  //           photoUrl: userAuth.user.photoURL,
-  //         })
-  //       );
-  //     })
-  //     .catch((err) => {
-  //       alert(err);
-  //     });
-  // };
 
   return (
     <View style={styles.container}>
@@ -84,51 +66,93 @@ export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
       >
         <BlurView intensity={100}>
           <View style={styles.logIn}>
-            <View>
-              <Text style={{ fontSize: 17, fontWeight: "400", color: "black" }}>
-                E-mail
-              </Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={(text) => setEmail(text)}
-                placeholder="test@email.se"
-              ></TextInput>
-            </View>
-            <View>
-              <Text style={{ fontSize: 17, fontWeight: "400", color: "black" }}>
-                Password
-              </Text>
-              <TextInput
-                autoCapitalize="none"
-                autoCorrect={false}
-                secureTextEntry={true}
-                textContentType="password"
-                value={password}
-                style={styles.input}
-                onChangeText={(text) => setPassword(text)}
-                placeholder="password"
-              ></TextInput>
-            </View>
-            <Pressable
-              style={styles.button}
-              onPress={() =>
-                dispatch(signin({ username: email, password: password }))
-              }
+            <Formik
+              validateOnMount={true}
+              validationSchema={loginValidationSchema}
+              initialValues={{ email: "", password: "" }}
+              onSubmit={values => console.log(values)}
             >
-              <Text style={styles.text}>Login</Text>
-            </Pressable>
-            <Pressable
-              style={styles.button}
-              onPress={() => navigation.navigate("CreateAccount")}
-            >
-              <Text style={styles.text}>Create account</Text>
-            </Pressable>
-            <View
-              style={{
-                position: "absolute",
-                bottom: 0,
-              }}
-            ></View>
+              {({
+                handleChange,
+                handleBlur,
+                values,
+                errors,
+                touched,
+                isValid,
+              }) => (
+                <>
+                  <View>
+                    <Text
+                      style={{
+                        fontSize: 17,
+                        fontWeight: "400",
+                        color: "black",
+                      }}
+                    >
+                      E-mail
+                    </Text>
+                    <TextInput
+                      placeholder="Email Address"
+                      style={styles.input}
+                      onChangeText={handleChange("email")}
+                      onBlur={handleBlur("email")}
+                      value={values.email}
+                      keyboardType="email-address"
+                    />
+                    {errors.email && touched.email && (
+                      <Text
+                        style={{
+                          color: "red",
+                        }}
+                      >
+                        {errors.email}
+                      </Text>
+                    )}
+                  </View>
+                  <View>
+                    <Text
+                      style={{
+                        fontSize: 17,
+                        fontWeight: "400",
+                        color: "black",
+                      }}
+                    >
+                      Password
+                    </Text>
+                    <TextInput
+                      placeholder="Password"
+                      style={styles.input}
+                      onChangeText={handleChange("password")}
+                      onBlur={handleBlur("password")}
+                      value={values.password}
+                      secureTextEntry
+                    />
+                    {errors.password && touched.password && (
+                      <Text
+                        style={{
+                          color: "red",
+                        }}
+                      >
+                        {errors.password}
+                      </Text>
+                    )}
+                  </View>
+                  <Pressable
+                    style={styles.button}
+                    onPress={() => dispatch(signin({ username: values.email, password: values.password }))}
+                    disabled={!isValid || values.email === ""}
+                  >
+                    <Text style={styles.text}>Login</Text>
+                  </Pressable>
+                  <Pressable
+                    style={styles.button}
+                    onPress={() => navigation.navigate("CreateAccount")}
+                  >
+                    <Text style={styles.text}>Create account</Text>
+                  </Pressable>
+                </>
+              )}
+            </Formik>
           </View>
         </BlurView>
       </ScrollView>
