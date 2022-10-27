@@ -40,9 +40,9 @@ const initialState: HouseHoldState = {
 
 export const selectActiveHousehold = (state: AppState) => {
   const activeHousehold = state.households.households.find(
-    (h) => h.id === state.profiles.activeProfile?.id
+    (h) => h.id === state.profiles.activeProfile?.householdId
   );
-
+  console.log("q " + activeHousehold);
   return activeHousehold;
 };
 
