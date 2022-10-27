@@ -1,6 +1,7 @@
 import React from "react";
 import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import { Card, Button } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { avatars } from "../../constants/Layout";
 import { Task } from "../../data/APItypes";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
@@ -42,7 +43,7 @@ export default function TaskOverviewScreen({
   // console.log(taskData.toString());
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 30 }}>
           Task overview Screen
         </Text>
@@ -159,7 +160,7 @@ export default function TaskOverviewScreen({
             Editera
           </Button>
         </View>
-      </View>
+      </SafeAreaView>
       {/* <Button title="Set name" onPress={() => dispatch(setName("David"))} /> */}
     </>
   );

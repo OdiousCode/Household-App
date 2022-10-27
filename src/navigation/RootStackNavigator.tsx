@@ -105,6 +105,7 @@ export default function RootStackNavigator() {
           <Stack.Screen
             name="HouseholdTopTabNavigator"
             component={HouseholdTopTabNavigator}
+            options={{ headerShown: false }}
           />
         </>
       )}

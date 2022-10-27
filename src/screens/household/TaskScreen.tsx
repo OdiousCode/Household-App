@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
@@ -13,7 +14,7 @@ export default function TaskScreen({
   //   const profile = useAppSelector((state) => state.profile);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text>Task Screen</Text>
       {/* <Button
         title="Statistics"
@@ -50,7 +51,7 @@ export default function TaskScreen({
       <Button title="Go back" onPress={() => navigation.goBack()} />
 
       {/* <Button title="Set name" onPress={() => dispatch(setName("David"))} /> */}
-    </View>
+    </SafeAreaView>
   );
 }
 
