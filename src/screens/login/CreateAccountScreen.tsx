@@ -1,116 +1,205 @@
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import React, { useState } from "react";
+import React from "react";
 import {
   Button,
-  SafeAreaView,
+  Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { auth } from "../../data/firebase/config";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { signup } from "../../store/slices/userSlice";
-import { useAppDispatch, useAppSelector } from "../../store/store";
+import { useAppDispatch} from "../../store/store";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { BlurView } from "expo-blur";
 
-// import { setName } from "../store/profileSlice";
-// import { useAppDispatch, useAppSelector } from "../store/store";
 
-export default function CreateAccount({
-  navigation,
-}: RootScreenProps<"CreateAccount">) {
-  //   const dispatch = useAppDispatch();
-  //   const balance = useAppSelector((state) => state.bank.balance);
-  //   const transactions = useAppSelector((state) => state.bank.transactions);
-  //   const profile = useAppSelector((state) => state.profile);
+const SignUpSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid email').required('Required'),
+  password: Yup.string().min(6, ({ min }) => `Password must be at least ${min} characters`)
+  .required("Password is required"),
+  confirmPassword: Yup.string().when('password', {
+    is: (val: string) => val && val.length > 0,
+    then: Yup.string()
+      .oneOf([Yup.ref('password')], 'Both passwords need to be the same')
+      .required('Required'),
+  }),
+})
 
-  const { isLoading, errorMessage } = useAppSelector((state) => state.user);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+export default function CreateAccount({navigation}: RootScreenProps<"CreateAccount">) {
+
   const dispatch = useAppDispatch();
-
-  const onHandleSignup = () => {
-    if (!firstName || !lastName) {
-      return alert("Please enter a full name");
-    }
-    // createUserWithEmailAndPassword(auth, email, password).catch((err) => {
-    //   alert(err);
-    // });
-
-    //TODO , save frist + lastname to DB connected to idk
-    dispatch(signup({ username: email, password: password }));
-  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.whiteSheet} />
-      <SafeAreaView style={styles.form}>
-        <Text style={styles.title}>Sign Up</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="First Name"
-          autoCapitalize="words"
-          autoFocus={true}
-          value={firstName}
-          onChangeText={(text) => setFirstName(text)}
-        />
-        <TextInput
-          style={styles.input}
-          autoCapitalize="words"
-          placeholder="Last Name"
-          autoFocus={true}
-          value={lastName}
-          onChangeText={(text) => setLastName(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="E-mail"
-          autoCapitalize="none"
-          keyboardType="email-address"
-          textContentType="emailAddress"
-          autoFocus={true}
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          autoCapitalize="none"
-          autoCorrect={false}
-          secureTextEntry={true}
-          textContentType="password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-        <TouchableOpacity style={styles.button} onPress={onHandleSignup}>
-          <Text style={{ fontWeight: "bold", color: "black", fontSize: 20 }}>
-            {" "}
-            Sign Up
-          </Text>
-        </TouchableOpacity>
-        <View
-          style={{
-            marginTop: 20,
-            flexDirection: "row",
-            alignItems: "center",
-            alignSelf: "center",
-          }}
-        >
-          <Text style={{ color: "gray", fontWeight: "600", fontSize: 14 }}>
-            Don't have an account?{" "}
-          </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text style={{ color: "#7DB2C5", fontWeight: "600", fontSize: 14 }}>
-              {" "}
-              Log In
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <Button title="Go back" onPress={() => navigation.goBack()} />
-      </SafeAreaView>
+      <View
+        style={{
+          width: 100,
+          height: 100,
+          backgroundColor: "blue",
+          position: "absolute",
+          transform: [{ rotate: "25deg" }],
+        }}
+      ></View>
+      <View
+        style={{
+          width: 100,
+          height: 100,
+          backgroundColor: "red",
+          top: 120,
+          position: "absolute",
+          transform: [{ rotate: "60deg" }],
+        }}
+      ></View>
+      <View
+        style={{
+          width: 100,
+          height: 100,
+          backgroundColor: "yellow",
+          bottom: 120,
+          position: "absolute",
+          borderRadius: 120,
+        }}
+      ></View>
+      <ScrollView
+        contentContainerStyle={{
+          flex: 1,
+          width: "100%",
+          height: "100%",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <BlurView intensity={100}>
+          <View style={styles.logIn}>
+          <Formik
+          validationSchema={SignUpSchema}
+            initialValues={{
+              email: '',
+              password: '',
+              confirmPassword: '',
+            }}
+            onSubmit={values => console.log(values)}
+          >
+              {({
+                  handleChange,
+                  handleBlur,
+                  values,
+                  errors,
+                  touched,
+                  isValid,
+              }) => (
+                <>
+                  <View>
+                  <Text
+                      style={{
+                        fontSize: 17,
+                        fontWeight: "400",
+                        color: "black",
+                      }}
+                    >
+                      E-mail
+                    </Text>
+                    <TextInput
+                      placeholder="Email Address"
+                      style={styles.input}
+                      onChangeText={handleChange("email")}
+                      onBlur={handleBlur("email")}
+                      value={values.email}
+                      keyboardType="email-address"
+                    />
+                    {errors.email && touched.email && (
+                      <Text
+                        style={{
+                          color: "red",
+                          marginTop: 5,
+                          marginBottom: 5
+                        }}
+                      >
+                        {errors.email}
+                      </Text>
+                    )}
+                  <Text
+                      style={{
+                        fontSize: 17,
+                        fontWeight: "400",
+                        color: "black",
+                      }}
+                    >
+                      Password
+                    </Text>
+                    <TextInput
+                      placeholder="Password"
+                      style={styles.input}
+                      onChangeText={handleChange("password")}
+                      onBlur={handleBlur("password")}
+                      value={values.password}
+                      secureTextEntry
+                    />
+                    {errors.password && touched.password && (
+                      <Text
+                        style={{
+                          color: "red",
+                        }}
+                      >
+                        {errors.password}
+                      </Text>
+                    )}
+                    <Text
+                      style={{
+                        fontSize: 17,
+                        fontWeight: "400",
+                        color: "black",
+                      }}
+                    >
+                      Confirm password
+                    </Text>
+                    <TextInput
+                      placeholder="Confirm password"
+                      style={styles.input}
+                      onChangeText={handleChange("confirmPassword")}
+                      onBlur={handleBlur("confirmPassword")}
+                      value={values.confirmPassword}
+                      secureTextEntry
+                    />
+                    {errors.confirmPassword && touched.confirmPassword && (
+                      <Text
+                        style={{
+                          color: "red",
+                        }}
+                      >
+                        {errors.confirmPassword}
+                      </Text>
+                    )}
+                  </View>
+                  <Pressable
+                    style={styles.button}
+                    onPress={() => dispatch(signup({username: values.email, password: values.confirmPassword}))}
+                    disabled={!isValid || values.email === ""}
+                  >
+                    <Text style={styles.text}>Submit</Text>
+                  </Pressable>
+                  <View>
+                    <Text style={{ color: "gray", fontWeight: "600", fontSize: 14 }}>
+                      Already have an account?{" "}
+                      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                        <Text style={{ color: "#7DB2C5", fontWeight: "600", fontSize: 14 }}>
+                          {" "}
+                          Log in
+                        </Text>
+                    </TouchableOpacity>
+                    </Text>
+                  </View>
+                  <Button title="Go back" onPress={() => navigation.goBack()} />
+                </>
+              )}
+            </Formik>
+          </View>
+        </BlurView>
+      </ScrollView>
     </View>
   );
 }
@@ -118,54 +207,33 @@ export default function CreateAccount({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  title: {
-    fontSize: 36,
-    fontWeight: "bold",
-    color: "#7DB2C5",
-    alignSelf: "center",
-    paddingBottom: 24,
+  logIn: {
+    flex: 1,
+    height: 500,
+    width: 300,
+    margin: 10,
+    marginTop: 150,
   },
   input: {
-    backgroundColor: "#F6F7FB",
-    height: 58,
-    marginBottom: 20,
-    fontSize: 16,
-    borderRadius: 10,
-    padding: 12,
-  },
-  backImage: {
-    width: "100%",
-    height: 340,
-    position: "absolute",
-    top: 0,
-    resizeMode: "cover",
-  },
-  whiteSheet: {
-    width: "100%",
-    height: "75%",
-    position: "absolute",
-    bottom: 0,
-    backgroundColor: "#fff",
-    borderTopLeftRadius: 60,
-  },
-  form: {
-    flex: 1,
-    justifyContent: "center",
-    marginHorizontal: 30,
+    color: "black",
+    margin: 10,
   },
   button: {
-    backgroundColor: "#7DB2C5",
-    height: 58,
-    borderRadius: 10,
-    justifyContent: "center",
+    margin: 15,
     alignItems: "center",
-    marginTop: 40,
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "#7DB2C5",
+  },
+  text: {
+    fontSize: 17,
   },
 });
-function dispatch(
-  arg0: any
-): ((value: void) => void | PromiseLike<void>) | null | undefined {
-  throw new Error("Function not implemented.");
-}
