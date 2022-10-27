@@ -41,6 +41,7 @@ export default function ProfileScreen({
     useCallback(() => {
       dispatch(getUserProfiles());
       dispatch(getUserHouseholds());
+      dispatch(setActiveProfile(undefined));
     }, [])
   );
 

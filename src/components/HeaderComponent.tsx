@@ -10,7 +10,7 @@ import { Text, StyleSheet } from "react-native";
 import { auth } from "../data/firebase/config";
 import { logOut, userReducer } from "../store/slices/userSlice";
 import { store, useAppDispatch, useAppSelector } from "../store/store";
-import { avatars } from "../constants/Layout";
+import { avatars, getAvatar } from "../constants/Layout";
 import { IconSource } from "react-native-paper/lib/typescript/components/Icon";
 
 export type Props = {
@@ -31,52 +31,90 @@ function CustomNavigationBar(props: Props) {
     dispatch(logOut());
     auth.signOut();
   }
-  let icon: IconSource
-  let icons = avatars.map((item, index) => {
-    if (item) {
-      return {
-        name: ` ${item.color}   ${item.icon}`,
-      }
-    }
-  })
-
-
   function checkIfUserLoged() {
     const userEmail = useAppSelector((state) => state.user.user?.email);
-    if (userEmail?.length === undefined || '')
-      return true;
+    if (userEmail?.length === undefined || "") return true;
+  }
+
+  function checkIfProfileActive() {
+    const activeProfile = useAppSelector(
+      (state) => state.profiles.activeProfile
+    );
+    if (activeProfile !== undefined) return true;
     else {
       return false;
     }
   }
-  return (
-    <Appbar.Header style={styles.header}>
-      {checkIfUserLoged() ? (
+
+  let activeProfile = useAppSelector((state) => state.profiles.activeProfile);
+  const appbarIcon = ({}) => {
+    return <Text>{getAvatar(activeProfile!.avatar).icon}</Text>;
+  };
+
+  if (checkIfUserLoged()) {
+    return (
+      <Appbar.Header style={styles.header}>
         <Appbar.Content style={styles.title} title={props.title} />
-      ) : (
-        <>
-          <Appbar.Content style={styles.title} title={props.title} />
-          <Menu
-            visible={visible}
-            onDismiss={closeMenu}
-            anchor={<Appbar.Action icon={'account'} color="white" onPress={openMenu} />}
-          >
-            <Menu.Item title={props.userName ? null : 'No Nickname '
-            } />
-            <Menu.Item title={props.userEmail} />
-            <Menu.Item onPress={(logOutOfapp)} title="Log Out" />
-          </Menu>
-        </>
-      )}
-    </Appbar.Header>
-  );
+      </Appbar.Header>
+    );
+  } else {
+    return (
+      <Appbar.Header style={styles.header}>
+        {checkIfProfileActive() ? (
+          <>
+            <Appbar.Content style={styles.title} title={props.title} />
+            <Menu
+              visible={visible}
+              onDismiss={closeMenu}
+              anchor={
+                <Appbar.Action
+                  icon={appbarIcon}
+                  color="white"
+                  onPress={openMenu}
+                />
+              }
+            >
+              {/* <Menu.Item title={props.userName ? null : "No Nickname "} /> */}
+              <Menu.Item title={props.userEmail} />
+              <Menu.Item title={activeProfile?.name} />
+              <Menu.Item
+                onPress={() => {
+                  navigation.navigate("Profile");
+                }}
+                title="Log Out"
+              />
+            </Menu>
+          </>
+        ) : (
+          <>
+            <Appbar.Content style={styles.title} title={props.title} />
+            <Menu
+              visible={visible}
+              onDismiss={closeMenu}
+              anchor={
+                <Appbar.Action
+                  icon={"account"}
+                  color="white"
+                  onPress={openMenu}
+                />
+              }
+            >
+              {/* <Menu.Item title={props.userName ? null : "No Nickname "} /> */}
+              <Menu.Item title={props.userEmail} />
+              <Menu.Item onPress={logOutOfapp} title="Log Out" />
+            </Menu>
+          </>
+        )}
+      </Appbar.Header>
+    );
+  }
 }
 
 export default CustomNavigationBar;
 
 const styles = StyleSheet.create({
   title: {
-    alignContent: 'center',
+    alignContent: "center",
     alignItems: "center",
     display: "flex",
   },
@@ -90,7 +128,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "left",
   },
-
 
   header: {
     height: 80,

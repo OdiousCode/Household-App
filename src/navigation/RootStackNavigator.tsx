@@ -16,7 +16,7 @@ import RoomApplication from "../screens/login/RoomApplicationScreen";
 // } from "./HouseholdStackNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import Navigation from "../navigation/Index";
-import { logIn, logOut, selectUser } from "../store/slices/userSlice";
+import { logOut, signin } from "../store/slices/userSlice";
 import { auth } from "../data/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
@@ -52,23 +52,26 @@ export type RootScreenProps<Screen extends keyof RootStackParamList> =
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootStackNavigator() {
-  const user = useAppSelector(selectUser);
+  const user = useAppSelector((state) => state.user.user);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     onAuthStateChanged(auth, (userAuth) => {
       if (userAuth) {
         // user is logged in, send the user's details to redux, store the current user in the state
-        dispatch(
-          logIn({
-            email: userAuth.email,
-            displayName: userAuth.displayName,
-          })
-        );
+        console.log("Log In");
+        // dispatch(
+        //   signin({
+        //     email: userAuth.email,
+        //     password: userAuth. // if we save pass
+        //   })
+        // );
       } else {
+        console.log("LogOut");
         //TODO look at this
-        auth.signOut();
-        dispatch(logOut);
+        // auth.signOut();
+        // dispatch(logOut());
       }
     });
   }, []);
@@ -79,8 +82,7 @@ export default function RootStackNavigator() {
         header: () => (
           <CustomNavigationBar
             title={"House Hold"}
-            userEmail={auth.currentUser?.email?.toString()}
-            userName={auth.currentUser?.displayName?.toString()}
+            userEmail={user?.email?.toString()}
           />
         ),
       }}
