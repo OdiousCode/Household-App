@@ -2,17 +2,12 @@
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Profile } from "../../data/APItypes";
 import { auth } from "../../data/firebase/config";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
-import {
-  getUserHouseholds,
-  setActiveHouseHold,
-} from "../../store/slices/householdSlice";
-import {
-  getUserProfiles,
-  selectCurrentProfile,
-} from "../../store/slices/profileSlice";
+import { getUserHouseholds } from "../../store/slices/householdSlice";
+import { getUserProfiles } from "../../store/slices/profileSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import ProfileOverViewScreen from "./ProfileOverviewScreen";
 // import { setName } from "../store/profileSlice";
@@ -39,10 +34,10 @@ export default function PendingApplicationScreen({
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text>LISTA ÖVER FOLK SOM VILL KOMMA IN </Text>
       <Button title="Go back" onPress={() => navigation.goBack()} />
-    </View>
+    </SafeAreaView>
   );
 }
 

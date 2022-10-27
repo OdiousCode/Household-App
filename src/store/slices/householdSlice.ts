@@ -22,7 +22,7 @@ interface HouseHoldState {
   error: string;
 
   households: Household[];
-  activeHouseHold?: Household;
+  //activeHouseHold?: Household;
 }
 
 const initialState: HouseHoldState = {
@@ -36,32 +36,14 @@ const initialState: HouseHoldState = {
       name: "Fam 4",
     },
   ],
-  activeHouseHold: undefined,
 };
 
-// export const selectUserHouseholds =
-//   (profiles: Profile[]) => (state: AppState) => {
-//     let returnHouseHold: Household[] = [];
-
-//     profiles.forEach((p) => {
-//       if (state.households.households.find((h) => h.id === p.householdId)) {
-//         returnHouseHold.push(state.households.households[p.householdId])
-//       }
-//     });
-
-//     // const returnHouseHold = state.households.households.find((h) => h.id === profiles.c);
-
-//     return returnHouseHold;
-//   };
-
-export const selectActiveHouseHold = (
-  state: AppState,
-  entrenceCode: string
-) => {
-  const returnUserProfiles = state.households.households.find(
-    (p) => p.entrenceCode === entrenceCode
+export const selectActiveHousehold = (state: AppState) => {
+  const activeHousehold = state.households.households.find(
+    (h) => h.id === state.profiles.activeProfile?.householdId
   );
-  state.households.activeHouseHold = returnUserProfiles;
+  console.log("q " + activeHousehold);
+  return activeHousehold;
 };
 
 export const createHousehold = createAsyncThunk<
@@ -126,13 +108,12 @@ const householdSlice = createSlice({
   name: "household",
   initialState,
   reducers: {
-    setActiveHouseHold(state, action) {
-      let allH = state.households;
-      let specificHousehold = state.households.find(
-        (p) => p.entrenceCode === action.payload
-      );
-      state.activeHouseHold = specificHousehold;
-    },
+    // setActiveHouseHold(state, action) {
+    //   let specificHousehold = state.households.find(
+    //     (p) => p.id === action.payload
+    //   );
+    //   state.activeHouseHold = specificHousehold;
+    // },
   },
   extraReducers: (builder) => {
     // GET USER HOUSEHOLDS
@@ -194,7 +175,7 @@ const householdSlice = createSlice({
   },
 });
 
-export const { setActiveHouseHold } = householdSlice.actions;
+//export const { setActiveHouseHold } = householdSlice.actions;
 export const selectUser = (state: any) => state.user.user;
 
 export const householdReducer = householdSlice.reducer;

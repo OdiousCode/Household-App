@@ -39,16 +39,22 @@ const Tab = createMaterialTopTabNavigator<HouseholdTopTabParamList>();
 
 export default function HouseholdTopTabNavigator() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarInactiveTintColor: "#444",
+        tabBarLabel: "",
+        tabBarStyle: { backgroundColor: "orange" },
+      }}
+    >
+      <Tab.Screen
+        name="ProfileOverViewScreen"
+        component={ProfileOverViewScreen}
+      />
       <Tab.Screen name="TaskScreen" component={TaskScreen} />
       <Tab.Screen
         name="PendingApplicationScreen"
         //TODO fix later (temporary fix for CI) V
         component={PendingApplicationScreen as any}
-      />
-      <Tab.Screen
-        name="ProfileOverViewScreen"
-        component={ProfileOverViewScreen}
       />
       <Tab.Screen name="StatisticsScreen" component={StatisticsScreen} />
       <Tab.Screen name="TaskOverviewScreen" component={TaskOverviewScreen} />

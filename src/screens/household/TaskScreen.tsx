@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Task } from "../../data/APItypes";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import { createHouseholdTask } from "../../store/slices/taskSlice";
@@ -22,8 +23,8 @@ export default function TaskScreen({
 
   const tasko: Task = {
     description: taskDescription,
-    difficulty: '2',
-    frequency: '1',
+    difficulty: 2,
+    frequency: 1,
     name: taskName,
     isArchived: false,
   }
@@ -32,10 +33,11 @@ export default function TaskScreen({
 
 
   return (
+
     <View style={styles.container}>
       <Text>Signup</Text>
       <TextInput
-        placeholder="Name"
+        placeholder="Title"
         value={taskName}
         onChangeText={setTaskName}
       />
@@ -63,11 +65,10 @@ export default function TaskScreen({
       />
 
 
-
-      {/* <Button title="Set name" onPress={() => dispatch(setName("David"))} /> */}
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
