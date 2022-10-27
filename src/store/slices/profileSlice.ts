@@ -56,20 +56,20 @@ const initialState: ProfileState = {
   ],
 };
 
-// export const selectActiveProfile
-export const selectCurrentProfile = (state: AppState) => {
-  if (!state.households.activeHouseHold) {
-    return;
-  }
-  const returnUserProfiles = state.profiles.profiles.filter(
-    (p) => p.userId === state.user.user?.uid
-  );
+// // export const selectActiveProfile
+// export const selectCurrentProfile = (state: AppState) => {
+//   if (!state.households.activeHouseHold) {
+//     return;
+//   }
+//   const returnUserProfiles = state.profiles.profiles.filter(
+//     (p) => p.userId === state.user.user?.uid
+//   );
 
-  const currentProfile = returnUserProfiles.find(
-    (p) => p.householdId === state.households.activeHouseHold?.id
-  );
-  return currentProfile;
-};
+//   const currentProfile = returnUserProfiles.find(
+//     (p) => p.householdId === state.households.activeHouseHold?.id
+//   );
+//   return currentProfile;
+// };
 
 //export const selectHouseHoldbyProfileId()
 
@@ -203,7 +203,12 @@ export const updateProfile = createAsyncThunk<
 const profileSlice = createSlice({
   name: "profile",
   initialState,
-  reducers: {},
+  reducers: {
+    setActiveProfile(state, action) {
+      let specificProfile = state.profiles.find((p) => p.id === action.payload);
+      state.activeProfile = specificProfile;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getUserProfiles.pending, (state) => {
       state.isLoading = true;
@@ -265,5 +270,7 @@ const profileSlice = createSlice({
     });
   },
 });
+
+export const { setActiveProfile } = profileSlice.actions;
 
 export const profileReducer = profileSlice.reducer;

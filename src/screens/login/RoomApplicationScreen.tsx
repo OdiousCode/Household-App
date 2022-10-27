@@ -3,10 +3,7 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import { Profile, ProfileDTO } from "../../data/APItypes";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
-import {
-  getUserHouseholds,
-  setActiveHouseHold,
-} from "../../store/slices/householdSlice";
+import { getUserHouseholds } from "../../store/slices/householdSlice";
 import { createProfile } from "../../store/slices/profileSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 // import { setName } from "../store/profileSlice";
@@ -33,26 +30,13 @@ export default function RoomApplication({
       <Button
         title="Submit"
         onPress={async () => {
-          console.log("1");
-          //TODO change to id, but find based on entrencode?
-
           if (allH.find((h) => h.entrenceCode === entrenceCode)) {
-            console.log("2");
-
             const profile: ProfileDTO = {
               avatar: -1,
-              name: "Elias",
+              name: "No Profile",
               pending: true,
               role: "User",
             };
-
-            //TODO
-            dispatch(
-              createProfile({
-                profile: profile,
-                houseHoldId: entrenceCode,
-              })
-            );
 
             const r = await dispatch(
               createProfile({
@@ -61,12 +45,10 @@ export default function RoomApplication({
               })
             );
             if (r.meta.requestStatus === "fulfilled") {
-              navigation.navigate("PortalWaiting", {
+              navigation.replace("PortalWaiting", {
                 profileId: (r.payload as Profile).id,
               });
             }
-            console.log("3");
-            // dispatch(setActiveHouseHold(entrenceCode));
           }
         }}
       />
