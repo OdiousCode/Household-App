@@ -1,4 +1,3 @@
-import { getActionFromState } from "@react-navigation/native";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
 import {
@@ -11,12 +10,10 @@ import {
   ref,
   set,
 } from "firebase/database";
-import { orderBy } from "firebase/firestore";
-import thunk from "redux-thunk";
-import { Household, Profile, Task, TaskHistory } from "../../data/APItypes";
+import {  Task, TaskHistory } from "../../data/APItypes";
 import { app, auth } from "../../data/firebase/config";
-import { AppState, useAppSelector } from "../store";
-import { householdReducer } from "./householdSlice";
+import { AppState } from "../store";
+
 
 interface TaskState {
   isLoading: boolean;
