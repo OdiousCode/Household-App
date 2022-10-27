@@ -15,6 +15,7 @@ import { Item } from "react-native-paper/lib/typescript/components/List/List";
 import { selectUserProfiles } from "../../store/slices/profileSlice";
 import { selectActiveHousehold } from "../../store/slices/householdSlice";
 
+
 export default function ProfileOverViewScreen({
   navigation,
 }: HouseholdScreenProps<"ProfileOverViewScreen">) {
@@ -215,6 +216,7 @@ export default function ProfileOverViewScreen({
                         </View>
                         <Text style={{ fontSize: 17 }}>
                           {getAvatar(profile.avatar).icon}
+
                         </Text>
                       </View>
                     </Card>
@@ -231,6 +233,7 @@ export default function ProfileOverViewScreen({
       </>
     );
   }
+
 }
 const styles = StyleSheet.create({
   container: {

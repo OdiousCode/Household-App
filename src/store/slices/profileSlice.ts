@@ -27,7 +27,7 @@ const initialState: ProfileState = {
 
   profiles: [
     {
-      avatar: 3,
+      avatar: 1,
       householdId: "1",
       id: "1",
       name: "VerkligtNamn",
@@ -36,13 +36,22 @@ const initialState: ProfileState = {
       userId: "123",
     },
     {
-      avatar: 3,
+      avatar: 2,
       householdId: "1",
       id: "2",
       name: "Också bra namn",
       pending: false,
-      role: "User",
+      role: "Admin",
       userId: "12345",
+    },
+    {
+      avatar: 3,
+      householdId: "2",
+      id: "3",
+      name: "asd",
+      pending: false,
+      role: "User",
+      userId: "123456",
     },
   ],
 };
