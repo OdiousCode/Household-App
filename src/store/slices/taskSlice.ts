@@ -11,7 +11,7 @@ import {
   set,
 } from "firebase/database";
 import {  Task, TaskHistory } from "../../data/APItypes";
-import { app, auth } from "../../data/firebase/config";
+import { app } from "../../data/firebase/config";
 import { AppState } from "../store";
 
 
@@ -84,7 +84,7 @@ export const getUserTaskHistories = createAsyncThunk<
     const queryResult = query(
       reference,
       orderByChild("householdId"),
-      equalTo(state.households.activeHouseHold!.id)
+      // equalTo(state.households)
     );
     const snapshot = await get(queryResult);
 
@@ -110,8 +110,8 @@ export const createHouseholdTask = createAsyncThunk<Task , Task,{rejectValue:str
   try {
 
     //TODO if household is valid
-     const state = thunkApi.getState();
-    const HhId = state.households.activeHouseHold?.id
+    const state = thunkApi.getState();
+    const findHouseHold = state.profiles.activeProfile?.householdId
     const db = getDatabase(app);
     const reference = ref(db, "app/tasks");
     const pushRef = push(reference);
@@ -120,7 +120,7 @@ export const createHouseholdTask = createAsyncThunk<Task , Task,{rejectValue:str
     let newT: Task = {
       frequency: p.frequency,
       difficulty: p.difficulty,
-      householdId: HhId,
+      householdId: findHouseHold,
       id: pushRef.key!,
       name : p.name,
       description: p.description,
@@ -145,7 +145,7 @@ export const getUserTasks = createAsyncThunk<
     const state = thunkApi.getState();
     state.user.user?.uid;
 
-    if (!state.households.activeHouseHold) {
+    if (!state.profiles.activeProfile?.householdId) {
       throw "no active household";
     }
 
@@ -155,7 +155,7 @@ export const getUserTasks = createAsyncThunk<
     const queryResult = query(
       reference,
       orderByChild("householdId"),
-      equalTo(state.households.activeHouseHold!.id)
+      equalTo(state.profiles.activeProfile.householdId)
     );
     const snapshot = await get(queryResult);
 
