@@ -1,59 +1,76 @@
-import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Task } from "../../data/APItypes";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
+import { createHouseholdTask } from "../../store/slices/taskSlice";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 
 export default function TaskScreen({
   navigation,
 }: HouseholdScreenProps<"TaskScreen">) {
-  //   const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
   //   const profile = useAppSelector((state) => state.profile);
+  const [taskName, setTaskName] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
+  const [taskDifficulty, setTaskDifficulty] = useState('');
+  const [taskFrequency, setTaskFrequency] = useState('');
+
+
+  const tasko: Task = {
+    id: '0',
+    householdId: '0',
+    description: taskDescription,
+    difficulty: 0,
+    frequency: 0,
+    name: taskName,
+    isArchived: false,
+  }
+
+
+
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>Task Screen</Text>
-      {/* <Button
-        title="Statistics"
-        onPress={() =>
-          navigation.navigate("HouseholdStackNavigator", {
-            screen: "StatisticsScreen",
-          })
-        }
-      />
-      <Button
-        title="Pending Applications"
-        onPress={() =>
-          navigation.navigate("HouseholdStackNavigator", {
-            screen: "PendingApplicationScreen",
-          })
-        }
-      />
-      <Button
-        title="Profile Overview"
-        onPress={() =>
-          navigation.navigate("HouseholdStackNavigator", {
-            screen: "ProfileOverViewScreen",
-          })
-        }
-      />
-      <Button
-        title="Task overview"
-        onPress={() =>
-          navigation.navigate("HouseholdStackNavigator", {
-            screen: "TaskOverviewScreen",
-          })
-        }
-      /> */}
-      <Button title="Go back" onPress={() => navigation.goBack()} />
 
-      {/* <Button title="Set name" onPress={() => dispatch(setName("David"))} /> */}
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Text>Signup</Text>
+      <TextInput
+        placeholder="Title"
+        value={taskName}
+        onChangeText={setTaskName}
+      />
+      <TextInput
+        placeholder="Description"
+        value={taskDescription}
+        onChangeText={setTaskDescription}
+      />
+
+      <TextInput
+        placeholder="Difficulty"
+        value={taskDifficulty}
+        onChangeText={setTaskDifficulty}
+      />
+
+      <TextInput
+        placeholder="Frequency"
+        value={taskFrequency}
+        onChangeText={setTaskFrequency}
+      />
+
+      <Button
+        title="Add task"
+        onPress={() => dispatch(createHouseholdTask(tasko))}
+      />
+
+
+    </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

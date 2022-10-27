@@ -1,11 +1,12 @@
-import React from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback } from "react";
 import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import { Card, Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { avatars } from "../../constants/Layout";
 import { Task } from "../../data/APItypes";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
-import { getUserTasks } from "../../store/slices/taskSlice";
+import { getUserTasks, selectHousHoldTasks } from "../../store/slices/taskSlice";
 import { store, useAppDispatch, useAppSelector } from "../../store/store";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
@@ -13,10 +14,21 @@ import { store, useAppDispatch, useAppSelector } from "../../store/store";
 export default function TaskOverviewScreen({
   navigation,
 }: HouseholdScreenProps<"TaskOverviewScreen">) {
-  //   const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
-  const taskData = useAppSelector((state) => state.tasks.householdTasks);
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getUserTasks());
+    }, []));
+
+
+
+  const taskDataSelektor = useAppSelector(selectHousHoldTasks);
+  const test = useAppSelector((p) => p.tasks.householdTasks)
+
+  console.log(test, 'Test   SELEKTOR')
+  console.log(taskDataSelektor)
   // const showAlert = () =>
   //   Alert.alert(
   //     taskData[0].name,
@@ -51,7 +63,7 @@ export default function TaskOverviewScreen({
         <View style={{ height: 500, width: "90%" }}>
           <FlatList
             style={{ flex: 1, width: "100%" }}
-            data={taskData}
+            data={taskDataSelektor}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) =>
               !item.isArchived ? (

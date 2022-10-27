@@ -28,9 +28,11 @@ export interface Household {
   name: string;
 }
 
+
+
 export interface Task {
-  id: number;
-  householdId: number;
+  id: string;
+  householdId: string;
   name: string;
   description?: string;
 
