@@ -36,8 +36,8 @@ export interface Task {
   name: string;
   description?: string;
 
-  difficulty: "1" | "2" | "3" | "4" | "5" | "6" | "7 ";
-  frequency: "1" | "2" | "3" | "4" | "5" | "6" | "7 ";
+  difficulty: number;
+  frequency: number;
 
   voice?: string; // mp3
   img?: string; // img

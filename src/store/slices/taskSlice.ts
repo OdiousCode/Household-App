@@ -14,8 +14,9 @@ import {
 import { orderBy } from "firebase/firestore";
 import thunk from "redux-thunk";
 import { Household, Profile, Task, TaskHistory } from "../../data/APItypes";
-import { app } from "../../data/firebase/config";
+import { app, auth } from "../../data/firebase/config";
 import { AppState, useAppSelector } from "../store";
+import { householdReducer } from "./householdSlice";
 
 interface TaskState {
   isLoading: boolean;
@@ -32,8 +33,8 @@ const initialState: TaskState = {
   householdTasks: [
     {
       id: '1',
-      difficulty: '1',
-      frequency: '5',
+      difficulty: 1,
+      frequency: 2,
       householdId: '1',
       isArchived: false,
       name: "Diska",
@@ -41,8 +42,8 @@ const initialState: TaskState = {
     },
     {
       id: '2',
-      difficulty: '1',
-      frequency: '2',
+      difficulty: 1,
+      frequency: 2,
       householdId: '1',
       isArchived: false,
       name: "Tvätta",
@@ -50,8 +51,8 @@ const initialState: TaskState = {
     },
     {
       id: '3',
-      difficulty: '1',
-      frequency: '2',
+      difficulty: 1,
+      frequency: 2,
       householdId: '1',
       isArchived: true,
       name: "Programmera",
@@ -75,11 +76,10 @@ export const getUserTaskHistories = createAsyncThunk<
 >("tasks/getUserTaskHistories", async (_, thunkApi) => {
   try {
     const state = thunkApi.getState();
-    state.user.user?.uid;
-
-    if (!state.households.activeHouseHold) {
-      throw "no active household";
-    }
+    
+    // if (!state.households.activeHouseHold) {
+    //   throw "no active household";
+    // }
 
     const db = getDatabase(app);
 
@@ -108,24 +108,26 @@ export const getUserTaskHistories = createAsyncThunk<
   }
 });
 
-export const createHouseholdTask = createAsyncThunk<Task, {taskProps: Task},{/*rejectValue:string;*/ state: AppState}>("tasks/createHouseholdTask", async ({taskProps}, thunkApi) => {
+
+export const createHouseholdTask = createAsyncThunk<Task , Task,{rejectValue:string; state: AppState}>("tasks/createHouseholdTask", async (p, thunkApi) => {
   try {
-    const state = thunkApi.getState();
+
     //TODO if household is valid
+     const state = thunkApi.getState();
+    const HhId = state.households.activeHouseHold?.id
     const db = getDatabase(app);
     const reference = ref(db, "app/tasks");
     const pushRef = push(reference);
-    
-    
 
+    
     let newT: Task = {
-      frequency: taskProps.frequency,
-      difficulty: taskProps.difficulty,
-      householdId: taskProps.householdId,
+      frequency: p.frequency,
+      difficulty: p.difficulty,
+      householdId: HhId,
       id: pushRef.key!,
-      name :taskProps.name,
-      description: taskProps.description,
-      isArchived: false,
+      name : p.name,
+      description: p.description,
+      isArchived: p.isArchived,
     };
 
     await set(pushRef, newT);
@@ -207,9 +209,9 @@ const taskSlice = createSlice({
       state.householdTasks!.push(action.payload);
     });
     builder.addCase(createHouseholdTask.rejected, (state, action) => {
-      console.log("rejected");
+      console.log("rejected ");
       state.isLoading = false;
-      // state.error = action.payload || "Unknown error";
+      state.error = action.payload || "Unknown error";
     });
   },
 });
