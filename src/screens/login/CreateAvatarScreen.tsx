@@ -9,10 +9,11 @@ import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
   createProfile,
   selectProfileById,
+  setActiveProfile,
   updateProfile,
 } from "../../store/slices/profileSlice";
 import { Profile, ProfileDTO } from "../../data/APItypes";
-import { setActiveHouseHold } from "../../store/slices/householdSlice";
+import {} from "../../store/slices/householdSlice";
 import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
 
 // import { setName } from "../store/profileSlice";
@@ -107,7 +108,7 @@ export default function CreateAvatar({
               if (!newProfile.pending && newProfile.avatar != -1) {
                 console.log("Go To Profile Screen");
 
-                dispatch(setActiveHouseHold(newProfile.householdId));
+                dispatch(setActiveProfile(newProfile.id));
 
                 navigation.replace("HouseholdTopTabNavigator", {
                   screen: "ProfileOverViewScreen",

@@ -1,17 +1,14 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
-import {
-  getUserHouseholds,
-  setActiveHouseHold,
-} from "../../store/slices/householdSlice";
+import { getUserHouseholds } from "../../store/slices/householdSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { Household, Profile } from "../../data/APItypes";
 import {
   getUserProfiles,
-  selectCurrentProfile,
   selectProfileById,
   selectUserProfiles,
+  setActiveProfile,
 } from "../../store/slices/profileSlice";
 import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
 import { avatars, getAvatar } from "../../constants/Layout";
@@ -33,10 +30,18 @@ export default function ProfileScreen({
 
   //let prof = useAppSelector(selectProfileById("-NFEJ99u7lzjxhCStSzZ"));
 
+  useEffect(() => {
+    dispatch(setActiveProfile(undefined));
+  }, []);
+
+  console.log("active profile");
+  console.log(useAppSelector((state) => state.profiles.activeProfile));
+
   useFocusEffect(
     useCallback(() => {
       dispatch(getUserProfiles());
       dispatch(getUserHouseholds());
+      dispatch(setActiveProfile(undefined));
     }, [])
   );
 
@@ -156,7 +161,7 @@ export default function ProfileScreen({
           onPress={() => {
             //TODO
             // setActive Profile?
-            dispatch(setActiveHouseHold(profile.householdId));
+            dispatch(setActiveProfile(profile.id));
 
             //TODO navigate to correct screen
             if (!profile.pending && profile.avatar !== -1) {

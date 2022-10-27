@@ -3,10 +3,7 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import { Profile, ProfileDTO } from "../../data/APItypes";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
-import {
-  getUserHouseholds,
-  setActiveHouseHold,
-} from "../../store/slices/householdSlice";
+import { getUserHouseholds } from "../../store/slices/householdSlice";
 import { createProfile } from "../../store/slices/profileSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 // import { setName } from "../store/profileSlice";
@@ -41,13 +38,6 @@ export default function RoomApplication({
               role: "User",
             };
 
-            dispatch(
-              createProfile({
-                profile: profile,
-                houseHoldId: entrenceCode,
-              })
-            );
-
             const r = await dispatch(
               createProfile({
                 profile: profile,
@@ -55,7 +45,7 @@ export default function RoomApplication({
               })
             );
             if (r.meta.requestStatus === "fulfilled") {
-              navigation.navigate("PortalWaiting", {
+              navigation.replace("PortalWaiting", {
                 profileId: (r.payload as Profile).id,
               });
             }

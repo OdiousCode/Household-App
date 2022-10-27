@@ -6,7 +6,7 @@ import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { BlurView } from "expo-blur";
 import { TextInput } from "react-native-paper";
 import { useDispatch } from "react-redux";
-import { logIn, signin } from "../../store/slices/userSlice";
+import { signin } from "../../store/slices/userSlice";
 import { Button } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 // import { setName } from "../store/profileSlice";
@@ -128,17 +128,7 @@ export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
                 position: "absolute",
                 bottom: 0,
               }}
-            >
-              <Button
-                icon="login"
-                mode="contained"
-                onPress={() => {
-                  dispatch(logIn("a"));
-                }}
-              >
-                Dev bypass
-              </Button>
-            </View>
+            ></View>
           </View>
         </BlurView>
       </ScrollView>
