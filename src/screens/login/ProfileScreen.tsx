@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { getUserHouseholds } from "../../store/slices/householdSlice";
@@ -30,10 +30,18 @@ export default function ProfileScreen({
 
   //let prof = useAppSelector(selectProfileById("-NFEJ99u7lzjxhCStSzZ"));
 
+  useEffect(() => {
+    dispatch(setActiveProfile(undefined));
+  }, []);
+
+  console.log("active profile");
+  console.log(useAppSelector((state) => state.profiles.activeProfile));
+
   useFocusEffect(
     useCallback(() => {
       dispatch(getUserProfiles());
       dispatch(getUserHouseholds());
+      dispatch(setActiveProfile(undefined));
     }, [])
   );
 

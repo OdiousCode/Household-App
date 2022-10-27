@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { auth } from "../../data/firebase/config";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
-import { logIn, signup } from "../../store/slices/userSlice";
+import { signup } from "../../store/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 
 // import { setName } from "../store/profileSlice";
