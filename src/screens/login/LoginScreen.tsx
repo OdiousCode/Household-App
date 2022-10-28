@@ -4,7 +4,7 @@ import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { BlurView } from "expo-blur";
 import { TextInput } from "react-native-paper";
 import { signin } from "../../store/slices/userSlice";
-import { useAppDispatch} from "../../store/store";
+import { useAppDispatch } from "../../store/store";
 import { Formik } from "formik";
 import * as yup from "yup";
 
