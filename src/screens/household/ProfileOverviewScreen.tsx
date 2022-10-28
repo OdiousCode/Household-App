@@ -51,6 +51,7 @@ export default function ProfileOverViewScreen({
   // }, []);
   const householdData = useAppSelector(selectActiveHousehold);
   const dispatch = useAppDispatch();
+
   const adminDeleteProfile = async (profile: Profile) => {
     if (profileData.find((i) => i.id === profile.id)) {
       const r = await dispatch(

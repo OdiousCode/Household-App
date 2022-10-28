@@ -62,11 +62,13 @@ export default function CreateAvatar({
     avaibleAvatars = allAvatarsInNumber;
   }
   let indexStartState = 0;
-  if (isEditing) {
+  let startStateName = "";
+  if (isEditing === true) {
     indexStartState = avaibleAvatars.indexOf(baseProfile.avatar);
+    startStateName = baseProfile.name;
   }
 
-  const [name, setName] = useState(baseProfile.name);
+  const [name, setName] = useState(startStateName);
   const [avatarIndex, setAvatarIndex] = useState(indexStartState);
   //TODO limit based on existing avatars
 
@@ -79,7 +81,7 @@ export default function CreateAvatar({
         style={styles.input}
         onChangeText={(name) => setName(name)}
         placeholder="Name"
-        defaultValue={baseProfile.name}
+        defaultValue={name}
       ></TextInput>
 
       <View>
