@@ -11,26 +11,27 @@ import {
 } from "react-native";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { signup } from "../../store/slices/userSlice";
-import { useAppDispatch} from "../../store/store";
+import { useAppDispatch } from "../../store/store";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { BlurView } from "expo-blur";
 
-
 const SignUpSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Required'),
-  password: Yup.string().min(6, ({ min }) => `Password must be at least ${min} characters`)
-  .required("Password is required"),
-  confirmPassword: Yup.string().when('password', {
+  email: Yup.string().email("Invalid email").required("Required"),
+  password: Yup.string()
+    .min(6, ({ min }) => `Password must be at least ${min} characters`)
+    .required("Password is required"),
+  confirmPassword: Yup.string().when("password", {
     is: (val: string) => val && val.length > 0,
     then: Yup.string()
-      .oneOf([Yup.ref('password')], 'Both passwords need to be the same')
-      .required('Required'),
+      .oneOf([Yup.ref("password")], "Both passwords need to be the same")
+      .required("Required"),
   }),
-})
+});
 
-export default function CreateAccount({navigation}: RootScreenProps<"CreateAccount">) {
-
+export default function CreateAccount({
+  navigation,
+}: RootScreenProps<"CreateAccount">) {
   const dispatch = useAppDispatch();
 
   return (
@@ -75,26 +76,26 @@ export default function CreateAccount({navigation}: RootScreenProps<"CreateAccou
       >
         <BlurView intensity={100}>
           <View style={styles.logIn}>
-          <Formik
-          validationSchema={SignUpSchema}
-            initialValues={{
-              email: '',
-              password: '',
-              confirmPassword: '',
-            }}
-            onSubmit={values => console.log(values)}
-          >
+            <Formik
+              validationSchema={SignUpSchema}
+              initialValues={{
+                email: "",
+                password: "",
+                confirmPassword: "",
+              }}
+              onSubmit={(values) => console.log(values)}
+            >
               {({
-                  handleChange,
-                  handleBlur,
-                  values,
-                  errors,
-                  touched,
-                  isValid,
+                handleChange,
+                handleBlur,
+                values,
+                errors,
+                touched,
+                isValid,
               }) => (
                 <>
                   <View>
-                  <Text
+                    <Text
                       style={{
                         fontSize: 17,
                         fontWeight: "400",
@@ -116,13 +117,13 @@ export default function CreateAccount({navigation}: RootScreenProps<"CreateAccou
                         style={{
                           color: "red",
                           marginTop: 5,
-                          marginBottom: 5
+                          marginBottom: 5,
                         }}
                       >
                         {errors.email}
                       </Text>
                     )}
-                  <Text
+                    <Text
                       style={{
                         fontSize: 17,
                         fontWeight: "400",
@@ -177,20 +178,37 @@ export default function CreateAccount({navigation}: RootScreenProps<"CreateAccou
                   </View>
                   <Pressable
                     style={styles.button}
-                    onPress={() => dispatch(signup({username: values.email, password: values.confirmPassword}))}
+                    onPress={() =>
+                      dispatch(
+                        signup({
+                          username: values.email,
+                          password: values.confirmPassword,
+                        })
+                      )
+                    }
                     disabled={!isValid || values.email === ""}
                   >
                     <Text style={styles.text}>Submit</Text>
                   </Pressable>
                   <View>
-                    <Text style={{ color: "gray", fontWeight: "600", fontSize: 14 }}>
+                    <Text
+                      style={{ color: "gray", fontWeight: "600", fontSize: 14 }}
+                    >
                       Already have an account?{" "}
-                      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                        <Text style={{ color: "#7DB2C5", fontWeight: "600", fontSize: 14 }}>
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate("Login")}
+                      >
+                        <Text
+                          style={{
+                            color: "#7DB2C5",
+                            fontWeight: "600",
+                            fontSize: 14,
+                          }}
+                        >
                           {" "}
                           Log in
                         </Text>
-                    </TouchableOpacity>
+                      </TouchableOpacity>
                     </Text>
                   </View>
                   <Button title="Go back" onPress={() => navigation.goBack()} />

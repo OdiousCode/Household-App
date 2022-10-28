@@ -3,9 +3,14 @@ import React, { useCallback } from "react";
 import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import { Card, Button } from "react-native-paper";
 import { getAvatar } from "../../constants/Layout";
+import { SafeAreaView } from "react-native-safe-area-context";
+import {} from "../../constants/Layout";
 import { Task } from "../../data/APItypes";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
-import { getUserTasks } from "../../store/slices/taskSlice";
+import {
+  getUserTasks,
+  selectHousHoldTasks,
+} from "../../store/slices/taskSlice";
 import { store, useAppDispatch, useAppSelector } from "../../store/store";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
@@ -16,7 +21,17 @@ export default function TaskOverviewScreen({
   const dispatch = useAppDispatch();
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
-  const taskData = useAppSelector((state) => state.tasks.householdTasks);
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getUserTasks());
+    }, [])
+  );
+
+  const taskDataSelektor = useAppSelector(selectHousHoldTasks);
+  const test = useAppSelector((p) => p.tasks.householdTasks);
+
+  console.log(test, "Test   SELEKTOR");
+  console.log(taskDataSelektor);
   // const showAlert = () =>
   //   Alert.alert(
   //     taskData[0].name,
