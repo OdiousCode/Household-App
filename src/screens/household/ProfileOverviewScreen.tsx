@@ -19,7 +19,9 @@ import { Item } from "react-native-paper/lib/typescript/components/List/List";
 import {
   deleteProfile,
   getUserProfiles,
+  selectProfilesByActiveHousehold,
   selectUserProfiles,
+  selectValidProfilesByActiveHousehold,
 } from "../../store/slices/profileSlice";
 import {
   getUserHouseholds,
@@ -36,7 +38,7 @@ export default function ProfileOverViewScreen({
   const currentProfile = useAppSelector(
     (state) => state.profiles.activeProfile
   );
-  const profileData = useAppSelector((state) => state.profiles.profiles);
+  const profileData = useAppSelector(selectValidProfilesByActiveHousehold);
   const test = useAppSelector((state) => state.profiles.activeProfile?.id);
   // const currentProfile = useAppSelector(selectUserProfiles);
   // const [refreshing, setRefreshing] = React.useState(false);
