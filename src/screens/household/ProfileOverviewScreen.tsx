@@ -204,6 +204,14 @@ export default function ProfileOverViewScreen({
                                   householdData.name,
                                   [
                                     {
+                                      text: "Redigera profil",
+                                      onPress: () => {
+                                        navigation.navigate("CreateAvatar", {
+                                          profileId: profile.id,
+                                        });
+                                      },
+                                    },
+                                    {
                                       text: "Lämna hushåll",
                                       onPress: () => {
                                         Alert.alert(

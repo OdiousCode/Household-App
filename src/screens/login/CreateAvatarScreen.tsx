@@ -58,8 +58,8 @@ export default function CreateAvatar({
     avaibleAvatars = allAvatarsInNumber;
   }
 
-  const [name, setName] = useState("");
-  const [avatarIndex, setAvatarIndex] = useState(1);
+  const [name, setName] = useState(baseProfile.name);
+  const [avatarIndex, setAvatarIndex] = useState(baseProfile.avatar);
   //TODO limit based on existing avatars
 
   return (
@@ -70,7 +70,8 @@ export default function CreateAvatar({
       <TextInput
         style={styles.input}
         onChangeText={(name) => setName(name)}
-        placeholder="name"
+        placeholder="Name"
+        defaultValue={baseProfile.name}
       ></TextInput>
 
       <View>
