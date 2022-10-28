@@ -16,7 +16,7 @@ import {
 } from "../../store/slices/profileSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 
-const wait = (timeout: number) => {
+export const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
