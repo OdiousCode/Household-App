@@ -13,7 +13,6 @@ import { Button, Card } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAvatar } from "../../constants/Layout";
 import { Profile } from "../../data/APItypes";
-import { auth } from "../../data/firebase/config";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import {
   getUserHouseholds,
@@ -27,9 +26,6 @@ import {
   updateProfile,
 } from "../../store/slices/profileSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import ProfileOverViewScreen from "./ProfileOverviewScreen";
-// import { setName } from "../store/profileSlice";
-// import { useAppDispatch, useAppSelector } from "../store/store";
 
 export default function PendingApplicationScreen({
   navigation,
@@ -83,10 +79,6 @@ export default function PendingApplicationScreen({
   }
 
   if (myProfile?.role === "Admin" && allPending.length < 1) {
-    console.log(allPending);
-    console.log(activeHousehold);
-    console.log(myProfile);
-
     return (
       <View style={styles.container}>
         <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 30 }}>
