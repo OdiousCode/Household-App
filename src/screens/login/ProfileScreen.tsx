@@ -21,7 +21,7 @@ import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
 import { getAvatar } from "../../constants/Layout";
 import { useFocusEffect } from "@react-navigation/native";
 
-const wait = (timeout: number) => {
+export const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
