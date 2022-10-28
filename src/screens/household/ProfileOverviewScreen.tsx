@@ -6,17 +6,29 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Button as Butt,
+  ScrollView,
+  RefreshControl,
 } from "react-native";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import { Card, Button } from "react-native-paper";
+
 import { store, useAppDispatch, useAppSelector } from "../../store/store";
 import { getAvatar } from "../../constants/Layout";
 import { Item } from "react-native-paper/lib/typescript/components/List/List";
-import { selectUserProfiles } from "../../store/slices/profileSlice";
-import { selectActiveHousehold } from "../../store/slices/householdSlice";
+import {
+  deleteProfile,
+  getUserProfiles,
+  selectUserProfiles,
+} from "../../store/slices/profileSlice";
+import {
+  getUserHouseholds,
+  selectActiveHousehold,
+} from "../../store/slices/householdSlice";
 
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { Profile, ProfileDTO } from "../../data/APItypes";
+import { wait } from "../login/ProfileScreen";
 
 export default function ProfileOverViewScreen({
   navigation,
@@ -27,10 +39,34 @@ export default function ProfileOverViewScreen({
   const profileData = useAppSelector((state) => state.profiles.profiles);
   const test = useAppSelector((state) => state.profiles.activeProfile?.id);
   // const currentProfile = useAppSelector(selectUserProfiles);
+  // const [refreshing, setRefreshing] = React.useState(false);
+  // const onRefresh = React.useCallback(() => {
+  //   console.log("refreshing");
+  //   setRefreshing(true);
+  //   dispatch(getUserProfiles());
+  //   dispatch(getUserHouseholds());
+  //   wait(2000).then(() => setRefreshing(false));
+  // }, []);
   const householdData = useAppSelector(selectActiveHousehold);
+  const dispatch = useAppDispatch();
+  const adminDeleteProfile = async (profile: Profile) => {
+    if (profileData.find((i) => i.id === profile.id)) {
+      const r = await dispatch(
+        deleteProfile({
+          profile: profile,
+        })
+      );
+      if (r.meta.requestStatus === "fulfilled") {
+        if ((r.payload as Profile).id === currentProfile?.id)
+          // if(profile.role=== "Admin")
+          navigation.navigate("Profile");
+      }
+    }
+  };
+  let allH = useAppSelector((state) => state.profiles.profiles);
+
   if (householdData === undefined) {
     return (
-
       <SafeAreaView>
         <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 30 }}>
           - IF SOMETHING FAILS THIS IS DISPLAYED - {"\n"}Hushåll:{" "}
@@ -49,14 +85,17 @@ export default function ProfileOverViewScreen({
           {test}
         </Text>
       </SafeAreaView>
-
     );
   } else {
     return (
       <>
-
         <SafeAreaView style={styles.container}>
-
+          {/* <ScrollView
+            contentContainerStyle={styles.container}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          > */}
           {currentProfile?.role === "Admin" ? (
             <Text
               style={{ fontSize: 20, fontWeight: "bold", marginBottom: 30 }}
@@ -81,7 +120,6 @@ export default function ProfileOverViewScreen({
           <View style={{ height: 500, width: "90%" }}>
             {/* user 0 is normal user, set to 1 to test admin mode, that user is admin */}
             {/* {currentProfile[12].role === "User" && ( */}
-
             <FlatList
               style={{ flex: 1, width: "100%" }}
               data={profileData}
@@ -131,13 +169,7 @@ export default function ProfileOverViewScreen({
                                             {
                                               text: "Ja",
                                               onPress: () => {
-                                                // Lägg in kod för att faktiskt se till att profilen lämnar hushåll här.
-                                                Alert.alert(
-                                                  profile.name +
-                                                    ' har tagits bort ur hushåll "' +
-                                                    householdData.name +
-                                                    '"'
-                                                );
+                                                adminDeleteProfile(profile);
                                               },
                                             },
                                             {
@@ -184,11 +216,13 @@ export default function ProfileOverViewScreen({
                                               text: "Ja",
                                               onPress: () => {
                                                 // Lägg in kod för att faktiskt se till att profilen lämnar hushåll här.
+
                                                 Alert.alert(
                                                   'Lämnat hushåll "' +
                                                     householdData.name +
                                                     '"'
                                                 );
+                                                adminDeleteProfile(profile);
                                               },
                                             },
                                             {
@@ -222,7 +256,6 @@ export default function ProfileOverViewScreen({
                         </View>
                         <Text style={{ fontSize: 17 }}>
                           {getAvatar(profile.avatar).icon}
-
                         </Text>
                       </View>
                     </Card>
@@ -235,12 +268,11 @@ export default function ProfileOverViewScreen({
               )}
             />
           </View>
-
+          {/* </ScrollView> */}
         </SafeAreaView>
       </>
     );
   }
-
 }
 const styles = StyleSheet.create({
   container: {
