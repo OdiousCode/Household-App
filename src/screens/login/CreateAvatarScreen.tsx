@@ -29,14 +29,15 @@ export default function CreateAvatar({
   if (!baseProfile) {
     return null;
   }
+  let isEditing = route.params?.isEditing;
+  if (isEditing === undefined) {
+    isEditing = false;
+  }
+
   let allSameHouseHoldId = useAppSelector((state) =>
     state.profiles.profiles.filter(
       (p) => p.householdId === baseProfile?.householdId
     )
-  );
-
-  let allActiveSameHouseholdId = allSameHouseHoldId.filter(
-    (p) => p.avatar !== -1 && p.pending === false
   );
 
   const allAvatars = getAllAvatars();
@@ -47,19 +48,26 @@ export default function CreateAvatar({
 
   let avaibleAvatars = allAvatarsInNumber;
   allSameHouseHoldId.forEach((element) => {
-    if (avaibleAvatars.includes(element.avatar)) {
+    if (
+      avaibleAvatars.includes(element.avatar) &&
+      baseProfile?.id !== element.id
+    ) {
       let index = avaibleAvatars.indexOf(element.avatar);
       avaibleAvatars.splice(index, 1);
     }
   });
 
-  console.log(avaibleAvatars);
+  // If more ppl then avatars, let them use all.
   if (avaibleAvatars.length <= 1) {
     avaibleAvatars = allAvatarsInNumber;
   }
+  let indexStartState = 0;
+  if (isEditing) {
+    indexStartState = avaibleAvatars.indexOf(baseProfile.avatar);
+  }
 
   const [name, setName] = useState(baseProfile.name);
-  const [avatarIndex, setAvatarIndex] = useState(baseProfile.avatar);
+  const [avatarIndex, setAvatarIndex] = useState(indexStartState);
   //TODO limit based on existing avatars
 
   return (
@@ -117,7 +125,7 @@ export default function CreateAvatar({
             //update Profile? currentprofile to name + avatar as wished
 
             let newProfile: Profile = {
-              avatar: avatarIndex,
+              avatar: avaibleAvatars[avatarIndex],
               name: name,
 
               email: baseProfile!.email,
@@ -139,7 +147,9 @@ export default function CreateAvatar({
               if (!newProfile.pending && newProfile.avatar != -1) {
                 console.log("Go To Profile Screen");
 
-                dispatch(setActiveProfile(newProfile.id));
+                if (!isEditing) {
+                  dispatch(setActiveProfile(newProfile.id));
+                }
 
                 navigation.replace("HouseholdTopTabNavigator", {
                   screen: "ProfileOverViewScreen",

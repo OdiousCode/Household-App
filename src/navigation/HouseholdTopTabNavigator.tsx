@@ -15,14 +15,7 @@ import {
   createMaterialTopTabNavigator,
   MaterialTopTabScreenProps,
 } from "@react-navigation/material-top-tabs";
-import { Profile, ProfileDTO } from "../data/APItypes";
 import { useAppSelector } from "../store/store";
-import { getUserHouseholds } from "../store/slices/householdSlice";
-import { getUserProfiles } from "../store/slices/profileSlice";
-
-// import QuestionScreen from "../screens/QuestionScreen";
-
-
 
 export type HouseholdTopTabParamList = {
   TaskScreen: undefined;
@@ -43,10 +36,7 @@ const Tab = createMaterialTopTabNavigator<HouseholdTopTabParamList>();
 // const Stack = createNativeStackNavigator<HouseholdStackParamList>();
 
 export default function HouseholdTopTabNavigator() {
-
   let myProfile = useAppSelector((state) => state.profiles.activeProfile);
-
-
 
   return (
     <Tab.Navigator
@@ -56,24 +46,23 @@ export default function HouseholdTopTabNavigator() {
         tabBarStyle: { backgroundColor: "orange", height: 1 },
       }}
     >
-      {(myProfile?.role === "Admin") && <Tab.Screen
-        name="PendingApplicationScreen"
-        //TODO fix later (temporary fix for CI) V
-        component={PendingApplicationScreen as any}
-      />}
       <Tab.Screen
         name="ProfileOverViewScreen"
         component={ProfileOverViewScreen}
       />
       <Tab.Screen name="TaskScreen" component={TaskScreen} />
       <Tab.Screen name="StatisticsScreen" component={StatisticsScreen} />
-      <Tab.Screen name="TaskOverviewScreen" component={TaskOverviewScreen}/>
-     
-      
+      <Tab.Screen name="TaskOverviewScreen" component={TaskOverviewScreen} />
+      {myProfile?.role === "Admin" && (
+        <Tab.Screen
+          name="PendingApplicationScreen"
+          //TODO fix later (temporary fix for CI) V
+          component={PendingApplicationScreen as any}
+        />
+      )}
     </Tab.Navigator>
   );
 }
 function dispatch(arg0: any) {
   throw new Error("Function not implemented.");
 }
-

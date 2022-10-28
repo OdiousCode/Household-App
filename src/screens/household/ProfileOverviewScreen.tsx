@@ -208,8 +208,9 @@ export default function ProfileOverViewScreen({
                                     {
                                       text: "Redigera profil",
                                       onPress: () => {
-                                        navigation.navigate("CreateAvatar", {
+                                        navigation.replace("CreateAvatar", {
                                           profileId: profile.id,
+                                          isEditing: true,
                                         });
                                       },
                                     },
