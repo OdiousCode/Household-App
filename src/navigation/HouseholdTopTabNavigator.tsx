@@ -1,9 +1,9 @@
-import { CompositeScreenProps } from "@react-navigation/native";
+import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
-import React from "react";
+import React, { useCallback } from "react";
 import { RootStackParamList } from "./RootStackNavigator";
 
 import TaskScreen from "../screens/household/TaskScreen";
@@ -16,8 +16,13 @@ import {
   MaterialTopTabScreenProps,
 } from "@react-navigation/material-top-tabs";
 import { Profile, ProfileDTO } from "../data/APItypes";
+import { useAppSelector } from "../store/store";
+import { getUserHouseholds } from "../store/slices/householdSlice";
+import { getUserProfiles } from "../store/slices/profileSlice";
 
 // import QuestionScreen from "../screens/QuestionScreen";
+
+
 
 export type HouseholdTopTabParamList = {
   TaskScreen: undefined;
@@ -38,6 +43,11 @@ const Tab = createMaterialTopTabNavigator<HouseholdTopTabParamList>();
 // const Stack = createNativeStackNavigator<HouseholdStackParamList>();
 
 export default function HouseholdTopTabNavigator() {
+
+  let myProfile = useAppSelector((state) => state.profiles.activeProfile);
+
+
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -46,18 +56,24 @@ export default function HouseholdTopTabNavigator() {
         tabBarStyle: { backgroundColor: "orange" },
       }}
     >
+      {(myProfile?.role === "Admin") && <Tab.Screen
+        name="PendingApplicationScreen"
+        //TODO fix later (temporary fix for CI) V
+        component={PendingApplicationScreen as any}
+      />}
       <Tab.Screen
         name="ProfileOverViewScreen"
         component={ProfileOverViewScreen}
       />
       <Tab.Screen name="TaskScreen" component={TaskScreen} />
-      <Tab.Screen
-        name="PendingApplicationScreen"
-        //TODO fix later (temporary fix for CI) V
-        component={PendingApplicationScreen as any}
-      />
       <Tab.Screen name="StatisticsScreen" component={StatisticsScreen} />
-      <Tab.Screen name="TaskOverviewScreen" component={TaskOverviewScreen} />
+      <Tab.Screen name="TaskOverviewScreen" component={TaskOverviewScreen}/>
+     
+      
     </Tab.Navigator>
   );
 }
+function dispatch(arg0: any) {
+  throw new Error("Function not implemented.");
+}
+
