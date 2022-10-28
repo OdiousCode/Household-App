@@ -6,12 +6,24 @@ import { Task } from "../../data/APItypes";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import { createHouseholdTask } from "../../store/slices/taskSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
+import { Formik } from "formik";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
+import * as yup from "yup";
 
 export default function TaskScreen({
   navigation,
 }: HouseholdScreenProps<"TaskScreen">) {
+  const loginValidationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email("Please enter valid email")
+      .required("Email Address is Required"),
+    password: yup
+      .string()
+      .min(6, ({ min }) => `Password must be at least ${min} characters`)
+      .required("Password is required"),
+  });
   const dispatch = useAppDispatch();
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
@@ -38,30 +50,81 @@ export default function TaskScreen({
       <SafeAreaView style={styles.container}>
         <Text style={styles.title}>Skapa en ny syssla</Text>
 
-        <Text>Title</Text>
-        <TextInput
-          style={styles.nameInput}
-          placeholder="Title"
-          value={taskName}
-          onChangeText={setTaskName}
-        />
-        <TextInput
-          placeholder="Description"
-          value={taskDescription}
-          onChangeText={setTaskDescription}
-        />
-
-        <TextInput
-          placeholder="Difficulty"
-          value={taskDifficulty}
-          onChangeText={setTaskDifficulty}
-        />
-
-        <TextInput
-          placeholder="Frequency"
-          value={taskFrequency}
-          onChangeText={setTaskFrequency}
-        />
+        <Formik
+          //TODO idk where validateOnMount exists
+          validateOnChange={true}
+          validationSchema={loginValidationSchema}
+          initialValues={{ email: "", password: "" }}
+          onSubmit={(values) => console.log(values)}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            values,
+            errors,
+            touched,
+            isValid,
+          }) => (
+            <>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    fontWeight: "400",
+                    color: "black",
+                  }}
+                >
+                  Title
+                </Text>
+                <TextInput
+                  placeholder="Email Address"
+                  style={styles.input}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                  keyboardType="email-address"
+                />
+                {errors.email && touched.email && (
+                  <Text
+                    style={{
+                      color: "red",
+                    }}
+                  >
+                    {errors.email}
+                  </Text>
+                )}
+              </View>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    fontWeight: "400",
+                    color: "black",
+                  }}
+                >
+                  Password
+                </Text>
+                <TextInput
+                  placeholder="Password"
+                  style={styles.input}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                  secureTextEntry
+                />
+                {errors.password && touched.password && (
+                  <Text
+                    style={{
+                      color: "red",
+                    }}
+                  >
+                    {errors.password}
+                  </Text>
+                )}
+              </View>
+            </>
+          )}
+        </Formik>
 
 
         <View style={{
@@ -114,5 +177,9 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: 'red',
     padding: 50,
+  },
+  input: {
+    color: "black",
+    margin: 10,
   },
 });
