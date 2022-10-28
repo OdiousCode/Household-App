@@ -21,7 +21,6 @@ export default function TaskScreen({
   const [taskDifficulty, setTaskDifficulty] = useState('');
   const [taskFrequency, setTaskFrequency] = useState('');
 
-
   const tasko: Task = {
     id: '0',
     householdId: '0',
@@ -34,13 +33,12 @@ export default function TaskScreen({
 
 
 
-
   return (
     <>
       <SafeAreaView style={styles.container}>
         <Text style={styles.title}>Skapa en ny syssla</Text>
 
-
+        <Text>Title</Text>
         <TextInput
           style={styles.nameInput}
           placeholder="Title"
@@ -72,7 +70,7 @@ export default function TaskScreen({
           alignItems: "center",
           flexDirection: "row",
           width: "100%",
-          bottom: 0,
+          bottom: 25,
           padding: 10,
         }}>
           <Button
@@ -81,7 +79,7 @@ export default function TaskScreen({
             buttonColor="#DCCFCF"
             textColor="#000"
             style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-            onPress={() => console.log("Pressed")}
+            onPress={() => dispatch(createHouseholdTask(tasko))}
           >
             Spara
           </Button>
@@ -90,7 +88,7 @@ export default function TaskScreen({
             mode="contained-tonal"
             buttonColor="#DCCFCF"
             style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-            onPress={() => console.log("Pressed")}
+            onPress={() => navigation.navigate('TaskOverviewScreen')}
           >
             Stäng
           </Button>
