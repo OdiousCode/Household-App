@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  RefreshControl,
+  ScrollView,
+} from "react-native";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { getUserHouseholds } from "../../store/slices/householdSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
@@ -11,8 +18,12 @@ import {
   setActiveProfile,
 } from "../../store/slices/profileSlice";
 import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
-import { avatars, getAvatar } from "../../constants/Layout";
+import { getAvatar } from "../../constants/Layout";
 import { useFocusEffect } from "@react-navigation/native";
+
+const wait = (timeout: number) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 
 export default function ProfileScreen({
   navigation,
@@ -28,14 +39,18 @@ export default function ProfileScreen({
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
 
-  //let prof = useAppSelector(selectProfileById("-NFEJ99u7lzjxhCStSzZ"));
-
   useEffect(() => {
     dispatch(setActiveProfile(undefined));
   }, []);
 
-  console.log("active profile");
-  console.log(useAppSelector((state) => state.profiles.activeProfile));
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+    console.log("refreshing");
+    setRefreshing(true);
+    dispatch(getUserProfiles());
+    dispatch(getUserHouseholds());
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -46,7 +61,12 @@ export default function ProfileScreen({
   );
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View
         style={{
           position: "absolute",
@@ -198,7 +218,7 @@ export default function ProfileScreen({
           Get Data
         </Button>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

@@ -1,12 +1,21 @@
 //TODO late
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { Button } from "react-native-paper";
 import { Profile } from "../../data/APItypes";
 import { auth } from "../../data/firebase/config";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
-import { getUserHouseholds } from "../../store/slices/householdSlice";
-import { getUserProfiles } from "../../store/slices/profileSlice";
+import {
+  getUserHouseholds,
+  selectActiveHousehold,
+} from "../../store/slices/householdSlice";
+import {
+  getUserProfiles,
+  selectPendingProfilesByActiveHousehold,
+  selectProfilesByActiveHousehold,
+  updateProfile,
+} from "../../store/slices/profileSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import ProfileOverViewScreen from "./ProfileOverviewScreen";
 // import { setName } from "../store/profileSlice";
@@ -17,12 +26,12 @@ export default function PendingApplicationScreen({
   route,
 }: HouseholdScreenProps<"PendingApplicationScreen">) {
   //todo usestate mby?
-  let profileId = route.params?.profileId;
   const dispatch = useAppDispatch();
 
-  let currentProfile = useAppSelector((state) =>
-    state.profiles.profiles.find((p) => p.id === profileId)
-  );
+  let myProfile = useAppSelector((state) => state.profiles.activeProfile);
+  let activeHousehold = useAppSelector(selectActiveHousehold);
+  let allPending = useAppSelector(selectPendingProfilesByActiveHousehold);
+
   let uid = useAppSelector((state) => state.user.user?.uid);
 
   useFocusEffect(
@@ -31,13 +40,46 @@ export default function PendingApplicationScreen({
       dispatch(getUserHouseholds());
     }, [])
   );
+  async function allowUser(profile: Profile) {
+    let newProfile: Profile = {
+      avatar: profile.avatar,
+      name: profile.name,
+      email: profile.email,
 
-  return (
-    <View style={styles.container}>
-      <Text>LISTA ÖVER FOLK SOM VILL KOMMA IN </Text>
-      <Button title="Go back" onPress={() => navigation.goBack()} />
-    </View>
-  );
+      householdId: profile!.householdId,
+      id: profile!.id,
+      pending: false,
+      role: profile!.role,
+      userId: profile!.userId,
+    };
+
+    const r = await dispatch(
+      updateProfile({
+        profile: newProfile,
+      })
+    );
+  }
+
+  if (myProfile?.role === "Admin") {
+    return (
+      <View>
+        {allPending.map((ap) => {
+          return (
+            <View>
+              <Button onPress={() => allowUser(ap)}>{ap.email}</Button>
+            </View>
+          );
+        })}
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <Text>Du har inte rättelse för denna sida</Text>
+        <Button onPress={() => navigation.goBack()}> Go Back</Button>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

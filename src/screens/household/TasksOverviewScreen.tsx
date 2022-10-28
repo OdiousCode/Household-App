@@ -1,7 +1,7 @@
 import React from "react";
 import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import { Card, Button } from "react-native-paper";
-import { avatars } from "../../constants/Layout";
+import { getAvatar } from "../../constants/Layout";
 import { Task } from "../../data/APItypes";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import { getUserTasks } from "../../store/slices/taskSlice";
@@ -111,9 +111,9 @@ export default function TaskOverviewScreen({
                     }}
                   > */}
                     <Text style={{ fontSize: 17 }}>
-                      {avatars[0].icon}
-                      {avatars[2].icon}
-                      {avatars[3].icon}
+                      {getAvatar(0).icon}
+                      {getAvatar(2).icon}
+                      {getAvatar(3).icon}
                     </Text>
                     {/* </View> */}
                     {/* <Text>{item.description}</Text> */}

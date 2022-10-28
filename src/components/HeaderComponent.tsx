@@ -10,7 +10,7 @@ import { Text, StyleSheet } from "react-native";
 import { auth } from "../data/firebase/config";
 import { logOut, userReducer } from "../store/slices/userSlice";
 import { store, useAppDispatch, useAppSelector } from "../store/store";
-import { avatars, getAvatar } from "../constants/Layout";
+import { getAvatar } from "../constants/Layout";
 import { IconSource } from "react-native-paper/lib/typescript/components/Icon";
 
 export type Props = {

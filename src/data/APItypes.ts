@@ -8,6 +8,7 @@ export interface Profile {
   id: string;
   userId: string;
   householdId: string;
+  email: string;
 
   name: string;
   role: "Admin" | "User";
