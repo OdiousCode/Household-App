@@ -10,7 +10,7 @@ export const AvatarIcon = {
   icon_Pig: "🐷",
 };
 
-export const avatars: Avatar[] = [
+const avatars: Avatar[] = [
   {
     color: avatarColors.avatar_Fox,
     icon: AvatarIcon.icon_Fox,
@@ -36,11 +36,17 @@ export const avatars: Avatar[] = [
     icon: AvatarIcon.icon_Pig,
   },
 ];
+export function getAllAvatars(): Avatar[] {
+  let allAvatars = avatars;
+  //allAvatars.push({ icon: "❓", color: "#3d3635" });
 
-export function getAvatar(index: number) {
+  return allAvatars;
+}
+
+export function getAvatar(index: number): Avatar {
   if (index == -1) {
     //TODO -?- icon
-    return { color: "#444", icon: "❓" };
+    return { icon: "❓", color: "#3d3635" };
   }
   return avatars[index];
 }

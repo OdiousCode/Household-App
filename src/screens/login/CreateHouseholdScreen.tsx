@@ -8,6 +8,7 @@ import {
   getUserHouseholds,
 } from "../../store/slices/householdSlice";
 import { createProfile } from "../../store/slices/profileSlice";
+import {} from "../../store/slices/userSlice";
 import { useAppDispatch } from "../../store/store";
 import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
 

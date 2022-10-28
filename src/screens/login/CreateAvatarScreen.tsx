@@ -4,7 +4,7 @@ import RootStackNavigator, {
   RootScreenProps,
 } from "../../navigation/RootStackNavigator";
 import { avatarColors } from "../../constants/Colors";
-import { avatars } from "../../constants/Layout";
+import { getAllAvatars, getAvatar } from "../../constants/Layout";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
   createProfile,
@@ -26,15 +26,42 @@ export default function CreateAvatar({
   const dispatch = useAppDispatch();
   //TODO route.params not optional?
   let baseProfile = useAppSelector(selectProfileById(route.params!.profileId));
-
-  const [name, setName] = useState("");
-  const [avatarIndex, setAvatarIndex] = useState(1);
-  const allAvatars = avatars;
-  //TODO limit based on existing avatars
-
   if (!baseProfile) {
     return null;
   }
+  let allSameHouseHoldId = useAppSelector((state) =>
+    state.profiles.profiles.filter(
+      (p) => p.householdId === baseProfile?.householdId
+    )
+  );
+
+  let allActiveSameHouseholdId = allSameHouseHoldId.filter(
+    (p) => p.avatar !== -1 && p.pending === false
+  );
+
+  const allAvatars = getAllAvatars();
+  let allAvatarsInNumber: number[] = [];
+  allAvatars.forEach((avatar, index) => {
+    allAvatarsInNumber.push(index);
+  });
+
+  let avaibleAvatars = allAvatarsInNumber;
+  allSameHouseHoldId.forEach((element) => {
+    if (avaibleAvatars.includes(element.avatar)) {
+      let index = avaibleAvatars.indexOf(element.avatar);
+      avaibleAvatars.splice(index, 1);
+    }
+  });
+
+  console.log(avaibleAvatars);
+  if (avaibleAvatars.length <= 1) {
+    avaibleAvatars = allAvatarsInNumber;
+  }
+
+  const [name, setName] = useState("");
+  const [avatarIndex, setAvatarIndex] = useState(1);
+  //TODO limit based on existing avatars
+
   return (
     <View style={styles.container}>
       <Text>Create avatar Screen</Text>
@@ -49,17 +76,19 @@ export default function CreateAvatar({
       <View>
         <View
           style={{
-            backgroundColor: allAvatars[avatarIndex].color,
+            backgroundColor: getAvatar(avaibleAvatars[avatarIndex]).color,
             padding: 20,
             borderRadius: 50,
           }}
         >
-          <Text style={{ fontSize: 30 }}>{allAvatars[avatarIndex].icon}</Text>
+          <Text style={{ fontSize: 30 }}>
+            {getAvatar(avaibleAvatars[avatarIndex]).icon}
+          </Text>
         </View>
 
         <Button
           onPress={() => {
-            if (avatarIndex === avatars.length - 1) {
+            if (avatarIndex === avaibleAvatars.length - 1) {
               setAvatarIndex(0);
             } else {
               setAvatarIndex(avatarIndex + 1);
@@ -72,7 +101,7 @@ export default function CreateAvatar({
         <Button
           onPress={() => {
             if (avatarIndex === 0) {
-              setAvatarIndex(avatars.length - 1);
+              setAvatarIndex(avaibleAvatars.length - 1);
             } else {
               setAvatarIndex(avatarIndex - 1);
             }
@@ -90,6 +119,7 @@ export default function CreateAvatar({
               avatar: avatarIndex,
               name: name,
 
+              email: baseProfile!.email,
               householdId: baseProfile!.householdId,
               id: baseProfile!.id,
               pending: baseProfile!.pending,

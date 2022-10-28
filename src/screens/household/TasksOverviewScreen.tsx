@@ -2,11 +2,15 @@ import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback } from "react";
 import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import { Card, Button } from "react-native-paper";
+import { getAvatar } from "../../constants/Layout";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { avatars } from "../../constants/Layout";
+import {} from "../../constants/Layout";
 import { Task } from "../../data/APItypes";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
-import { getUserTasks, selectHousHoldTasks } from "../../store/slices/taskSlice";
+import {
+  getUserTasks,
+  selectHousHoldTasks,
+} from "../../store/slices/taskSlice";
 import { store, useAppDispatch, useAppSelector } from "../../store/store";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
@@ -20,15 +24,14 @@ export default function TaskOverviewScreen({
   useFocusEffect(
     useCallback(() => {
       dispatch(getUserTasks());
-    }, []));
-
-
+    }, [])
+  );
 
   const taskDataSelektor = useAppSelector(selectHousHoldTasks);
-  const test = useAppSelector((p) => p.tasks.householdTasks)
+  const test = useAppSelector((p) => p.tasks.householdTasks);
 
-  console.log(test, 'Test   SELEKTOR')
-  console.log(taskDataSelektor)
+  console.log(test, "Test   SELEKTOR");
+  console.log(taskDataSelektor);
   // const showAlert = () =>
   //   Alert.alert(
   //     taskData[0].name,
@@ -124,9 +127,9 @@ export default function TaskOverviewScreen({
                     }}
                   > */}
                     <Text style={{ fontSize: 17 }}>
-                      {avatars[0].icon}
-                      {avatars[2].icon}
-                      {avatars[3].icon}
+                      {getAvatar(0).icon}
+                      {getAvatar(2).icon}
+                      {getAvatar(3).icon}
                     </Text>
                     {/* </View> */}
                     {/* <Text>{item.description}</Text> */}

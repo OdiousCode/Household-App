@@ -10,7 +10,7 @@ import {
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import { Card, Button } from "react-native-paper";
 import { store, useAppDispatch, useAppSelector } from "../../store/store";
-import { avatars, getAvatar } from "../../constants/Layout";
+import { getAvatar } from "../../constants/Layout";
 import { Item } from "react-native-paper/lib/typescript/components/List/List";
 import { selectUserProfiles } from "../../store/slices/profileSlice";
 import { selectActiveHousehold } from "../../store/slices/householdSlice";

@@ -31,6 +31,7 @@ const initialState: ProfileState = {
       householdId: "1",
       id: "1",
       name: "VerkligtNamn",
+      email: "verkligEmail",
       pending: false,
       role: "User",
       userId: "123",
@@ -40,18 +41,10 @@ const initialState: ProfileState = {
       householdId: "1",
       id: "2",
       name: "Också bra namn",
+      email: "också bra email",
       pending: false,
       role: "Admin",
       userId: "12345",
-    },
-    {
-      avatar: 3,
-      householdId: "2",
-      id: "3",
-      name: "asd",
-      pending: false,
-      role: "User",
-      userId: "123456",
     },
   ],
 };
@@ -77,6 +70,35 @@ export const selectProfileById = (id: string) => (state: AppState) => {
   const returnUserProfiles = state.profiles.profiles.find((p) => p.id === id);
 
   return returnUserProfiles;
+};
+
+export const selectProfilesByActiveHousehold = (state: AppState) => {
+  const returnUserProfiles = state.profiles.profiles.filter(
+    (p) => p.householdId === state.profiles.activeProfile?.householdId
+  );
+
+  return returnUserProfiles;
+};
+
+export const selectValidProfilesByActiveHousehold = (state: AppState) => {
+  const returnUserProfiles = state.profiles.profiles.filter(
+    (p) => p.householdId === state.profiles.activeProfile?.householdId
+  );
+  const nonPendingProfiles = returnUserProfiles.filter(
+    (p) => p.pending === false
+  );
+  const validProfiles = nonPendingProfiles.filter((p) => p.avatar !== -1);
+
+  return validProfiles;
+};
+
+export const selectPendingProfilesByActiveHousehold = (state: AppState) => {
+  const returnUserProfiles = state.profiles.profiles.filter(
+    (p) => p.householdId === state.profiles.activeProfile?.householdId
+  );
+  const pendingProfiles = returnUserProfiles.filter((p) => p.pending === true);
+
+  return pendingProfiles;
 };
 
 //TODO
@@ -124,7 +146,11 @@ export const getUserProfiles = createAsyncThunk<
   }
 });
 
-export const createProfile = createAsyncThunk<Profile, { profile: ProfileDTO; houseHoldId: string },{ rejectValue: string; state: AppState }>("profiles/createProfile", async ({ profile, houseHoldId }, thunkApi) => {
+export const createProfile = createAsyncThunk<
+  Profile,
+  { profile: ProfileDTO; houseHoldId: string },
+  { rejectValue: string; state: AppState }
+>("profiles/createProfile", async ({ profile, houseHoldId }, thunkApi) => {
   try {
     const state = thunkApi.getState();
     if (!state.user.user) {
@@ -145,6 +171,7 @@ export const createProfile = createAsyncThunk<Profile, { profile: ProfileDTO; ho
       role: profile.role,
 
       //householdId:
+      email: state.user.user.email!,
       userId: state.user.user.uid,
       householdId: houseHoldId,
       id: pushRef!.key!,

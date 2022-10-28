@@ -8,9 +8,7 @@ import { useAppDispatch } from "../../store/store";
 import { Formik } from "formik";
 import * as yup from "yup";
 
-
 export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
-
   const loginValidationSchema = yup.object().shape({
     email: yup
       .string()
@@ -67,10 +65,11 @@ export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
         <BlurView intensity={100}>
           <View style={styles.logIn}>
             <Formik
-              validateOnMount={true}
+              //TODO idk where validateOnMount exists
+              validateOnChange={true}
               validationSchema={loginValidationSchema}
               initialValues={{ email: "", password: "" }}
-              onSubmit={values => console.log(values)}
+              onSubmit={(values) => console.log(values)}
             >
               {({
                 handleChange,
@@ -139,7 +138,14 @@ export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
                   </View>
                   <Pressable
                     style={styles.button}
-                    onPress={() => dispatch(signin({ username: values.email, password: values.password }))}
+                    onPress={() =>
+                      dispatch(
+                        signin({
+                          username: values.email,
+                          password: values.password,
+                        })
+                      )
+                    }
                     disabled={!isValid || values.email === ""}
                   >
                     <Text style={styles.text}>Login</Text>
