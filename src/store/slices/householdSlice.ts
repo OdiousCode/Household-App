@@ -72,6 +72,37 @@ export const createHousehold = createAsyncThunk<
   }
 });
 
+export const updateHousehold = createAsyncThunk<
+  Household,
+  { household: Household },
+  { rejectValue: string; state: AppState }
+>("household/updateHousehold", async ({ household }, thunkApi) => {
+  try {
+    const state = thunkApi.getState();
+    if (!state.user.user) {
+      return thunkApi.rejectWithValue(
+        "Must be valid Profile + Household combination"
+      );
+    }
+    //profile.id = uid todo.
+
+    const db = getDatabase(app);
+
+    await set(ref(db, "app/profiles/" + household.id), household);
+
+    //TODO look for error?
+    return household;
+  } catch (error) {
+    console.error(error);
+    if (error instanceof FirebaseError) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+    return thunkApi.rejectWithValue(
+      "Could not signup please contact our support."
+    );
+  }
+});
+
 export const getUserHouseholds = createAsyncThunk<
   Household[],
   void,
@@ -149,6 +180,30 @@ const householdSlice = createSlice({
     });
     builder.addCase(createHousehold.rejected, (state, action) => {
       console.log("rejected");
+      state.isLoading = false;
+      state.error = action.payload || "Unknown error";
+    });
+
+    builder.addCase(updateHousehold.pending, (state) => {
+      state.isLoading = true;
+      console.log("pending");
+    });
+    builder.addCase(updateHousehold.fulfilled, (state, action) => {
+      console.log("fulfilled");
+      console.log("updateHouseHold");
+      state.isLoading = false;
+      state.households = state.households.map((item, index) => {
+        if (item.id !== action.payload.id) {
+          return item;
+        } else {
+          return action.payload;
+        }
+      });
+    });
+    builder.addCase(updateHousehold.rejected, (state, action) => {
+      console.log("rejected " + action.payload);
+      console.log("UpdateProfile");
+
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
     });
