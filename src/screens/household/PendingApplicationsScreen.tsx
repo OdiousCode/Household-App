@@ -62,7 +62,8 @@ export default function PendingApplicationScreen({
 
   if (myProfile?.role === "Admin") {
     return (
-      <View>
+      <View style={styles.container}>
+        <Text>Depending profiles</Text>
         {allPending.map((ap) => {
           return (
             <View>
