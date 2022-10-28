@@ -192,6 +192,42 @@ export const createProfile = createAsyncThunk<
   }
 });
 
+export const deleteProfile = createAsyncThunk<
+  Profile,
+  { profile: Profile },
+  { rejectValue: string; state: AppState }
+>("profiles/deleteProfile", async ({ profile }, thunkApi) => {
+  try {
+    const state = thunkApi.getState();
+    if (!state.user.user) {
+      return thunkApi.rejectWithValue(
+        "Must be valid Profile + Household combination"
+      );
+    }
+    //profile.id = uid todo.
+
+    const db = getDatabase(app);
+
+    await set(ref(db, "app/profiles/" + profile.id), null);
+
+    //TODO look for error?
+    return profile;
+  } catch (error) {
+    console.error(error);
+    if (error instanceof FirebaseError) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+    return thunkApi.rejectWithValue(
+      "Could not signup please contact our support."
+    );
+  }
+});
+
+// async (id) => {
+//   await db.collection('names').doc(id).delete();
+//   console.log('Deleted ', id)
+// }
+
 export const updateProfile = createAsyncThunk<
   Profile,
   { profile: Profile },
@@ -286,7 +322,31 @@ const profileSlice = createSlice({
     });
     builder.addCase(updateProfile.rejected, (state, action) => {
       console.log("rejected " + action.payload);
-      console.log("UpdateProfile");
+      console.log("Delete profile");
+
+      state.isLoading = false;
+      state.error = action.payload || "Unknown error";
+    });
+
+    builder.addCase(deleteProfile.pending, (state) => {
+      state.isLoading = true;
+      console.log("pending");
+    });
+    builder.addCase(deleteProfile.fulfilled, (state, action) => {
+      console.log("fulfilled");
+      console.log("Delete profile");
+      state.isLoading = false;
+      state.profiles = state.profiles.map((item, index) => {
+        if (item.id !== action.payload.id) {
+          return item;
+        } else {
+          return action.payload;
+        }
+      });
+    });
+    builder.addCase(deleteProfile.rejected, (state, action) => {
+      console.log("rejected " + action.payload);
+      console.log("Delete profile");
 
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
