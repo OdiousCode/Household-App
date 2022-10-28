@@ -20,6 +20,7 @@ import {
   selectActiveHousehold,
 } from "../../store/slices/householdSlice";
 import {
+  deleteProfile,
   getUserProfiles,
   selectPendingProfilesByActiveHousehold,
   selectProfilesByActiveHousehold,
@@ -74,21 +75,9 @@ export default function PendingApplicationScreen({
   }
 
   async function deleteUser(profile: Profile) {
-    let newProfile: Profile = {
-      avatar: profile.avatar,
-      name: profile.name,
-      email: profile.email,
-
-      householdId: profile!.householdId,
-      id: profile!.id,
-      pending: false,
-      role: profile!.role,
-      userId: profile!.userId,
-    };
-
     const r = await dispatch(
-      updateProfile({
-        profile: newProfile,
+      deleteProfile({
+        profile: profile,
       })
     );
   }
@@ -156,13 +145,13 @@ export default function PendingApplicationScreen({
                                       {
                                         text: "Ja",
                                         onPress: () => {
-                                          // Lägg in kod för att faktiskt se till att profilen lämnar hushåll här.
                                           Alert.alert(
                                             profile.email +
                                               ' har tagits bort ur hushåll "' +
                                               activeHousehold!.name +
                                               '"'
                                           );
+                                          deleteUser(profile);
                                         },
                                       },
                                       {
@@ -268,95 +257,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-//  <SafeAreaView style={styles.container}>
-//         <View style={{ height: 500, width: "90%" }}>
-//           <FlatList
-//             style={{ flex: 1, width: "100%" }}
-//             data={allPending}
-//             keyExtractor={(profile) => profile.id.toString()}
-//             renderItem={({ item: profile }) => (
-//               <View>
-//                 <Card
-//                   style={{
-//                     backgroundColor: getAvatar(profile.avatar).color,
-//                     borderRadius: 10,
-//                     borderColor: "#000",
-//                     marginBottom: 10,
-//                   }}
-//                 >
-//                   <View
-//                     style={{
-//                       margin: 10,
-//                       alignItems: "center",
-//                       flexDirection: "row",
-//                       justifyContent: "space-between",
-//                     }}
-//                   >
-//                     <View
-//                       style={{
-//                         flexDirection: "row",
-//                       }}
-//                     >
-//                       <TouchableOpacity
-//                         onPress={() =>
-//                           Alert.alert(
-//                             profile.name,
-//                             activeHousehold!.name,
-//                             [
-//                               {
-//                                 text: "Kasta ur hushåll",
-//                                 onPress: () => {
-//                                   Alert.alert(
-//                                     "Ta bort " +
-//                                       profile.name +
-//                                       ' ifrån "' +
-//                                       activeHousehold!.name +
-//                                       '"',
-//                                     "Är du säker att du vill ta bort användaren?",
-//                                     [
-//                                       {
-//                                         text: "Ja",
-//                                         onPress: () => {
-//                                           // Lägg in kod för att faktiskt se till att profilen lämnar hushåll här.
-//                                           Alert.alert(
-//                                             profile.name +
-//                                               ' har tagits bort ur hushåll "' +
-//                                               activeHousehold!.name +
-//                                               '"'
-//                                           );
-//                                         },
-//                                       },
-//                                       {
-//                                         text: "Nej",
-//                                       },
-//                                     ]
-//                                   );
-//                                 },
-//                               },
-//                               {
-//                                 text: "Avbryt",
-//                               },
-//                             ],
-//                             {
-//                               cancelable: true,
-//                               onDismiss: () =>
-//                                 Alert.alert("Avbröt uppdatering av användare"),
-//                             }
-//                           )
-//                         }
-//                       >
-//                         <Text>❌ </Text>
-//                       </TouchableOpacity>
-//                       <Text style={{ fontWeight: "bold" }}>{profile.name}</Text>
-//                     </View>
-//                     <Text style={{ fontSize: 17 }}>
-//                       {getAvatar(profile.avatar).icon}
-//                     </Text>
-//                   </View>
-//                 </Card>
-//               </View>
-//             )}
-//           />
-//         </View>
-//       </SafeAreaView>
