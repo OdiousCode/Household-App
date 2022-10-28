@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Card, Button } from "react-native-paper";
 import { Task } from "../../data/APItypes";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import { createHouseholdTask } from "../../store/slices/taskSlice";
@@ -35,39 +36,68 @@ export default function TaskScreen({
 
 
   return (
-
-    <View style={styles.container}>
-      <Text>Signup</Text>
-      <TextInput
-        placeholder="Title"
-        value={taskName}
-        onChangeText={setTaskName}
-      />
-      <TextInput
-        placeholder="Description"
-        value={taskDescription}
-        onChangeText={setTaskDescription}
-      />
-
-      <TextInput
-        placeholder="Difficulty"
-        value={taskDifficulty}
-        onChangeText={setTaskDifficulty}
-      />
-
-      <TextInput
-        placeholder="Frequency"
-        value={taskFrequency}
-        onChangeText={setTaskFrequency}
-      />
-
-      <Button
-        title="Add task"
-        onPress={() => dispatch(createHouseholdTask(tasko))}
-      />
+    <>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.title}>Skapa en ny syssla</Text>
 
 
-    </View>
+        <TextInput
+          style={styles.nameInput}
+          placeholder="Title"
+          value={taskName}
+          onChangeText={setTaskName}
+        />
+        <TextInput
+          placeholder="Description"
+          value={taskDescription}
+          onChangeText={setTaskDescription}
+        />
+
+        <TextInput
+          placeholder="Difficulty"
+          value={taskDifficulty}
+          onChangeText={setTaskDifficulty}
+        />
+
+        <TextInput
+          placeholder="Frequency"
+          value={taskFrequency}
+          onChangeText={setTaskFrequency}
+        />
+
+
+        <View style={{
+          position: "absolute",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexDirection: "row",
+          width: "100%",
+          bottom: 0,
+          padding: 10,
+        }}>
+          <Button
+            icon="plus-circle-outline"
+            mode="contained"
+            buttonColor="#DCCFCF"
+            textColor="#000"
+            style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+            onPress={() => console.log("Pressed")}
+          >
+            Spara
+          </Button>
+          <Button
+            icon="close"
+            mode="contained-tonal"
+            buttonColor="#DCCFCF"
+            style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+            onPress={() => console.log("Pressed")}
+          >
+            Stäng
+          </Button>
+        </View>
+
+      </SafeAreaView >
+    </>
   );
 }
 
@@ -75,8 +105,16 @@ export default function TaskScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#F2F2F2",
     alignItems: "center",
     justifyContent: "center",
+  },
+  title: {
+    fontSize: 32,
+  },
+  nameInput: {
+    margin: 10,
+    backgroundColor: 'red',
+    padding: 50,
   },
 });
