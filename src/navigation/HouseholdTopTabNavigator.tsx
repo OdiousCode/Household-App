@@ -53,7 +53,7 @@ export default function HouseholdTopTabNavigator() {
       screenOptions={{
         tabBarInactiveTintColor: "#444",
         tabBarLabel: "",
-        tabBarStyle: { backgroundColor: "orange" },
+        tabBarStyle: { backgroundColor: "orange", height: 1 },
       }}
     >
       {(myProfile?.role === "Admin") && <Tab.Screen

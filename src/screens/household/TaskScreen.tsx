@@ -14,22 +14,22 @@ import * as yup from "yup";
 export default function TaskScreen({
   navigation,
 }: HouseholdScreenProps<"TaskScreen">) {
-  
+
   const dispatch = useAppDispatch();
 
   const TaskValidationSchema = yup.object().shape({
-      Title: yup
+    Title: yup
       .string()
       .required("Title Address is Required"),
-      Description: yup
+    Description: yup
       .string()
       .required("Deacription is required"),
-      Difficulty: yup
+    Difficulty: yup
       .number()
       .max(5, `Difficulty should be number between 1-5`)
       .min(1, `Difficulty should be number between 1-5`)
       .required("Difficulty is Required"),
-      Frequency: yup
+    Frequency: yup
       .number()
       .min(1, `Frequency should be number between 1-5`)
       .required("Frequency is Required"),
@@ -73,7 +73,7 @@ export default function TaskScreen({
                   onBlur={handleBlur("Title")}
                   value={values.Title}
                 />
-                {errors.Title && touched.Title&& (
+                {errors.Title && touched.Title && (
                   <Text
                     style={{
                       color: "red",
@@ -109,7 +109,7 @@ export default function TaskScreen({
                     {errors.Description}
                   </Text>
                 )}
-                 <Text
+                <Text
                   style={{
                     fontSize: 17,
                     fontWeight: "400",
@@ -135,7 +135,7 @@ export default function TaskScreen({
                     {errors.Difficulty}
                   </Text>
                 )}
-                 <Text
+                <Text
                   style={{
                     fontSize: 17,
                     fontWeight: "400",
@@ -163,29 +163,42 @@ export default function TaskScreen({
                   </Text>
                 )}
               </View>
-              <Button
-            icon="plus-circle-outline"
-            mode="contained"
-            buttonColor="#DCCFCF"
-            textColor="#000"
-            style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-            onPress={() => dispatch(createHouseholdTask({ id:"", householdId: "", name: values.Title, description: values.Description, difficulty: values.Difficulty, frequency: 1, voice: "", img: "", isArchived: false}))}
-          >
-            Spara
-          </Button>
-          <Button
-            icon="close"
-            mode="contained-tonal"
-            buttonColor="#DCCFCF"
-            style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-            onPress={() => navigation.navigate('TaskOverviewScreen')}
-          >
-            Stäng
-          </Button>
+
+              <View
+                style={{
+                  position: "absolute",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexDirection: "row",
+                  width: "100%",
+                  bottom: 20,
+                  padding: 10,
+                }}>
+                <Button
+                  icon="plus-circle-outline"
+                  mode="contained"
+                  buttonColor="#DCCFCF"
+                  textColor="#000"
+                  style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+                  onPress={() => dispatch(createHouseholdTask({ id: "", householdId: "", name: values.Title, description: values.Description, difficulty: values.Difficulty, frequency: 1, voice: "", img: "", isArchived: false }))}
+                >
+                  Spara
+                </Button>
+                <Button
+                  icon="close"
+                  mode="contained-tonal"
+                  buttonColor="#DCCFCF"
+                  style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+                  onPress={() => navigation.navigate('TaskOverviewScreen')}
+                >
+                  Stäng
+                </Button>
+              </View>
+
             </>
           )}
 
-       
+
         </Formik>
         <View style={{
           position: "absolute",
