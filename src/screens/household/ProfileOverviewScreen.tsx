@@ -15,6 +15,9 @@ import { Item } from "react-native-paper/lib/typescript/components/List/List";
 import { selectUserProfiles } from "../../store/slices/profileSlice";
 import { selectActiveHousehold } from "../../store/slices/householdSlice";
 
+import { SafeAreaView } from "react-native-safe-area-context";
+
+
 export default function ProfileOverViewScreen({
   navigation,
 }: HouseholdScreenProps<"ProfileOverViewScreen">) {
@@ -27,7 +30,8 @@ export default function ProfileOverViewScreen({
   const householdData = useAppSelector(selectActiveHousehold);
   if (householdData === undefined) {
     return (
-      <View>
+
+      <SafeAreaView>
         <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 30 }}>
           - IF SOMETHING FAILS THIS IS DISPLAYED - {"\n"}Hushåll:{" "}
           {householdData}
@@ -44,12 +48,15 @@ export default function ProfileOverViewScreen({
           roll: {currentProfile?.role}
           {test}
         </Text>
-      </View>
+      </SafeAreaView>
+
     );
   } else {
     return (
       <>
-        <View style={styles.container}>
+
+        <SafeAreaView style={styles.container}>
+
           {currentProfile?.role === "Admin" ? (
             <Text
               style={{ fontSize: 20, fontWeight: "bold", marginBottom: 30 }}
@@ -215,6 +222,7 @@ export default function ProfileOverViewScreen({
                         </View>
                         <Text style={{ fontSize: 17 }}>
                           {getAvatar(profile.avatar).icon}
+
                         </Text>
                       </View>
                     </Card>
@@ -227,10 +235,12 @@ export default function ProfileOverViewScreen({
               )}
             />
           </View>
-        </View>
+
+        </SafeAreaView>
       </>
     );
   }
+
 }
 const styles = StyleSheet.create({
   container: {

@@ -1,4 +1,5 @@
-import React from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback } from "react";
 import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import { Card, Button } from "react-native-paper";
 import { getAvatar } from "../../constants/Layout";
@@ -12,7 +13,7 @@ import { store, useAppDispatch, useAppSelector } from "../../store/store";
 export default function TaskOverviewScreen({
   navigation,
 }: HouseholdScreenProps<"TaskOverviewScreen">) {
-  //   const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   //   const balance = useAppSelector((state) => state.bank.balance);
   //   const transactions = useAppSelector((state) => state.bank.transactions);
   const taskData = useAppSelector((state) => state.tasks.householdTasks);
@@ -42,7 +43,7 @@ export default function TaskOverviewScreen({
   // console.log(taskData.toString());
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 30 }}>
           Task overview Screen
         </Text>
@@ -50,7 +51,7 @@ export default function TaskOverviewScreen({
         <View style={{ height: 500, width: "90%" }}>
           <FlatList
             style={{ flex: 1, width: "100%" }}
-            data={taskData}
+            data={taskDataSelektor}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) =>
               !item.isArchived ? (
@@ -159,7 +160,7 @@ export default function TaskOverviewScreen({
             Editera
           </Button>
         </View>
-      </View>
+      </SafeAreaView>
       {/* <Button title="Set name" onPress={() => dispatch(setName("David"))} /> */}
     </>
   );
