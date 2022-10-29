@@ -223,11 +223,6 @@ export const deleteProfile = createAsyncThunk<
   }
 });
 
-// async (id) => {
-//   await db.collection('names').doc(id).delete();
-//   console.log('Deleted ', id)
-// }
-
 export const updateProfile = createAsyncThunk<
   Profile,
   { profile: Profile },
@@ -271,11 +266,8 @@ const profileSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getUserProfiles.pending, (state) => {
       state.isLoading = true;
-      console.log("pending");
     });
     builder.addCase(getUserProfiles.fulfilled, (state, action) => {
-      console.log("fulfilled");
-      console.log("getUserProfiles");
       state.isLoading = false;
       let allProfiles: Profile[] = [];
       for (var key in action.payload) {
@@ -284,33 +276,26 @@ const profileSlice = createSlice({
       state.profiles = allProfiles;
     });
     builder.addCase(getUserProfiles.rejected, (state, action) => {
-      console.log("rejected");
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
     });
 
     builder.addCase(createProfile.pending, (state) => {
       state.isLoading = true;
-      console.log("pending");
     });
     builder.addCase(createProfile.fulfilled, (state, action) => {
-      console.log("fulfilled");
       state.isLoading = false;
       state.profiles.push(action.payload);
     });
     builder.addCase(createProfile.rejected, (state, action) => {
-      console.log("rejected " + action.payload);
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
     });
 
     builder.addCase(updateProfile.pending, (state) => {
       state.isLoading = true;
-      console.log("pending");
     });
     builder.addCase(updateProfile.fulfilled, (state, action) => {
-      console.log("fulfilled");
-      console.log("UpdateProfile");
       state.isLoading = false;
       state.profiles = state.profiles.map((item, index) => {
         if (item.id !== action.payload.id) {
@@ -321,20 +306,14 @@ const profileSlice = createSlice({
       });
     });
     builder.addCase(updateProfile.rejected, (state, action) => {
-      console.log("rejected " + action.payload);
-      console.log("Delete profile");
-
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
     });
 
     builder.addCase(deleteProfile.pending, (state) => {
       state.isLoading = true;
-      console.log("pending");
     });
     builder.addCase(deleteProfile.fulfilled, (state, action) => {
-      console.log("fulfilled");
-      console.log("Delete profile");
       state.isLoading = false;
       state.profiles = state.profiles.map((item, index) => {
         if (item.id !== action.payload.id) {
@@ -345,9 +324,6 @@ const profileSlice = createSlice({
       });
     });
     builder.addCase(deleteProfile.rejected, (state, action) => {
-      console.log("rejected " + action.payload);
-      console.log("Delete profile");
-
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
     });

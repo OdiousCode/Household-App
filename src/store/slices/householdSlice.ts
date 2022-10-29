@@ -150,11 +150,8 @@ const householdSlice = createSlice({
     // GET USER HOUSEHOLDS
     builder.addCase(getUserHouseholds.pending, (state) => {
       state.isLoading = true;
-      console.log("pending");
     });
     builder.addCase(getUserHouseholds.fulfilled, (state, action) => {
-      console.log("fulfilled");
-      console.log("get user households");
       state.isLoading = false;
       let allHouseholds: Household[] = [];
       for (var key in action.payload) {
@@ -163,7 +160,6 @@ const householdSlice = createSlice({
       state.households = allHouseholds;
     });
     builder.addCase(getUserHouseholds.rejected, (state, action) => {
-      console.log("rejected");
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
     });
@@ -174,23 +170,18 @@ const householdSlice = createSlice({
       state.error = "";
     });
     builder.addCase(createHousehold.fulfilled, (state, action) => {
-      console.log("fulfilled");
       state.households.push(action.payload);
       state.isLoading = false;
     });
     builder.addCase(createHousehold.rejected, (state, action) => {
-      console.log("rejected");
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
     });
 
     builder.addCase(updateHousehold.pending, (state) => {
       state.isLoading = true;
-      console.log("pending");
     });
     builder.addCase(updateHousehold.fulfilled, (state, action) => {
-      console.log("fulfilled");
-      console.log("updateHouseHold");
       state.isLoading = false;
       state.households = state.households.map((item, index) => {
         if (item.id !== action.payload.id) {
@@ -201,9 +192,6 @@ const householdSlice = createSlice({
       });
     });
     builder.addCase(updateHousehold.rejected, (state, action) => {
-      console.log("rejected " + action.payload);
-      console.log("UpdateProfile");
-
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
     });

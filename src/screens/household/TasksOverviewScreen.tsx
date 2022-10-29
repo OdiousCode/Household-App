@@ -5,13 +5,17 @@ import { Card, Button } from "react-native-paper";
 import { getAvatar } from "../../constants/Layout";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {} from "../../constants/Layout";
-import { Task } from "../../data/APItypes";
+import { Task, TaskHistory } from "../../data/APItypes";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import {
+  createHouseholdTaskHistory,
+  getUserTaskHistories,
   getUserTasks,
-  selectHousHoldTasks,
+  selectActiveHouseholdTask,
+  selectActiveHouseholdTaskHistories,
 } from "../../store/slices/taskSlice";
 import { store, useAppDispatch, useAppSelector } from "../../store/store";
+import { date } from "yup/lib/locale";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 
@@ -24,38 +28,21 @@ export default function TaskOverviewScreen({
   useFocusEffect(
     useCallback(() => {
       dispatch(getUserTasks());
+      dispatch(getUserTaskHistories());
     }, [])
   );
 
-  const taskDataSelektor = useAppSelector(selectHousHoldTasks);
+  const householdTasks = useAppSelector(selectActiveHouseholdTask);
   const test = useAppSelector((p) => p.tasks.householdTasks);
 
-  console.log(test, "Test   SELEKTOR");
-  console.log(taskDataSelektor);
-  // const showAlert = () =>
-  //   Alert.alert(
-  //     taskData[0].name,
-  //     taskData[0].description,
-  //     [
-  //       {
-  //         text: "Arkivera",
-  //         onPress: () => Alert.alert("Arkiverar syssla"),
-  //         style: "cancel",
-  //       },
-  //       {
-  //         text: "Markera som klar",
-  //         onPress: () => Alert.alert("Syssla markerad som klar"),
-  //         style: "destructive",
-  //       },
-  //     ],
-  //     {
-  //       cancelable: true,
-  //       onDismiss: () => Alert.alert("Avbröt uppdatering av syssla"),
-  //     }
-  //   );
-  // const taskData = state
-  // const taskData = store.dispatch(getUserTasks());
-  // console.log(taskData.toString());
+  const householdTaskHistory = useAppSelector(
+    selectActiveHouseholdTaskHistories
+  );
+
+  householdTaskHistory.sort((a, b) => a.date - b.date);
+  console.log("All profileHisotries");
+  console.log(householdTaskHistory);
+
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -66,30 +53,33 @@ export default function TaskOverviewScreen({
         <View style={{ height: 500, width: "90%" }}>
           <FlatList
             style={{ flex: 1, width: "100%" }}
-            data={taskDataSelektor}
+            data={householdTasks}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) =>
-              !item.isArchived ? (
+            renderItem={({ item: task }) =>
+              !task.isArchived ? (
                 <Card
                   onPress={() =>
                     Alert.alert(
-                      item.name,
-                      item.description,
+                      task.name,
+                      task.description,
                       [
                         {
                           text: "Arkivera",
                           onPress: () => {
-                            Alert.alert('Arkiverar syssla "' + item.name + '"');
+                            Alert.alert('Arkiverar syssla "' + task.name + '"');
                             // Archive it smh
                           },
                         },
                         {
                           text: "Markera som klar",
-                          onPress: () => {
+                          onPress: async () => {
                             Alert.alert(
-                              'Syssla "' + item.name + '" markerad som klar'
+                              'Syssla "' + task.name + '" markerad som klar'
                             );
                             // Mark as finished smh
+                            let r = await dispatch(
+                              createHouseholdTaskHistory(task)
+                            );
                           },
                         },
                       ],
@@ -117,15 +107,18 @@ export default function TaskOverviewScreen({
                       justifyContent: "space-between",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
-                    {/* <View
-                    key={avatars[0].icon}
-                    style={{
-                      backgroundColor: avatars[0].color,
-                      padding: 3,
-                      borderRadius: 50,
-                    }}
-                  > */}
+                    <Text style={{ fontWeight: "bold" }}>{task.name}</Text>
+                    <Text style={{ fontWeight: "bold" }}>
+                      {/* Days between */}
+                      {Math.ceil(
+                        (householdTaskHistory.find(
+                          (hth) => hth.taskId === task.id
+                        )!.date -
+                          Date.now()) /
+                          (1000 * 3600 * 24)
+                      )}
+                    </Text>
+
                     <Text style={{ fontSize: 17 }}>
                       {getAvatar(0).icon}
                       {getAvatar(2).icon}
@@ -138,7 +131,7 @@ export default function TaskOverviewScreen({
                 </Card>
               ) : (
                 <Text style={{ textDecorationLine: "line-through" }}>
-                  {item.name} - arkiverad
+                  {task.name} - arkiverad
                 </Text>
               )
             }
