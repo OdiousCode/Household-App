@@ -29,8 +29,6 @@ export interface Household {
   name: string;
 }
 
-
-
 export interface Task {
   id: string;
   householdId: string;
@@ -47,9 +45,9 @@ export interface Task {
 }
 
 export interface TaskHistory {
-  id: number;
-  taskId: number;
-  profileId: number;
+  id: string;
+  taskId: string;
+  profileId: string;
 
   date: number;
 }

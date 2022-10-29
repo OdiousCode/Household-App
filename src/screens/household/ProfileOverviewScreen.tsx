@@ -51,6 +51,7 @@ export default function ProfileOverViewScreen({
   // }, []);
   const householdData = useAppSelector(selectActiveHousehold);
   const dispatch = useAppDispatch();
+
   const adminDeleteProfile = async (profile: Profile) => {
     if (profileData.find((i) => i.id === profile.id)) {
       const r = await dispatch(
@@ -208,8 +209,9 @@ export default function ProfileOverViewScreen({
                                     {
                                       text: "Redigera profil",
                                       onPress: () => {
-                                        navigation.navigate("CreateAvatar", {
+                                        navigation.replace("CreateAvatar", {
                                           profileId: profile.id,
+                                          isEditing: true,
                                         });
                                       },
                                     },

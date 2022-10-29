@@ -38,7 +38,7 @@ declare global {
 export type RootStackParamList = {
   Login: undefined;
   CreateAccount: undefined;
-  CreateAvatar: { profileId: string } | undefined;
+  CreateAvatar: { profileId: string; isEditing?: boolean } | undefined;
   PortalWaiting: { profileId: string };
   Profile: undefined;
   RoomApplication: undefined;
