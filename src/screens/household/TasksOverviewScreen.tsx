@@ -20,15 +20,12 @@ import {
   getUserProfiles,
   selectProfileById,
 } from "../../store/slices/profileSlice";
-// import { setName } from "../store/profileSlice";
-// import { useAppDispatch, useAppSelector } from "../store/store";
+import CreateTask from "../login/CreateTaskScreen";
 
 export default function TaskOverviewScreen({
   navigation,
 }: HouseholdScreenProps<"TaskOverviewScreen">) {
   const dispatch = useAppDispatch();
-  //   const balance = useAppSelector((state) => state.bank.balance);
-  //   const transactions = useAppSelector((state) => state.bank.transactions);
   useFocusEffect(
     useCallback(() => {
       dispatch(getUserTasks());
@@ -45,8 +42,6 @@ export default function TaskOverviewScreen({
   );
 
   householdTaskHistory.sort((a, b) => a.date - b.date);
-  // console.log("All profileHisotries");
-  // console.log(householdTaskHistory);
 
   return (
     <>
@@ -70,7 +65,6 @@ export default function TaskOverviewScreen({
                 let tempHolder = Math.ceil(
                   (taskHistory.date - Date.now()) / (1000 * 3600 * 24)
                 );
-                console.log("tempholder" + tempHolder);
 
                 if (tempHolder === 0) {
                   daysToMostRecent = "Idag";
@@ -87,20 +81,15 @@ export default function TaskOverviewScreen({
               if (taskHistory) {
                 var whenTaskWasDone = taskHistory?.date;
                 var numberOfDaysToAdd = task.frequency;
-                let sho =
+                let dateShouldBeDone =
                   whenTaskWasDone + numberOfDaysToAdd * 24 * 60 * 60 * 1000;
 
                 let tempHolder = Math.ceil(
-                  (sho - Date.now()) / (1000 * 3600 * 24)
+                  (dateShouldBeDone - Date.now()) / (1000 * 3600 * 24)
                 );
-                let dateNow = Math.ceil(Date.now() / (1000 * 3600 * 24));
 
-                console.log("shoe" + sho);
-                console.log("Tempholder " + tempHolder);
-
-                if (sho < Date.now()) {
+                if (dateShouldBeDone < Date.now()) {
                   if (tempHolder === 0) {
-                    console.log("idag");
                     shouldBeDone = "idag";
                   } else if (tempHolder == -1) {
                     shouldBeDone = "igårr";
@@ -110,10 +99,8 @@ export default function TaskOverviewScreen({
                     shouldBeDone = tempHolder.toString();
                   }
                 } else {
-                  console.log("else");
                   console.log(tempHolder);
                   if (tempHolder === 0) {
-                    console.log("idag");
                     shouldBeDone = "idag";
                   } else if (tempHolder === 1) {
                     shouldBeDone = "imorgon";
@@ -192,18 +179,11 @@ export default function TaskOverviewScreen({
             buttonColor="#DCCFCF"
             textColor="#000"
             style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-            onPress={() => console.log("Pressed")}
+            onPress={() => {
+              navigation.navigate("CreateTask");
+            }}
           >
             Lägg till
-          </Button>
-          <Button
-            icon="pencil"
-            mode="contained-tonal"
-            buttonColor="#DCCFCF"
-            style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-            onPress={() => console.log("Pressed")}
-          >
-            Editera
           </Button>
         </View>
       </SafeAreaView>
@@ -216,17 +196,24 @@ export default function TaskOverviewScreen({
       task.description,
       [
         {
-          text: "Arkivera",
+          text: "Se mer",
           onPress: () => {
-            Alert.alert('Arkiverar syssla "' + task.name + '"');
-            // Archive it smh
+            navigation.navigate("CreateTask", {
+              taskId: task.id,
+              viewOnly: true,
+            });
+          },
+        },
+        {
+          text: "Ändra",
+          onPress: () => {
+            navigation.navigate("CreateTask", { taskId: task.id });
           },
         },
         {
           text: "Markera som klar",
           onPress: async () => {
-            Alert.alert('Syssla "' + task.name + '" markerad som klar');
-            // Mark as finished smh
+            Alert.alert('Syssla "' + task.name + '" avklarad!');
             let r = await dispatch(createHouseholdTaskHistory(task));
           },
         },

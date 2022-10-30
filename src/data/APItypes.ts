@@ -33,7 +33,7 @@ export interface Task {
   id: string;
   householdId: string;
   name: string;
-  description?: string;
+  description: string;
 
   difficulty: number;
   frequency: number;
