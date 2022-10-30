@@ -1,9 +1,12 @@
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  Alert, RefreshControl,
-  ScrollView, StyleSheet,
-  Text, View
+  Alert,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 import { Button, Menu } from "react-native-paper";
 import { getAvatar } from "../../constants/Layout";
@@ -11,8 +14,9 @@ import { Profile } from "../../data/APItypes";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { getUserHouseholds } from "../../store/slices/householdSlice";
 import {
-  getUserProfiles, selectUserProfiles,
-  setActiveProfile
+  getUserProfiles,
+  selectUserProfiles,
+  setActiveProfile,
 } from "../../store/slices/profileSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 
@@ -176,10 +180,10 @@ export default function ProfileScreen({
           onPress={() => {
             //TODO
             // setActive Profile?
-            if(profile.id !== undefined) {
-                dispatch(setActiveProfile(profile.id))
+            if (profile.id !== undefined) {
+              dispatch(setActiveProfile(profile.id));
 
-               //TODO navigate to correct screen
+              //TODO navigate to correct screen
               if (!profile.pending && profile.avatar !== -1) {
                 console.log("Valid Profile");
 
@@ -191,10 +195,12 @@ export default function ProfileScreen({
                   profileId: profile.id,
                 });
               }
-              
-            }
-            else {
-              {return Alert.alert("Please choose a household or create one if you don't have one!")}
+            } else {
+              {
+                return Alert.alert(
+                  "Please choose a household or create one if you don't have one!"
+                );
+              }
             }
             //else go to pending
           }}
