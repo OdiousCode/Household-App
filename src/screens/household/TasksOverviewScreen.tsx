@@ -40,7 +40,7 @@ export default function TaskOverviewScreen({
   const householdTaskHistory = useAppSelector(
     selectActiveHouseholdTaskHistories
   );
-
+  const activeProfile = useAppSelector((state) => state.profiles.activeProfile);
   householdTaskHistory.sort((a, b) => b.date - a.date);
 
   return (
@@ -191,38 +191,67 @@ export default function TaskOverviewScreen({
   );
 
   function OnPressFunc(task: Task) {
-    Alert.alert(
-      task.name,
-      task.description,
-      [
-        {
-          text: "Se mer",
-          onPress: () => {
-            navigation.navigate("CreateTask", {
-              taskId: task.id,
-              viewOnly: true,
-            });
-          },
-        },
-        {
-          text: "Ändra",
-          onPress: () => {
-            navigation.navigate("CreateTask", { taskId: task.id });
-          },
-        },
-        {
-          text: "Markera som klar",
-          onPress: async () => {
-            Alert.alert('Syssla "' + task.name + '" avklarad!');
-            let r = await dispatch(createHouseholdTaskHistory(task));
-          },
-        },
-      ],
-      {
-        cancelable: true,
-        onDismiss: () => Alert.alert("Avbröt uppdatering av syssla"),
-      }
-    );
+    {
+      activeProfile?.role === "Admin"
+        ? Alert.alert(
+            task.name,
+            task.description,
+            [
+              {
+                text: "Se mer",
+                onPress: () => {
+                  navigation.navigate("CreateTask", {
+                    taskId: task.id,
+                    viewOnly: true,
+                  });
+                },
+              },
+              {
+                text: "Ändra",
+                onPress: () => {
+                  navigation.navigate("CreateTask", { taskId: task.id });
+                },
+              },
+              {
+                text: "Klar?",
+                onPress: async () => {
+                  Alert.alert('Syssla "' + task.name + '" avklarad!');
+                  let r = await dispatch(createHouseholdTaskHistory(task));
+                },
+              },
+            ],
+            {
+              cancelable: true,
+              onDismiss: () => Alert.alert("Avbröt uppdatering av syssla"),
+            }
+          )
+        : Alert.alert(
+            task.name,
+            task.description,
+            [
+              {
+                text: "Se mer",
+                onPress: () => {
+                  navigation.navigate("CreateTask", {
+                    taskId: task.id,
+                    viewOnly: true,
+                  });
+                },
+              },
+              {
+                text: "Klar?",
+                onPress: async () => {
+                  Alert.alert('Syssla "' + task.name + '" avklarad!');
+                  let r = await dispatch(createHouseholdTaskHistory(task));
+                },
+              },
+            ],
+            {
+              cancelable: true,
+              onDismiss: () => Alert.alert("Avbröt uppdatering av syssla"),
+            }
+          );
+    }
   }
 }
 
