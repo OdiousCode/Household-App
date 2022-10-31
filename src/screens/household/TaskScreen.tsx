@@ -6,7 +6,7 @@ import { Task } from "../../data/APItypes";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import { createHouseholdTask } from "../../store/slices/taskSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { Formik } from "formik";
+import { Formik, prepareDataForValidation } from "formik";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 import * as yup from "yup";
@@ -18,22 +18,31 @@ export default function TaskScreen({
   const dispatch = useAppDispatch();
 
   const TaskValidationSchema = yup.object().shape({
-    Title: yup
+    name: yup
       .string()
       .required("Title Address is Required"),
-    Description: yup
+    description: yup
       .string()
       .required("Deacription is required"),
-    Difficulty: yup
+    difficulty: yup
       .number()
       .max(5, `Difficulty should be number between 1-5`)
       .min(1, `Difficulty should be number between 1-5`)
       .required("Difficulty is Required"),
-    Frequency: yup
+    frequency: yup
       .number()
       .min(1, `Frequency should be number between 1-5`)
       .required("Frequency is Required"),
   });
+
+  async function handleFormSubmit(values: Task) {
+    dispatch(createHouseholdTask(values))
+    navigation.navigate('TaskOverviewScreen')
+  }
+
+
+
+
 
 
   return (
@@ -44,10 +53,11 @@ export default function TaskScreen({
         <Formik
           validateOnChange={true}
           validationSchema={TaskValidationSchema}
-          initialValues={{ Title: "", Description: "", Difficulty: 1, Frequency: "" }}
-          onSubmit={(values) => console.log(values)}
+          initialValues={{ name: '', description: '', difficulty: 1, frequency: 1, isArchived: false, householdId: '', id: '' }}
+          onSubmit={(values) => { handleFormSubmit(values) }}
         >
           {({
+            handleSubmit,
             handleChange,
             handleBlur,
             values,
@@ -69,21 +79,19 @@ export default function TaskScreen({
                 <TextInput
                   placeholder="Title"
                   style={styles.input}
-                  onChangeText={handleChange("Title")}
-                  onBlur={handleBlur("Title")}
-                  value={values.Title}
+                  onChangeText={handleChange("name")}
+                  onBlur={handleBlur("name")}
+                  value={values.name}
                 />
-                {errors.Title && touched.Title && (
+                {errors.name && touched.name && (
                   <Text
                     style={{
                       color: "red",
                     }}
                   >
-                    {errors.Title}
+                    {errors.name}
                   </Text>
                 )}
-              </View>
-              <View>
                 <Text
                   style={{
                     fontSize: 17,
@@ -95,18 +103,26 @@ export default function TaskScreen({
                 </Text>
                 <TextInput
                   placeholder="Description"
-                  style={styles.input}
-                  onChangeText={handleChange("Description")}
-                  onBlur={handleBlur("Description")}
-                  value={values.Description}
+                  style={{
+                    color: "black",
+                    margin: 10,
+                    backgroundColor: '#E8E8E8',
+                    padding: 15,
+                    alignContent: 'flex-start',
+                    width: 350,
+                    height: 100,
+                  }}
+                  onChangeText={handleChange("description")}
+                  onBlur={handleBlur("description")}
+                  value={values.description}
                 />
-                {errors.Description && touched.Description && (
+                {errors.description && touched.description && (
                   <Text
                     style={{
                       color: "red",
                     }}
                   >
-                    {errors.Description}
+                    {errors.description}
                   </Text>
                 )}
                 <Text
@@ -121,18 +137,19 @@ export default function TaskScreen({
                 <TextInput
                   placeholder="Difficulty"
                   style={styles.input}
-                  onChangeText={handleChange("Difficulty")}
-                  onBlur={handleBlur("Difficulty")}
-                  value={values.Difficulty.toString()}
+                  onChangeText={handleChange("difficulty")}
+                  onBlur={handleBlur("difficulty")}
+                  value={values.difficulty.toString()}
                   maxLength={1}
+                  keyboardType={"numeric"}
                 />
-                {errors.Difficulty && touched.Difficulty && (
+                {errors.difficulty && touched.difficulty && (
                   <Text
                     style={{
                       color: "red",
                     }}
                   >
-                    {errors.Difficulty}
+                    {errors.difficulty}
                   </Text>
                 )}
                 <Text
@@ -147,19 +164,20 @@ export default function TaskScreen({
                 <TextInput
                   placeholder="Frequency"
                   style={styles.input}
-                  onChangeText={handleChange("Frequency")}
-                  onBlur={handleBlur("Frequency")}
-                  value={values.Frequency}
+                  onChangeText={handleChange("frequency")}
+                  onBlur={handleBlur("frequency")}
+                  value={values.frequency.toString()}
                   maxLength={1}
+                  keyboardType={"numeric"}
 
                 />
-                {errors.Frequency && touched.Frequency && (
+                {errors.frequency && touched.frequency && (
                   <Text
                     style={{
                       color: "red",
                     }}
                   >
-                    {errors.Frequency}
+                    {errors.frequency}
                   </Text>
                 )}
               </View>
@@ -180,7 +198,8 @@ export default function TaskScreen({
                   buttonColor="#DCCFCF"
                   textColor="#000"
                   style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                  onPress={() => dispatch(createHouseholdTask({ id: "", householdId: "", name: values.Title, description: values.Description, difficulty: values.Difficulty, frequency: 1, voice: "", img: "", isArchived: false }))}
+                  onPress={() => { handleSubmit() }}
+
                 >
                   Spara
                 </Button>
@@ -222,18 +241,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F2F2F2",
     alignItems: "center",
-    justifyContent: "center",
   },
   title: {
     fontSize: 32,
-  },
-  nameInput: {
-    margin: 10,
-    backgroundColor: 'red',
-    padding: 50,
+    paddingBottom: 50,
   },
   input: {
     color: "black",
     margin: 10,
+    backgroundColor: '#E8E8E8',
+    padding: 15,
+    alignItems: 'center',
+    width: 350,
   },
 });
