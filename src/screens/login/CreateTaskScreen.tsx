@@ -6,7 +6,7 @@ import RootStackNavigator, {
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { Task } from "../../data/APItypes";
 import { } from "../../store/slices/householdSlice";
-import { Button } from "react-native-paper";
+import { Button, Card, Paragraph, Title } from "react-native-paper";
 import {
   createHouseholdTask,
   updateTask as updateHouseholdTask,
@@ -288,27 +288,58 @@ export default function CreateTask({
     );
   } else {
     return (
-      <View style={styles.container}>
-        <Text>View Task "Screen"</Text>
-        <Button onPress={() => navigation.goBack()}> Go Back</Button>
+      // <View style={styles.container}>
+      //   <Text style={styles.title}>{baseTask?.name}</Text>
 
-        <Text>{startStateName}</Text>
-        <Text>{startStateDesc}</Text>
-        <Text>{startStateDiff}</Text>
-        <Text>{startStateFreq}</Text>
 
-        <View>
-          <Button
-            onPress={async () => {
-              navigation.replace("HouseholdTopTabNavigator", {
-                screen: "TaskOverviewScreen",
-              });
-            }}
-          >
-            Go Back
-          </Button>
-        </View>
-      </View>
+      //   <Text>{baseTask?.description}</Text>
+      //   <Text>{baseTask?.difficulty}</Text>
+      //   <Text>{baseTask?.frequency}</Text>
+
+      //   <View>
+      //     <Button
+      //       icon="close"
+      //       mode="contained-tonal"
+      //       buttonColor="#DCCFCF"
+      //       style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+      //       onPress={async () => {
+      //         navigation.replace("HouseholdTopTabNavigator", {
+      //           screen: "TaskOverviewScreen",
+      //         });
+      //       }}
+      //     >
+      //       Stäng
+      //     </Button>
+      //   </View>
+
+      // </View>
+
+
+      <Card>
+        <Card.Title style={styles.container} title={baseTask?.name} />
+        <Card.Content>
+          <Paragraph>{baseTask?.description}</Paragraph>
+        </Card.Content>
+        <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
+        <Card.Actions>
+          <View>
+            <Button
+              icon="close"
+              mode="contained-tonal"
+              buttonColor="#DCCFCF"
+              style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+              onPress={async () => {
+                navigation.replace("HouseholdTopTabNavigator", {
+                  screen: "TaskOverviewScreen",
+                });
+              }}
+            >
+              Close
+            </Button>
+          </View>
+          <Button>Ok</Button>
+        </Card.Actions>
+      </Card>
     );
   }
 
