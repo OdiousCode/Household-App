@@ -39,7 +39,7 @@ export default function ProfileOverViewScreen({
     (state) => state.profiles.activeProfile
   );
   const profileData = useAppSelector(selectValidProfilesByActiveHousehold);
-  const test = useAppSelector((state) => state.profiles.activeProfile?.id);
+  const activeProfile = useAppSelector((state) => state.profiles.activeProfile?.id);
   // const currentProfile = useAppSelector(selectUserProfiles);
   // const [refreshing, setRefreshing] = React.useState(false);
   // const onRefresh = React.useCallback(() => {
@@ -85,7 +85,7 @@ export default function ProfileOverViewScreen({
           pending: {currentProfile?.pending}
           {"\n"}
           roll: {currentProfile?.role}
-          {test}
+          {activeProfile}
         </Text>
       </SafeAreaView>
     );
