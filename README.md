@@ -55,56 +55,112 @@ tas med i statistiken.
 Om en använder har pausats under en del av en period i statistiken ska graferna
 normaliseras.
 
-1
+# Delmoment
 
-Konto (5)
+## Konto (5)
 En användare ska kunna registrera och logga in sig. *
+- Anväder oss utav firebase auth
+
 En användare ska kunna skapa ett nytt hushåll. *
+- Med knapp på profilskärmen(Hemskärmen) "Skapa hushåll".
+
 En användare ska kunna gå med i ett hushåll genom att ange hushållets kod. *
+- Vi använder oss av ID på hushåll som kod
+
 När en användare har valt att gå med i ett hushåll behöver en ägare av hushållet först
 godkänna användaren.
+- Efter en ägare har godkänt ansökan, så kan man gå med hushållet och då får man välja namn och en av dom tillgängliga avatarerna
+
 En användare ska kunna lämna ett hushåll.
-Profil (6)
+- På profileoverviewscreen kan man klicka på en penna på sin användare, för att byta namn eller lämna hushåll.
+
+## Profil (6)
 En användare ska kunna ange sitt namn. *
+- När du skapar din profil anger du ett namn, kan även ändra detta i profileoverviewen i hushållet.
+
 En användare ska kunna välja en avatar (emoji-djur + färg) från en fördefinierad lista. *
+- Vi har en array av ikoner + anknuten färg användare kan välja emellan.
+
 Valda avatarer ska inte kunna väljas av andra användare i hushållet. *
+- Listan av avatarer visar bara dom som ej är tagna ännu.
+
 Avataren ska användas i appen för att visa vad användaren har gjort. *
+- To be implemented
+
 En användare ska kunna ställa in appens utseende (mörkt, ljust, auto).
+- To be implemented
+
 Om en användare tillhör två eller fler hushåll ska denne kunna välja att byta mellan de
 olika hushållen.
-Sysslor (6)
+- På profilsidan kan du välja emellan alla hushåll du är medlem eller ägare av.
+
+## Sysslor (6)
 En ägare ska kunna lägga till sysslor att göra i hemmet. *
+- Create task finns i task overview som knapp när man är ägare.
+
 En syssla ska ha ett namn, en beskrivning (text), hur ofta den ska göras (dagar), och en
 vikt som beskriver hur energikrävande den är. *
+- Vår task "modell" har allt detta samt attribut för ljud/bild för senare bruk.
+
 En användare ska kunna lägga till en ljudinspelning och en bild för att beskriva sysslan
 ytterligare.
+- To be implemented
+
 En ägare ska kunna redigera en syssla. *
+- Genom taskoverview kan man klicka på sysslan för att ändra på den.
+
 En ägare ska kunna ta bort en syssla.
+- To be implemented, just nu har vi bara så att den "arkiveras"
+
 När en syssla tas bort ska användaren få en varning om att all statistik gällande sysslan
 också kommer att tas bort och få valet att arkivera sysslan istället.
-Dagsvyn (3)
+- To be implemented, just nu arkiverar vi enbart
+
+## Dagsvyn (3)
 Alla sysslor ska listas i en dagsvy och ge en översikt kring vad som behöver göras. *
+- To be implemented, just nu visar vi alla tasks oavsett
+
 Utöver sysslans namn ska även vem/vilka som har gjort sysslan visas, hur många dagar
 sedan sysslan gjordes senast samt om den är försenad. *
+- To be implemented
+
 När en användare väljer en syssla ska beskrivningen av sysslan visas och det ska även
 med ett enkelt tryck gå att markera sysslan som gjord. *
-Statistik (6)
+- Går markera som klar, så skapas en task history
+
+## Statistik (6)
 En användare ska kunna se fördelningen av gjorda sysslor mellan användarna i sitt
 hushåll. *
+- To be implemented
+
 Varje statistikvy ska visa den totala fördelningen (inräknat vikterna för sysslorna) samt
 fördelning av varje enskild syssla. *
-Det ska finnas en statistikvy över ”nuvarande vecka”. *
-Det ska finnas en statistikvy över ”förra vecka”.
-Det ska finnas en statistikvy över ”förra månaden”.
+- To be implemented
 
-2
+Det ska finnas en statistikvy över ”nuvarande vecka”. *
+- To be implemented
+
+Det ska finnas en statistikvy över ”förra vecka”.
+- To be implemented
+
+Det ska finnas en statistikvy över ”förra månaden”.
+- To be implemented
 
 Om det inte finns statistik för en av vyerna ska den vyn inte visas.
-Schemaläggning (3)
+- To be implemented
+
+## Schemaläggning (3)
 En ägare ska kunna tilldela och ta bort sysslor från användare i hushållet.
+- To be implemented
+
 Användare ska kunna se de tilldelade sysslorna i sitt gränssnitt.
+- To be implemented
+
 En ägare ska kunna skapa grupper av sysslor som automatiskt tilldelas användarna i
 hushållet och roteras baserat på ett intervall i dagar.
+- To be implemented
+
+
 Inlämning
 För att bli godkänd på den här uppgiften MÅSTE ni använda GIT och GitHub.
 Inlämningen sker som vanligt via läroplattformen. I din projektmapp ska det finnas
