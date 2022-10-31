@@ -261,7 +261,7 @@ export default function TaskOverviewScreen({
               mode="contained"
               buttonColor="#DCCFCF"
               textColor="#000"
-              style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+              style={{ borderRadius: 4, borderWidth: 1, width: 150, backgroundColor: "#7DB2C5" }}
               onPress={() => {
                 navigation.navigate("CreateTask");
               }}
