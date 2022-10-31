@@ -76,6 +76,7 @@ export default function TaskOverviewScreen({
     "Thursday",
     "Friday",
     "Saturday",
+
   ];
   const [visible, setVisible] = useState(false);
   const showDialog = () => {
@@ -211,10 +212,8 @@ export default function TaskOverviewScreen({
                   }}
                   style={{
                     backgroundColor: "#fff",
-
                     borderRadius: 10,
                     borderColor: "#000",
-
                     marginBottom: 10,
                   }}
                 >
@@ -245,30 +244,32 @@ export default function TaskOverviewScreen({
             }}
           />
         </View>
-        <View
-          style={{
-            position: "absolute",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexDirection: "row",
-            width: "100%",
-            bottom: 0,
-            padding: 10,
-          }}
-        >
-          <Button
-            icon="plus-circle-outline"
-            mode="contained"
-            buttonColor="#DCCFCF"
-            textColor="#000"
-            style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-            onPress={() => {
-              navigation.navigate("CreateTask");
+        {activeProfile?.role === "Admin" && (
+          <View
+            style={{
+              position: "absolute",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexDirection: "row",
+              width: "100%",
+              bottom: 0,
+              padding: 10,
             }}
           >
-            Add
-          </Button>
-        </View>
+            <Button
+              icon="plus-circle-outline"
+              mode="contained"
+              buttonColor="#DCCFCF"
+              textColor="#000"
+              style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+              onPress={() => {
+                navigation.navigate("CreateTask");
+              }}
+            >
+              Add
+            </Button>
+          </View>
+        )}
       </SafeAreaView>
     </>
   );
@@ -306,6 +307,7 @@ export default function TaskOverviewScreen({
             {
               cancelable: true,
               onDismiss: () => Alert.alert("Cancel updating of new task"),
+
             }
           )
         : Alert.alert(
@@ -332,6 +334,7 @@ export default function TaskOverviewScreen({
             {
               cancelable: true,
               onDismiss: () => Alert.alert("Cancel updating of new task"),
+
             }
           );
     }
