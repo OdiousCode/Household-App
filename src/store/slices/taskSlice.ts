@@ -195,11 +195,10 @@ export const updateTask = createAsyncThunk<
         "Must be valid Profile + Household combination"
       );
     }
-    //profile.id = uid todo.
 
     const db = getDatabase(app);
 
-    await set(ref(db, "app/profiles/" + task.id), task);
+    await set(ref(db, "app/tasks/" + task.id), task);
 
     //TODO look for error?
     return task;

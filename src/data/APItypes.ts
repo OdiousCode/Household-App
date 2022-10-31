@@ -38,8 +38,8 @@ export interface Task {
   difficulty: number;
   frequency: number;
 
-  voice?: string; // mp3
-  img?: string; // img
+  // voice?: string; // mp3
+  // img?: string; // img
 
   isArchived: boolean;
 }

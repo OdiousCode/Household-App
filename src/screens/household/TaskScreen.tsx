@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View, KeyboardAvoidingView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  KeyboardAvoidingView,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Card, Button } from "react-native-paper";
 import { Task } from "../../data/APItypes";
@@ -10,21 +16,16 @@ import { Formik, prepareDataForValidation } from "formik";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 import * as yup from "yup";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function TaskScreen({
   navigation,
 }: HouseholdScreenProps<"TaskScreen">) {
-
   const dispatch = useAppDispatch();
 
   const TaskValidationSchema = yup.object().shape({
-    name: yup
-      .string()
-      .required("Title Address is Required"),
-    description: yup
-      .string()
-      .required("Deacription is required"),
+    name: yup.string().required("Title Address is Required"),
+    description: yup.string().required("Deacription is required"),
     difficulty: yup
       .number()
       .max(5, `Difficulty should be number between 1-5`)
@@ -37,14 +38,11 @@ export default function TaskScreen({
   });
 
   async function handleFormSubmit(values: Task) {
-    dispatch(createHouseholdTask(values))
-    navigation.navigate('TaskOverviewScreen')
+    console.log("VALUES " + values);
+
+    dispatch(createHouseholdTask(values));
+    navigation.navigate("TaskOverviewScreen");
   }
-
-
-
-
-
 
   return (
     <>
@@ -53,8 +51,18 @@ export default function TaskScreen({
         <Formik
           validateOnChange={true}
           validationSchema={TaskValidationSchema}
-          initialValues={{ name: '', description: '', difficulty: 1, frequency: 1, isArchived: false, householdId: '', id: '' }}
-          onSubmit={(values) => { handleFormSubmit(values) }}
+          initialValues={{
+            name: "",
+            description: "",
+            difficulty: 1,
+            frequency: 1,
+            isArchived: false,
+            householdId: "",
+            id: "",
+          }}
+          onSubmit={(values) => {
+            handleFormSubmit(values);
+          }}
         >
           {({
             handleSubmit,
@@ -107,9 +115,9 @@ export default function TaskScreen({
                     style={{
                       color: "black",
                       margin: 10,
-                      backgroundColor: '#E8E8E8',
+                      backgroundColor: "#E8E8E8",
                       padding: 15,
-                      alignContent: 'flex-start',
+                      alignContent: "flex-start",
                       width: 350,
                       height: 100,
                     }}
@@ -170,7 +178,6 @@ export default function TaskScreen({
                     value={values.frequency.toString()}
                     maxLength={1}
                     keyboardType={"numeric"}
-
                   />
                   {errors.frequency && touched.frequency && (
                     <Text
@@ -182,27 +189,28 @@ export default function TaskScreen({
                     </Text>
                   )}
                 </View>
-
               </KeyboardAwareScrollView>
 
               <View
                 style={{
                   position: "absolute",
                   justifyContent: "space-between",
-                  alignItems: 'baseline',
+                  alignItems: "baseline",
                   flexDirection: "row",
                   width: "100%",
                   bottom: 20,
                   padding: 10,
-                }}>
+                }}
+              >
                 <Button
                   icon="plus-circle-outline"
                   mode="contained"
                   buttonColor="#DCCFCF"
                   textColor="#000"
                   style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                  onPress={() => { handleSubmit() }}
-
+                  onPress={() => {
+                    handleSubmit();
+                  }}
                 >
                   Spara
                 </Button>
@@ -211,23 +219,18 @@ export default function TaskScreen({
                   mode="contained-tonal"
                   buttonColor="#DCCFCF"
                   style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                  onPress={() => navigation.navigate('TaskOverviewScreen')}
+                  onPress={() => navigation.navigate("TaskOverviewScreen")}
                 >
                   Stäng
                 </Button>
               </View>
-
             </>
           )}
-
-
         </Formik>
-
-      </SafeAreaView >
+      </SafeAreaView>
     </>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -242,9 +245,9 @@ const styles = StyleSheet.create({
   input: {
     color: "black",
     margin: 10,
-    backgroundColor: '#E8E8E8',
+    backgroundColor: "#E8E8E8",
     padding: 15,
-    alignItems: 'center',
+    alignItems: "center",
     width: 350,
   },
 });
