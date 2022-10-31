@@ -72,7 +72,7 @@ export default function ProfileOverViewScreen({
     return (
       <SafeAreaView>
         <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 30 }}>
-          - IF SOMETHING FAILS THIS IS DISPLAYED - {"\n"}Hushåll:{" "}
+          - IF SOMETHING FAILS THIS IS DISPLAYED - {"\n"}Household:{" "}
           {householdData}
         </Text>
         <Text>

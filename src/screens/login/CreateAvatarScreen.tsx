@@ -14,6 +14,7 @@ import {
 } from "../../store/slices/profileSlice";
 import { Profile, ProfileDTO } from "../../data/APItypes";
 import {} from "../../store/slices/householdSlice";
+import ProfileOverViewScreen from "../../screens/household/ProfileOverviewScreen";
 import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
 
 // import { setName } from "../store/profileSlice";
@@ -122,8 +123,7 @@ export default function CreateAvatar({
 
         <View style={styles.container2}>
 
-        <Pressable style={styles.cancelButton} onPress={() => navigation.goBack()}><Text style={styles.text}>Cancel</Text></Pressable>
-
+        <Pressable style={styles.cancelButton} onPress={() => navigation.navigate("HouseholdTopTabNavigator", {screen: "ProfileOverViewScreen",})}><Text style={styles.text}>Cancel</Text></Pressable>
         <Pressable style={styles.submitButton}
           onPress={async () => {
             // TODO
