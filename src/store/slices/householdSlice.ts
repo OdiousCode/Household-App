@@ -87,7 +87,7 @@ export const updateHousehold = createAsyncThunk<
 
     const db = getDatabase(app);
 
-    await set(ref(db, "app/profiles/" + household.id), household);
+    await set(ref(db, "app/households/" + household.id), household);
 
     //TODO look for error?
     return household;
