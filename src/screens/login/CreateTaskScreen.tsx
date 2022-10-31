@@ -243,41 +243,40 @@ export default function CreateTask({
                       </Text>
                     )}
                   </View>
-                </KeyboardAwareScrollView>
-
-                <View
-                  style={{
-                    position: "absolute",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    flexDirection: "row",
-                    width: "100%",
-                    bottom: 20,
-                    padding: 10,
-                  }}
-                >
-                  <Button
-                    icon="plus-circle-outline"
-                    mode="contained"
-                    buttonColor="#DCCFCF"
-                    textColor="#000"
-                    style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                    onPress={() => {
-                      handleSubmit();
+                  <View
+                    style={{
+                      position: "relative",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      flexDirection: "row",
+                      width: "92%",
+                      bottom: 5,
+                      padding: 5,
                     }}
                   >
-                    Spara
-                  </Button>
-                  <Button
-                    icon="close"
-                    mode="contained-tonal"
-                    buttonColor="#DCCFCF"
-                    style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                    onPress={() => navigation.goBack()}
-                  >
-                    Stäng
-                  </Button>
-                </View>
+                    <Button
+                      icon="plus-circle-outline"
+                      mode="contained"
+                      buttonColor="#DCCFCF"
+                      textColor="#000"
+                      style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+                      onPress={() => {
+                        handleSubmit();
+                      }}
+                    >
+                      Spara
+                    </Button>
+                    <Button
+                      icon="close"
+                      mode="contained-tonal"
+                      buttonColor="#DCCFCF"
+                      style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+                      onPress={() => navigation.goBack()}
+                    >
+                      Stäng
+                    </Button>
+                  </View>
+                </KeyboardAwareScrollView>
               </>
             )}
           </Formik>
