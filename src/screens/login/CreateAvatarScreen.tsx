@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 25,
-    marginBottom: 90
+    marginBottom: 50
   },
   avatar: {
     padding: 10,
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   input: {
     color: "black",
     margin: 20,
-    fontSize: 18
+    fontSize: 20,
   },
   selectButton: {
     margin: 8,
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   submitButton: {
-    marginTop: 100,
+    marginTop: 50,
     marginLeft: 25,
     alignItems: "center",
     justifyContent: "center",
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#7DB2C5",
   },
   cancelButton: {
-    marginTop: 100,
+    marginTop: 50,
     marginRight: 25,
     alignItems: "center",
     justifyContent: "center",
@@ -233,5 +233,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
   }
+
 
 });
