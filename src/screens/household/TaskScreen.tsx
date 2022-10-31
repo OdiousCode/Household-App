@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View, KeyboardAvoidingView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Card, Button } from "react-native-paper";
 import { Task } from "../../data/APItypes";
@@ -10,6 +10,7 @@ import { Formik, prepareDataForValidation } from "formik";
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
 import * as yup from "yup";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function TaskScreen({
   navigation,
@@ -49,7 +50,6 @@ export default function TaskScreen({
     <>
       <SafeAreaView style={styles.container}>
         <Text style={styles.title}>Skapa en ny syssla</Text>
-
         <Formik
           validateOnChange={true}
           validationSchema={TaskValidationSchema}
@@ -66,127 +66,130 @@ export default function TaskScreen({
             isValid,
           }) => (
             <>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 17,
-                    fontWeight: "400",
-                    color: "black",
-                  }}
-                >
-                  Title
-                </Text>
-                <TextInput
-                  placeholder="Title"
-                  style={styles.input}
-                  onChangeText={handleChange("name")}
-                  onBlur={handleBlur("name")}
-                  value={values.name}
-                />
-                {errors.name && touched.name && (
+              <KeyboardAwareScrollView>
+                <View>
                   <Text
                     style={{
-                      color: "red",
+                      fontSize: 17,
+                      fontWeight: "400",
+                      color: "black",
                     }}
                   >
-                    {errors.name}
+                    Title
                   </Text>
-                )}
-                <Text
-                  style={{
-                    fontSize: 17,
-                    fontWeight: "400",
-                    color: "black",
-                  }}
-                >
-                  Description
-                </Text>
-                <TextInput
-                  placeholder="Description"
-                  style={{
-                    color: "black",
-                    margin: 10,
-                    backgroundColor: '#E8E8E8',
-                    padding: 15,
-                    alignContent: 'flex-start',
-                    width: 350,
-                    height: 100,
-                  }}
-                  onChangeText={handleChange("description")}
-                  onBlur={handleBlur("description")}
-                  value={values.description}
-                />
-                {errors.description && touched.description && (
+                  <TextInput
+                    placeholder="Title"
+                    style={styles.input}
+                    onChangeText={handleChange("name")}
+                    onBlur={handleBlur("name")}
+                    value={values.name}
+                  />
+                  {errors.name && touched.name && (
+                    <Text
+                      style={{
+                        color: "red",
+                      }}
+                    >
+                      {errors.name}
+                    </Text>
+                  )}
                   <Text
                     style={{
-                      color: "red",
+                      fontSize: 17,
+                      fontWeight: "400",
+                      color: "black",
                     }}
                   >
-                    {errors.description}
+                    Description
                   </Text>
-                )}
-                <Text
-                  style={{
-                    fontSize: 17,
-                    fontWeight: "400",
-                    color: "black",
-                  }}
-                >
-                  Difficulty
-                </Text>
-                <TextInput
-                  placeholder="Difficulty"
-                  style={styles.input}
-                  onChangeText={handleChange("difficulty")}
-                  onBlur={handleBlur("difficulty")}
-                  value={values.difficulty.toString()}
-                  maxLength={1}
-                  keyboardType={"numeric"}
-                />
-                {errors.difficulty && touched.difficulty && (
+                  <TextInput
+                    placeholder="Description"
+                    style={{
+                      color: "black",
+                      margin: 10,
+                      backgroundColor: '#E8E8E8',
+                      padding: 15,
+                      alignContent: 'flex-start',
+                      width: 350,
+                      height: 100,
+                    }}
+                    onChangeText={handleChange("description")}
+                    onBlur={handleBlur("description")}
+                    value={values.description}
+                  />
+                  {errors.description && touched.description && (
+                    <Text
+                      style={{
+                        color: "red",
+                      }}
+                    >
+                      {errors.description}
+                    </Text>
+                  )}
                   <Text
                     style={{
-                      color: "red",
+                      fontSize: 17,
+                      fontWeight: "400",
+                      color: "black",
                     }}
                   >
-                    {errors.difficulty}
+                    Difficulty
                   </Text>
-                )}
-                <Text
-                  style={{
-                    fontSize: 17,
-                    fontWeight: "400",
-                    color: "black",
-                  }}
-                >
-                  Frequency
-                </Text>
-                <TextInput
-                  placeholder="Frequency"
-                  style={styles.input}
-                  onChangeText={handleChange("frequency")}
-                  onBlur={handleBlur("frequency")}
-                  value={values.frequency.toString()}
-                  maxLength={1}
-                  keyboardType={"numeric"}
+                  <TextInput
+                    placeholder="Difficulty"
+                    style={styles.input}
+                    onChangeText={handleChange("difficulty")}
+                    onBlur={handleBlur("difficulty")}
+                    value={values.difficulty.toString()}
+                    maxLength={1}
+                    keyboardType={"numeric"}
+                  />
+                  {errors.difficulty && touched.difficulty && (
+                    <Text
+                      style={{
+                        color: "red",
+                      }}
+                    >
+                      {errors.difficulty}
+                    </Text>
+                  )}
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      fontWeight: "400",
+                      color: "black",
+                    }}
+                  >
+                    Frequency
+                  </Text>
+                  <TextInput
+                    placeholder="Frequency"
+                    style={styles.input}
+                    onChangeText={handleChange("frequency")}
+                    onBlur={handleBlur("frequency")}
+                    value={values.frequency.toString()}
+                    maxLength={1}
+                    keyboardType={"numeric"}
 
-                />
-                {errors.frequency && touched.frequency && (
-                  <Text
-                    style={{
-                      color: "red",
-                    }}
-                  >
-                    {errors.frequency}
-                  </Text>
-                )}
-              </View>
+                  />
+                  {errors.frequency && touched.frequency && (
+                    <Text
+                      style={{
+                        color: "red",
+                      }}
+                    >
+                      {errors.frequency}
+                    </Text>
+                  )}
+                </View>
+
+              </KeyboardAwareScrollView>
 
               <View
                 style={{
                   position: "absolute",
                   justifyContent: "space-between",
-                  alignItems: "center",
+                  alignItems: 'baseline',
                   flexDirection: "row",
                   width: "100%",
                   bottom: 20,
@@ -219,16 +222,6 @@ export default function TaskScreen({
 
 
         </Formik>
-        <View style={{
-          position: "absolute",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexDirection: "row",
-          width: "100%",
-          bottom: 25,
-          padding: 10,
-        }}>
-        </View>
 
       </SafeAreaView >
     </>
@@ -244,7 +237,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    paddingBottom: 50,
+    paddingBottom: 20,
   },
   input: {
     color: "black",
