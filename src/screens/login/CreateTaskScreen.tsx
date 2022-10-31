@@ -3,18 +3,10 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import RootStackNavigator, {
   RootScreenProps,
 } from "../../navigation/RootStackNavigator";
-import { avatarColors } from "../../constants/Colors";
-import { getAllAvatars, getAvatar } from "../../constants/Layout";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import {
-  createProfile,
-  selectProfileById,
-  setActiveProfile,
-  updateProfile,
-} from "../../store/slices/profileSlice";
-import { Profile, ProfileDTO, Task } from "../../data/APItypes";
-import {} from "../../store/slices/householdSlice";
-import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
+import { Task } from "../../data/APItypes";
+import { } from "../../store/slices/householdSlice";
+import { Button } from "react-native-paper";
 import {
   createHouseholdTask,
   updateTask as updateHouseholdTask,
