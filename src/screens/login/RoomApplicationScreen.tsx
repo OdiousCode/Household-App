@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, Pressable, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import { Profile, ProfileDTO } from "../../data/APItypes";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
@@ -24,52 +24,75 @@ export default function RoomApplication({
 
   return (
     <View style={styles.container}>
-      <Text>Room application Screen</Text>
-      <Button title="Go back" onPress={() => navigation.goBack()} />
-
-      <Button
-        title="Submit"
-        onPress={async () => {
-          if (allH.find((h) => h.entrenceCode === entrenceCode)) {
-            const profile: ProfileDTO = {
-              avatar: -1,
-              name: "No Profile",
-              pending: true,
-              role: "User",
-            };
-
-            const r = await dispatch(
-              createProfile({
-                profile: profile,
-                houseHoldId: entrenceCode,
-              })
-            );
-            if (r.meta.requestStatus === "fulfilled") {
-              navigation.replace("PortalWaiting", {
-                profileId: (r.payload as Profile).id,
-              });
-            }
-          }
-        }}
-      />
+      <Text style={styles.text}>Room application Screen</Text>
       <TextInput
         style={styles.input}
         onChangeText={(code) => setEntranceCode(code)}
         placeholder="entrance code"
         value={entrenceCode}
       ></TextInput>
+
+      <View style={styles.container2}>
+        <Pressable style={styles.button} onPress={() => navigation.goBack()}>
+            <Text>Avbrytt</Text>
+        </Pressable>
+        <Pressable style={styles.button}
+          onPress={async () => {
+            if (allH.find((h) => h.entrenceCode.substring(14,20) === entrenceCode)) {
+              
+              const profile: ProfileDTO = {
+                avatar: -1,
+                name: "No Profile",
+                pending: true,
+                role: "User",
+              };
+
+              const r = await dispatch(
+                createProfile({
+                  profile: profile,
+                  houseHoldId: entrenceCode,
+                })
+              );
+              if (r.meta.requestStatus === "fulfilled") {
+                navigation.replace("PortalWaiting", {
+                  profileId: (r.payload as Profile).id,
+                });
+              }
+            }
+          }}
+        >
+          <Text>Gå med</Text>
+        </Pressable>
+      </View>  
     </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
   input: {
     color: "black",
-    margin: 10,
+    width: 200,
+  },
+  text: {
+    fontSize: 25,
+    margin: 50
+  },
+  button: {
+    margin: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: "#ABB2B4",
+  },
+  container2: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

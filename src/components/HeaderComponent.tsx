@@ -1,17 +1,13 @@
 import {
-  NavigationAction,
-  NavigationProp,
   useNavigation,
 } from "@react-navigation/native";
-import React, { useReducer, useState } from "react";
+import React, { useState } from "react";
 import { Appbar, Menu } from "react-native-paper";
-import Navigation from "../navigation/Index";
 import { Text, StyleSheet } from "react-native";
 import { auth } from "../data/firebase/config";
-import { logOut, userReducer } from "../store/slices/userSlice";
-import { store, useAppDispatch, useAppSelector } from "../store/store";
+import { logOut} from "../store/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { getAvatar } from "../constants/Layout";
-import { IconSource } from "react-native-paper/lib/typescript/components/Icon";
 
 export type Props = {
   title: string;
@@ -26,6 +22,7 @@ function CustomNavigationBar(props: Props) {
   const sayHello = () => navigation.goBack();
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
+  const activeHouseHold = useAppSelector((state) => state.profiles.activeProfile?.householdId);
 
   function logOutOfapp() {
     dispatch(logOut());
@@ -77,11 +74,12 @@ function CustomNavigationBar(props: Props) {
               {/* <Menu.Item title={props.userName ? null : "No Nickname "} /> */}
               <Menu.Item title={props.userEmail} />
               <Menu.Item title={activeProfile?.name} />
+              <Menu.Item title={"Kod: " + activeHouseHold?.substring(14,20)} />
               <Menu.Item
                 onPress={() => {
                   navigation.navigate("Profile");
                 }}
-                title="Log Out"
+                title="Bytt profil"
               />
             </Menu>
           </>

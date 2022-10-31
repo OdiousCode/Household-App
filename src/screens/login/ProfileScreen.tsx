@@ -202,27 +202,9 @@ export default function ProfileScreen({
                 );
               }
             }
-            //else go to pending
           }}
         >
           Gå in
-        </Button>
-      </View>
-      <View style={{ position: "absolute", bottom: 50 }}>
-        <Text>Testing stuff</Text>
-
-        <Button
-          onPress={async () => {
-            console.log("GET DATA RUNNING");
-            const r = await dispatch(getUserProfiles());
-            if (r.meta.requestStatus === "fulfilled") {
-            }
-            const res = await dispatch(getUserHouseholds());
-            if (r.meta.requestStatus === "fulfilled") {
-            }
-          }}
-        >
-          Get Data
         </Button>
       </View>
     </ScrollView>
