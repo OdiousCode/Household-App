@@ -41,7 +41,7 @@ export default function TaskOverviewScreen({
     selectActiveHouseholdTaskHistories
   );
 
-  householdTaskHistory.sort((a, b) => a.date - b.date);
+  householdTaskHistory.sort((a, b) => b.date - a.date);
 
   return (
     <>
