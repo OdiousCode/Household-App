@@ -183,6 +183,37 @@ export const createHouseholdTask = createAsyncThunk<
   }
 });
 
+export const updateTask = createAsyncThunk<
+  Task,
+  { task: Task },
+  { rejectValue: string; state: AppState }
+>("tasks/updateTask", async ({ task }, thunkApi) => {
+  try {
+    const state = thunkApi.getState();
+    if (!state.user.user) {
+      return thunkApi.rejectWithValue(
+        "Must be valid Profile + Household combination"
+      );
+    }
+    //profile.id = uid todo.
+
+    const db = getDatabase(app);
+
+    await set(ref(db, "app/profiles/" + task.id), task);
+
+    //TODO look for error?
+    return task;
+  } catch (error) {
+    console.error(error);
+    if (error instanceof FirebaseError) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+    return thunkApi.rejectWithValue(
+      "Could not signup please contact our support."
+    );
+  }
+});
+
 export const getUserTasks = createAsyncThunk<
   Task[],
   void,
@@ -249,6 +280,24 @@ const taskSlice = createSlice({
       state.householdTasks.push(action.payload);
     });
     builder.addCase(createHouseholdTask.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload || "Unknown error";
+    });
+
+    builder.addCase(updateTask.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateTask.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.householdTasks = state.householdTasks.map((item, index) => {
+        if (item.id !== action.payload.id) {
+          return item;
+        } else {
+          return action.payload;
+        }
+      });
+    });
+    builder.addCase(updateTask.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload || "Unknown error";
     });

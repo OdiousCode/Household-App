@@ -119,7 +119,6 @@ export const getUserProfiles = createAsyncThunk<
   { rejectValue: string; state: AppState }
 >("profiles/getUserProfiles", async (_, thunkApi) => {
   try {
-    console.log(1);
     const state = thunkApi.getState();
     state.user.user?.uid;
 
