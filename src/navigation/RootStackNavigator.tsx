@@ -83,7 +83,7 @@ export default function RootStackNavigator() {
       screenOptions={{
         header: () => (
           <CustomNavigationBar
-            title={"House Hold"}
+            title={"Household"}
             userEmail={user?.email?.toString()}
           />
         ),

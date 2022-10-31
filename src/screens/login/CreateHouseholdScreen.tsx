@@ -69,7 +69,7 @@ export default function CreateHouseHoldScreen({
           }
         }}
       >
-        Skapa HusHåll
+        Create household
       </Button>
     </View>
   );

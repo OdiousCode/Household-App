@@ -34,7 +34,7 @@ export default function RoomApplication({
 
       <View style={styles.container2}>
         <Pressable style={styles.button} onPress={() => navigation.goBack()}>
-            <Text>Avbrytt</Text>
+            <Text>Cancel</Text>
         </Pressable>
         <Pressable style={styles.button}
           onPress={async () => {
@@ -61,7 +61,7 @@ export default function RoomApplication({
             }
           }}
         >
-          <Text>Gå med</Text>
+          <Text>Join household</Text>
         </Pressable>
       </View>  
     </View>

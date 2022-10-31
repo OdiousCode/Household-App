@@ -183,7 +183,7 @@ export default function TaskOverviewScreen({
               navigation.navigate("CreateTask");
             }}
           >
-            Lägg till
+            Add
           </Button>
         </View>
       </SafeAreaView>

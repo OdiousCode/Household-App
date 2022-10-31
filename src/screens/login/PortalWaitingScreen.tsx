@@ -58,16 +58,16 @@ export default function PortalWaitingScreen({
       if (currentProfile.pending) {
         return (
           <View style={styles.container}>
-            <Text>Du väntar på att få bli insläppt i detta hus </Text>
+            <Text>You are awaiting acceptance to the household </Text>
             <Button title="Go back" onPress={() => navigation.goBack()} />
           </View>
         );
       } else if (!currentProfile.pending && currentProfile.avatar === -1) {
         return (
           <View style={styles.container}>
-            <Text>Du har blivit insläptt men behöver skapa en profil </Text>
+            <Text>You have been accepted but you need to create a profile</Text>
             <Button
-              title="Skapa Avatar"
+              title="Create avatar"
               onPress={() => {
                 navigation.replace("CreateAvatar", {
                   profileId: currentProfile!.id,

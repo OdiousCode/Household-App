@@ -74,12 +74,12 @@ function CustomNavigationBar(props: Props) {
               {/* <Menu.Item title={props.userName ? null : "No Nickname "} /> */}
               <Menu.Item title={props.userEmail} />
               <Menu.Item title={activeProfile?.name} />
-              <Menu.Item title={"Kod: " + activeHouseHold?.substring(14,20)} />
+              <Menu.Item title={"Code: " + activeHouseHold?.substring(14,20)} />
               <Menu.Item
                 onPress={() => {
                   navigation.navigate("Profile");
                 }}
-                title="Bytt profil"
+                title="Change profile "
               />
             </Menu>
           </>

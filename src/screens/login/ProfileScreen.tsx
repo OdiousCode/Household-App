@@ -90,7 +90,7 @@ export default function ProfileScreen({
           }}
           onPress={() => navigation.navigate("RoomApplication")}
         >
-          Anslut hushåll
+          Join household
         </Button>
         <Button
           icon="plus-circle-outline"
@@ -104,7 +104,7 @@ export default function ProfileScreen({
           }}
           onPress={() => navigation.navigate("CreateHousehold")}
         >
-          Skapa hushåll
+          Create household
         </Button>
       </View>
       <View style={{ alignItems: "center" }}>
@@ -131,7 +131,7 @@ export default function ProfileScreen({
                 }}
                 onPress={openMenu}
               >
-                Välj hushåll
+                Pick household
               </Button>
             }
           >
@@ -204,7 +204,7 @@ export default function ProfileScreen({
             }
           }}
         >
-          Gå in
+          Enter household
         </Button>
       </View>
     </ScrollView>

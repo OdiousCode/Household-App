@@ -92,7 +92,7 @@ export default function CreateTask({
     return (
       <>
         <SafeAreaView style={styles.container}>
-          <Text style={styles.title}>Skapa en ny syssla</Text>
+          <Text style={styles.title}>Create a new task</Text>
 
           <Formik
             validateOnChange={true}
@@ -256,7 +256,7 @@ export default function CreateTask({
                         handleSubmit();
                       }}
                     >
-                      Spara
+                      Save
                     </Button>
                     <Button
                       icon="close"
@@ -265,7 +265,7 @@ export default function CreateTask({
                       style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
                       onPress={() => navigation.goBack()}
                     >
-                      Stäng
+                      Close
                     </Button>
                   </View>
                 </KeyboardAwareScrollView>

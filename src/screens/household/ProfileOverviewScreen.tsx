@@ -97,13 +97,13 @@ export default function ProfileOverViewScreen({
             <Text
               style={{ fontSize: 20, fontWeight: "bold", marginBottom: 30 }}
             >
-              [Admin] Hushåll: {householdData.name}
+              [Admin] Household: {householdData.name}
             </Text>
           ) : (
             <Text
               style={{ fontSize: 20, fontWeight: "bold", marginBottom: 30 }}
             >
-              Hushåll: {householdData.name}
+              Household: {householdData.name}
             </Text>
           )}
           {/* <Text>
@@ -155,38 +155,38 @@ export default function ProfileOverViewScreen({
                                     householdData.name,
                                     [
                                       {
-                                        text: "Kasta ur hushåll",
+                                        text: "Remove from household",
                                         onPress: () => {
                                           Alert.alert(
-                                            "Ta bort " +
+                                            "Remove " +
                                               profile.name +
-                                              ' ifrån "' +
+                                              ' from "' +
                                               householdData.name +
                                               '"',
-                                            "Är du säker att du vill ta bort användaren?",
+                                            "Are you sure you want to remove the user?",
                                             [
                                               {
-                                                text: "Ja",
+                                                text: "Yes",
                                                 onPress: () => {
                                                   adminDeleteProfile(profile);
                                                 },
                                               },
                                               {
-                                                text: "Nej",
+                                                text: "No",
                                               },
                                             ]
                                           );
                                         },
                                       },
                                       {
-                                        text: "Avbryt",
+                                        text: "Cancel",
                                       },
                                     ],
                                     {
                                       cancelable: true,
                                       onDismiss: () =>
                                         Alert.alert(
-                                          "Avbröt uppdatering av användare"
+                                          "Canceled update of the user"
                                         ),
                                     }
                                   )
@@ -203,7 +203,7 @@ export default function ProfileOverViewScreen({
                                     householdData.name,
                                     [
                                       {
-                                        text: "Redigera profil",
+                                        text: "Edit profile",
                                         onPress: () => {
                                           navigation.replace("CreateAvatar", {
                                             profileId: profile.id,
@@ -212,21 +212,21 @@ export default function ProfileOverViewScreen({
                                         },
                                       },
                                       {
-                                        text: "Lämna hushåll",
+                                        text: "Leave household",
                                         onPress: () => {
                                           Alert.alert(
-                                            'Lämna hushåll "' +
+                                            'Leave household "' +
                                               householdData.name +
                                               '"',
-                                            "Är du säker att du vill lämna?",
+                                            "Are you you want to leave the household?",
                                             [
                                               {
-                                                text: "Ja",
+                                                text: "Yes",
                                                 onPress: () => {
                                                   // Lägg in kod för att faktiskt se till att profilen lämnar hushåll här.
 
                                                   Alert.alert(
-                                                    'Lämnat hushåll "' +
+                                                    'leave household "' +
                                                       householdData.name +
                                                       '"'
                                                   );
@@ -234,21 +234,21 @@ export default function ProfileOverViewScreen({
                                                 },
                                               },
                                               {
-                                                text: "Nej",
+                                                text: "No",
                                               },
                                             ]
                                           );
                                         },
                                       },
                                       {
-                                        text: "Avbryt",
+                                        text: "Cancel",
                                       },
                                     ],
                                     {
                                       cancelable: true,
                                       onDismiss: () =>
                                         Alert.alert(
-                                          "Avbröt uppdatering av användare"
+                                          "Canceled update of the user"
                                         ),
                                     }
                                   )
