@@ -50,7 +50,8 @@ export default function HouseholdTopTabNavigator() {
         name="ProfileOverViewScreen"
         component={ProfileOverViewScreen}
       />
-      <Tab.Screen name="TaskScreen" component={TaskScreen} />
+      {/* TODO remove */}
+      {/* <Tab.Screen name="TaskScreen" component={TaskScreen} /> */}
       <Tab.Screen name="StatisticsScreen" component={StatisticsScreen} />
       <Tab.Screen name="TaskOverviewScreen" component={TaskOverviewScreen} />
       {myProfile?.role === "Admin" && (

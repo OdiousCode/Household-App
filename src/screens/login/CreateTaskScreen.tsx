@@ -120,6 +120,7 @@ export default function CreateTask({
             {({
               handleSubmit,
               handleChange,
+              handleBlur,
               values,
               errors,
               touched,
@@ -140,6 +141,7 @@ export default function CreateTask({
                     placeholder="Title"
                     style={styles.input}
                     onChangeText={handleChange("name")}
+                    onBlur={handleBlur("name")}
                     value={values.name}
                   />
                   {errors.name && touched.name && (
@@ -172,6 +174,7 @@ export default function CreateTask({
                       height: 100,
                     }}
                     onChangeText={handleChange("description")}
+                    onBlur={handleBlur("description")}
                     value={values.description}
                   />
                   {errors.description && touched.description && (
@@ -196,6 +199,7 @@ export default function CreateTask({
                     placeholder="Difficulty"
                     style={styles.input}
                     onChangeText={handleChange("difficulty")}
+                    onBlur={handleBlur("difficulty")}
                     value={values.difficulty.toString()}
                     maxLength={1}
                     keyboardType={"numeric"}
@@ -222,6 +226,7 @@ export default function CreateTask({
                     placeholder="Frequency"
                     style={styles.input}
                     onChangeText={handleChange("frequency")}
+                    onBlur={handleBlur("frequency")}
                     value={values.frequency.toString()}
                     maxLength={1}
                     keyboardType={"numeric"}
