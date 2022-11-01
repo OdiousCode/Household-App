@@ -11,7 +11,11 @@ import {
   set,
 } from "firebase/database";
 import { date } from "yup";
-import { getAllAvatars, getAvatar } from "../../constants/Layout";
+import {
+  getAllAvatars,
+  getAvatar,
+  getColorByAvatar,
+} from "../../constants/Layout";
 import { Task, TaskHistory } from "../../data/APItypes";
 import { app } from "../../data/firebase/config";
 import { AppState } from "../store";
@@ -144,24 +148,27 @@ export const selectHistoryForPeriod =
           (l) => l === getAvatar(profile!.avatar).icon
         );
       }
-      console.log("taskDiff");
-      console.log(task.difficulty);
-      console.log("index");
-      console.log(index);
-      console.log("choreStatistic.data[index];");
-      console.log(choreStatistic.data[index]);
 
       let numb: number = +choreStatistic.data[index];
-      console.log("numb");
-      console.log(numb);
-
       numb += +task.difficulty;
-
       choreStatistic.data[index] = +numb;
     });
 
-    console.log("chores");
-    console.log(chores);
+    chores.forEach((chore) => {
+      chore.labels.forEach((label) => {
+        let index = total.labels.findIndex((l) => l === label);
+
+        if (index == -1) {
+          let color = getColorByAvatar(label);
+
+          total.labels.push(label);
+          total.data.push(0);
+          total.colorScale.push(color);
+        }
+
+        total.data[index] += +chore.data[index];
+      });
+    });
 
     return { chores, total };
   };
@@ -440,17 +447,12 @@ function selectFilteredHistoryFromPeriodString(
   state: AppState
 ) {
   const allHistories = selectActiveHouseholdTaskHistories(state);
-  console.log("allHistories");
-  console.log(allHistories);
 
   const allOrderdHistories = allHistories.sort((a, b) => b.date - a.date);
 
   const aWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
   const index = allHistories.findIndex((p) => p.date > aWeekAgo);
   const allFilteredHistories = allOrderdHistories.slice(index);
-
-  console.log("allFilterHistories");
-  console.log(allFilteredHistories);
 
   return allFilteredHistories;
 }
