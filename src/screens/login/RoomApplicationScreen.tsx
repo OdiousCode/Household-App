@@ -38,7 +38,7 @@ export default function RoomApplication({
         </Pressable>
         <Pressable style={styles.button}
           onPress={async () => {
-            if (allH.find((h) => h.entrenceCode.substring(14,20) === entrenceCode)) {
+            if (allH.find((h) => h.entrenceCode === entrenceCode)) {
               
               const profile: ProfileDTO = {
                 avatar: -1,
@@ -61,7 +61,7 @@ export default function RoomApplication({
             }
           }}
         >
-          <Text>Join household</Text>
+          <Text>Join</Text>
         </Pressable>
       </View>  
     </View>

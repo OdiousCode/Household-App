@@ -57,8 +57,8 @@ export const createHousehold = createAsyncThunk<
     const pushRef = push(reference);
 
     let newH: Household = {
-      entrenceCode: pushRef.key!,
-      id: pushRef.key!,
+      entrenceCode: pushRef.key!.substring(14,20),
+      id: pushRef.key!.substring(14,20),
       name: name,
     };
 
