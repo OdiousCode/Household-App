@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
   selectActiveHouseholdTask,
   selectActiveHouseholdTaskHistories,
+  selectHistoryForPeriod,
   selectHistoryForPeriod as selectStatisticsForPeriod,
 } from "../../store/slices/taskSlice";
 import { Profile } from "../../data/APItypes";
@@ -32,7 +33,6 @@ export default function StatisticsScreen({
   const { chores, total } = useAppSelector(
     selectStatisticsForPeriod("Current Week")
   );
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>
@@ -40,7 +40,6 @@ export default function StatisticsScreen({
         <Text style={{ fontSize: 22, textAlign: "center" }}>
           Household Tasks
         </Text>
-
         {chores.map((c) => (
           <View key={c.title}>
             <Text>{c.title}</Text>
@@ -53,6 +52,15 @@ export default function StatisticsScreen({
             />
           </View>
         ))}
+      </View>
+      <View>{/* OVERALL "CONTRIBUTION" */}</View>
+      <View>
+        <VictoryPie
+          width={300}
+          height={300}
+          colorScale={[av[0].color]}
+          data={[{ y: 5 }]}
+        />
       </View>
     </ScrollView>
   );

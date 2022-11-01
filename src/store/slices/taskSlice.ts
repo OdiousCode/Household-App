@@ -91,7 +91,7 @@ export const selectHistoryForPeriod =
     // const av = getAllAvatars();
     // const allHistories = selectActiveHouseholdTaskHistories(state);
     // const allTasks = selectActiveHouseholdTask(state);
-
+    console.log("Period: " + period);
     const allFilteredHistories = selectFilteredHistoryFromPeriodString(
       period,
       state
@@ -113,9 +113,13 @@ export const selectHistoryForPeriod =
       const task = state.tasks.householdTasks.find(
         (t) => t.id === history.taskId
       );
-      if (!task) return;
-
+      if (!task) {
+        console.log("no task");
+        return;
+      }
+      console.log("t: " + task.name + " " + task.difficulty);
       let choreStatistic = chores.find((c) => c.title === task.name);
+      console.log("stat: " + choreStatistic);
       if (!choreStatistic) {
         choreStatistic = {
           title: task.name,
@@ -130,18 +134,20 @@ export const selectHistoryForPeriod =
         (p) => p.id === history.profileId
       );
       if (!profile) return;
-
+      console.log("prof: " + profile.name);
       let index = choreStatistic.labels.findIndex(
         (l) => l === getAvatar(profile!.avatar).icon
       );
-
-      if (!index) {
+      console.log("index: " + index);
+      if ((index = -1)) {
+        console.log("Hejhopp");
         choreStatistic.colorScale.push(getAvatar(profile!.avatar).color);
         choreStatistic.data.push(0);
         choreStatistic.labels.push(getAvatar(profile.avatar).icon);
       }
       choreStatistic.data[index] += task.difficulty;
     });
+    console.log("c: " + chores[0]?.data + " t: " + total.data);
     return { chores, total };
   };
 
@@ -425,5 +431,11 @@ function selectFilteredHistoryFromPeriodString(
   const aWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
   const index = allHistories.findIndex((p) => p.date <= aWeekAgo);
   const allFilteredHistories = allOrderdHistories.slice(index);
+  console.log(
+    "filter: task-id: " +
+      allFilteredHistories[0]?.taskId +
+      " prof-id " +
+      allFilteredHistories[0]?.profileId
+  );
   return allFilteredHistories;
 }
