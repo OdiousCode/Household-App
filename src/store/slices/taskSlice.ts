@@ -11,6 +11,7 @@ import {
   set,
 } from "firebase/database";
 import { date } from "yup";
+import { getAllAvatars, getAvatar } from "../../constants/Layout";
 import { Task, TaskHistory } from "../../data/APItypes";
 import { app } from "../../data/firebase/config";
 import { AppState } from "../store";
@@ -65,6 +66,84 @@ const initialState: TaskState = {
     },
   ],
 };
+
+type ChoreStatistic = {
+  title: string;
+  labels: string[];
+  colorScale: string[];
+  data: number[];
+};
+
+type AllChoreStatistics = {
+  total: ChoreStatistic;
+  chores: ChoreStatistic[];
+};
+
+export type PeriodString =
+  | "Current Week"
+  | "Previous Week"
+  | "Previous Month"
+  | "All Time";
+
+export const selectHistoryForPeriod =
+  (period: PeriodString) =>
+  (state: AppState): AllChoreStatistics => {
+    // const av = getAllAvatars();
+    // const allHistories = selectActiveHouseholdTaskHistories(state);
+    // const allTasks = selectActiveHouseholdTask(state);
+
+    const allFilteredHistories = selectFilteredHistoryFromPeriodString(
+      period,
+      state
+    );
+
+    let total: ChoreStatistic = {
+      title: "Total",
+      colorScale: [],
+      data: [],
+      labels: [],
+    };
+
+    let chores: ChoreStatistic[] = [];
+
+    //ALL FILTERED HISTORIES
+    // let ProfileHistory = new Map<string, string[]>();
+
+    allFilteredHistories.forEach((history) => {
+      const task = state.tasks.householdTasks.find(
+        (t) => t.id === history.taskId
+      );
+      if (!task) return;
+
+      let choreStatistic = chores.find((c) => c.title === task.name);
+      if (!choreStatistic) {
+        choreStatistic = {
+          title: task.name,
+          colorScale: [],
+          data: [],
+          labels: [],
+        };
+
+        chores.push(choreStatistic);
+      }
+      let profile = state.profiles.profiles.find(
+        (p) => p.id === history.profileId
+      );
+      if (!profile) return;
+
+      let index = choreStatistic.labels.findIndex(
+        (l) => l === getAvatar(profile!.avatar).icon
+      );
+
+      if (!index) {
+        choreStatistic.colorScale.push(getAvatar(profile!.avatar).color);
+        choreStatistic.data.push(0);
+        choreStatistic.labels.push(getAvatar(profile.avatar).icon);
+      }
+      choreStatistic.data[index] += task.difficulty;
+    });
+    return { chores, total };
+  };
 
 export const selectActiveHouseholdTaskHistories = (state: AppState) => {
   const householdId = state.profiles.activeProfile?.householdId;
@@ -334,3 +413,17 @@ const taskSlice = createSlice({
 });
 
 export const taskReducer = taskSlice.reducer;
+
+function selectFilteredHistoryFromPeriodString(
+  period: string,
+  state: AppState
+) {
+  const allHistories = selectActiveHouseholdTaskHistories(state);
+
+  const allOrderdHistories = allHistories.sort((a, b) => b.date - a.date);
+
+  const aWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const index = allHistories.findIndex((p) => p.date <= aWeekAgo);
+  const allFilteredHistories = allOrderdHistories.slice(index);
+  return allFilteredHistories;
+}

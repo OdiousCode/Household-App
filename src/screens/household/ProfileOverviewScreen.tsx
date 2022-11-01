@@ -39,7 +39,9 @@ export default function ProfileOverViewScreen({
     (state) => state.profiles.activeProfile
   );
   const profileData = useAppSelector(selectValidProfilesByActiveHousehold);
-  const activeProfile = useAppSelector((state) => state.profiles.activeProfile?.id);
+  const activeProfile = useAppSelector(
+    (state) => state.profiles.activeProfile?.id
+  );
   // const currentProfile = useAppSelector(selectUserProfiles);
   // const [refreshing, setRefreshing] = React.useState(false);
   // const onRefresh = React.useCallback(() => {
@@ -205,7 +207,7 @@ export default function ProfileOverViewScreen({
                                       {
                                         text: "Edit profile",
                                         onPress: () => {
-                                          navigation.replace("CreateAvatar", {
+                                          navigation.navigate("CreateAvatar", {
                                             profileId: profile.id,
                                             isEditing: true,
                                           });
