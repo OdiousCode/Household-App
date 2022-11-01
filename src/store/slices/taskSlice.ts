@@ -135,13 +135,34 @@ export const selectHistoryForPeriod =
         (l) => l === getAvatar(profile!.avatar).icon
       );
 
-      if (!index) {
+      if (index == -1) {
         choreStatistic.colorScale.push(getAvatar(profile!.avatar).color);
         choreStatistic.data.push(0);
         choreStatistic.labels.push(getAvatar(profile.avatar).icon);
+
+        index = choreStatistic.labels.findIndex(
+          (l) => l === getAvatar(profile!.avatar).icon
+        );
       }
-      choreStatistic.data[index] += task.difficulty;
+      console.log("taskDiff");
+      console.log(task.difficulty);
+      console.log("index");
+      console.log(index);
+      console.log("choreStatistic.data[index];");
+      console.log(choreStatistic.data[index]);
+
+      let numb: number = +choreStatistic.data[index];
+      console.log("numb");
+      console.log(numb);
+
+      numb += +task.difficulty;
+
+      choreStatistic.data[index] = +numb;
     });
+
+    console.log("chores");
+    console.log(chores);
+
     return { chores, total };
   };
 
@@ -419,11 +440,17 @@ function selectFilteredHistoryFromPeriodString(
   state: AppState
 ) {
   const allHistories = selectActiveHouseholdTaskHistories(state);
+  console.log("allHistories");
+  console.log(allHistories);
 
   const allOrderdHistories = allHistories.sort((a, b) => b.date - a.date);
 
   const aWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-  const index = allHistories.findIndex((p) => p.date <= aWeekAgo);
+  const index = allHistories.findIndex((p) => p.date > aWeekAgo);
   const allFilteredHistories = allOrderdHistories.slice(index);
+
+  console.log("allFilterHistories");
+  console.log(allFilteredHistories);
+
   return allFilteredHistories;
 }

@@ -161,11 +161,12 @@ export default function CreateAvatar({
 
                 if (!isEditing) {
                   dispatch(setActiveProfile(newProfile.id));
+                  navigation.replace("HouseholdTopTabNavigator", {
+                    screen: "ProfileOverViewScreen",
+                  });
                 }
 
-                navigation.replace("HouseholdTopTabNavigator", {
-                  screen: "ProfileOverViewScreen",
-                });
+                navigation.goBack();
               } else {
                 console.log("Go back");
                 navigation.goBack();
