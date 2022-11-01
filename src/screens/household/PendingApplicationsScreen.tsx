@@ -90,6 +90,15 @@ export default function PendingApplicationScreen({
     return (
       <SafeAreaView style={styles.container}>
         <View style={{ height: 500, width: "90%" }}>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              textAlign: "center",
+            }}
+          >
+            Pending applications
+          </Text>
           <FlatList
             style={{ flex: 1, width: "100%" }}
             data={allPending}
@@ -102,7 +111,7 @@ export default function PendingApplicationScreen({
                     borderRadius: 10,
                     borderColor: "#000",
                     marginBottom: 10,
-                    alignItems: "center"
+                    alignItems: "center",
                   }}
                 >
                   <View
@@ -130,7 +139,7 @@ export default function PendingApplicationScreen({
                                   Alert.alert(
                                     "Remove" +
                                       profile.email +
-                                      'from' +
+                                      "from" +
                                       activeHousehold!.name +
                                       '"',
                                     "Are you sure you want to remove the user?",
@@ -250,10 +259,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   cancelIcon: {
-    marginRight: 80
+    marginRight: 80,
   },
   acceptIcon: {
     marginLeft: 80,
-    fontSize: 17
-  }
+    fontSize: 17,
+  },
 });

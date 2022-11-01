@@ -104,7 +104,7 @@ export default function ProfileScreen({
           }}
           onPress={() => navigation.navigate("CreateHousehold")}
         >
-          Create household
+          New household
         </Button>
       </View>
       <View style={{ alignItems: "center" }}>
@@ -174,7 +174,7 @@ export default function ProfileScreen({
           style={{
             borderRadius: 10,
             borderWidth: 0.5,
-            width: 150,
+            width: 200,
             borderColor: "#000",
           }}
           onPress={() => {

@@ -75,40 +75,42 @@ export default function CreateAvatar({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create avatar Screen</Text>
+      <Text style={styles.title}>Create new profile</Text>
       <TextInput
         style={styles.input}
         onChangeText={(name) => setName(name)}
         placeholder="Name"
         defaultValue={name}
       ></TextInput>
+      <Text style={{ fontSize: 20, margin: 5 }}>Choose your avatar</Text>
+      <View
+        style={{
+          backgroundColor: getAvatar(avaibleAvatars[avatarIndex]).color,
+          padding: 20,
+          borderRadius: 50,
+          width: 75,
+        }}
+      >
+        <Text style={{ fontSize: 30 }}>
+          {getAvatar(avaibleAvatars[avatarIndex]).icon}
+        </Text>
+      </View>
 
-        <View
-          style={{
-            backgroundColor: getAvatar(avaibleAvatars[avatarIndex]).color,
-            padding: 20,
-            borderRadius: 50,
-            width: 75,
+      <View style={styles.container2}>
+        <Pressable
+          style={styles.selectButton}
+          onPress={() => {
+            if (avatarIndex === 0) {
+              setAvatarIndex(avaibleAvatars.length - 1);
+            } else {
+              setAvatarIndex(avatarIndex - 1);
+            }
           }}
         >
-          <Text style={{ fontSize: 30 }}>
-            {getAvatar(avaibleAvatars[avatarIndex]).icon}
-          </Text>
-        </View>
-
-        <View style={styles.container2}>
-          <Pressable style={styles.selectButton}
-            onPress={() => {
-              if (avatarIndex === 0) {
-                setAvatarIndex(avaibleAvatars.length - 1);
-              } else {
-                setAvatarIndex(avatarIndex - 1);
-              }
-            }}
-          >
-            <Text>Prev</Text>
-          </Pressable>
-          <Pressable style={styles.selectButton}
+          <Text>Prev</Text>
+        </Pressable>
+        <Pressable
+          style={styles.selectButton}
           onPress={() => {
             if (avatarIndex === avaibleAvatars.length - 1) {
               setAvatarIndex(0);
@@ -119,12 +121,21 @@ export default function CreateAvatar({
         >
           <Text>Next</Text>
         </Pressable>
-        </View>
+      </View>
 
-        <View style={styles.container2}>
-
-        <Pressable style={styles.cancelButton} onPress={() => navigation.navigate("HouseholdTopTabNavigator", {screen: "ProfileOverViewScreen",})}><Text style={styles.text}>Cancel</Text></Pressable>
-        <Pressable style={styles.submitButton}
+      <View style={styles.container2}>
+        <Pressable
+          style={styles.cancelButton}
+          onPress={() =>
+            navigation.navigate("HouseholdTopTabNavigator", {
+              screen: "ProfileOverViewScreen",
+            })
+          }
+        >
+          <Text style={styles.text}>Cancel</Text>
+        </Pressable>
+        <Pressable
+          style={styles.submitButton}
           onPress={async () => {
             // TODO
             //update Profile? currentprofile to name + avatar as wished
@@ -150,7 +161,7 @@ export default function CreateAvatar({
             //TODO take screen as param and move to screen?
             if (r.meta.requestStatus === "fulfilled") {
               if (!newProfile.pending && newProfile.avatar != -1) {
-                console.log("Go To Profile Screen");
+                console.log("Go to Profile Screen");
 
                 if (!isEditing) {
                   dispatch(setActiveProfile(newProfile.id));
@@ -165,11 +176,11 @@ export default function CreateAvatar({
               }
             }
           }}
-        >    
+        >
           <Text style={styles.text}>Submit</Text>
         </Pressable>
-        </View>
       </View>
+    </View>
   );
 }
 
@@ -182,7 +193,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 25,
-    marginBottom: 50
+    marginBottom: 50,
   },
   avatar: {
     padding: 10,
@@ -232,7 +243,5 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-  }
-
-
+  },
 });
