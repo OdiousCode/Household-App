@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 // import { setName } from "../store/profileSlice";
@@ -21,52 +21,71 @@ export default function StatisticsScreen({
   const av = getAllAvatars();
   return (
     <View style={styles.container}>
-      <View>
-        <Text style={{ fontSize: 22, textAlign: "center" }}>Diska</Text>
-        <VictoryPie
-          width={300}
-          height={300}
-          colorScale={[
-            av[0].color,
-            av[1].color,
-            av[2].color,
-            av[3].color,
-            av[4].color,
-            av[5].color,
-          ]}
-          data={[
-            { x: av[0].icon, y: 33 },
-            { x: av[1].icon, y: 22 },
-            { x: av[2].icon, y: 44 },
-            { x: av[3].icon, y: 55 },
-            { x: av[4].icon, y: 11 },
-            { x: av[5].icon, y: 33 },
-          ]}
-        />
-      </View>
-      <View>
-        <Text style={{ fontSize: 22, textAlign: "center" }}>Tvätta</Text>
-        <VictoryPie
-          width={300}
-          height={300}
-          colorScale={[
-            av[0].color,
-            av[1].color,
-            av[2].color,
-            av[3].color,
-            av[4].color,
-            av[5].color,
-          ]}
-          data={[
-            { x: av[0].icon, y: 5 },
-            { x: av[1].icon, y: 7 },
-            { x: av[2].icon, y: 1 },
-            { x: av[3].icon, y: 2 },
-            { x: av[4].icon, y: 11 },
-            { x: av[5].icon, y: 5 },
-          ]}
-        />
-      </View>
+      <ScrollView>
+        <View style={styles.container}>
+          <Text style={{ fontSize: 25, textAlign: "center" }}>Diska</Text>
+          <VictoryPie
+            colorScale={[
+              av[0].color,
+              av[1].color,
+              av[2].color,
+              av[3].color,
+              av[4].color,
+              av[5].color,
+            ]}
+            data={[
+              { x: " ", y: 33 },
+              { x: " ", y: 22 },
+              { x: " ", y: 44 },
+              { x: " ", y: 55 },
+              { x: " ", y: 11 },
+              { x: " ", y: 33 },
+            ]}
+          />
+        </View>
+        <View style={styles.container}>
+          <Text style={{ fontSize: 25, textAlign: "center" }}>Tvätta</Text>
+          <VictoryPie
+            colorScale={[
+              av[0].color,
+              av[1].color,
+              av[2].color,
+              av[3].color,
+              av[4].color,
+              av[5].color,
+            ]}
+            data={[
+              { x: " ", y: 33 },
+              { x: " ", y: 22 },
+              { x: " ", y: 44 },
+              { x: " ", y: 55 },
+              { x: " ", y: 11 },
+              { x: " ", y: 33 },
+            ]}
+          />
+        </View>
+        <View style={styles.container}>
+          <Text style={{ fontSize: 25, textAlign: "center" }}>Dammsuga</Text>
+          <VictoryPie
+            colorScale={[
+              av[0].color,
+              av[1].color,
+              av[2].color,
+              av[3].color,
+              av[4].color,
+              av[5].color,
+            ]}
+            data={[
+              { x: " ", y: 33 },
+              { x: " ", y: 22 },
+              { x: " ", y: 44 },
+              { x: " ", y: 55 },
+              { x: " ", y: 11 },
+              { x: " ", y: 33 },
+            ]}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -74,7 +93,10 @@ export default function StatisticsScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "center",
   },
+  chart: {},
 });
