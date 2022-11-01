@@ -39,7 +39,9 @@ export default function ProfileOverViewScreen({
     (state) => state.profiles.activeProfile
   );
   const profileData = useAppSelector(selectValidProfilesByActiveHousehold);
-  const activeProfile = useAppSelector((state) => state.profiles.activeProfile?.id);
+  const activeProfile = useAppSelector(
+    (state) => state.profiles.activeProfile?.id
+  );
   // const currentProfile = useAppSelector(selectUserProfiles);
   // const [refreshing, setRefreshing] = React.useState(false);
   // const onRefresh = React.useCallback(() => {
@@ -106,17 +108,7 @@ export default function ProfileOverViewScreen({
               Household: {householdData.name}
             </Text>
           )}
-          {/* <Text>
-            namn: {currentProfile?.name}
-            id: {currentProfile?.id}
-            husid: {currentProfile?.householdId}
-            pending: {currentProfile?.pending}
-            roll: {currentProfile?.role}
-          </Text> */}
-          {/* IF current user is a user */}
           <View style={{ height: 500, width: "90%" }}>
-            {/* user 0 is normal user, set to 1 to test admin mode, that user is admin */}
-            {/* {currentProfile[12].role === "User" && ( */}
             <FlatList
               style={{ flex: 1, width: "100%" }}
               data={profileData}
@@ -163,7 +155,7 @@ export default function ProfileOverViewScreen({
                                               ' from "' +
                                               householdData.name +
                                               '"',
-                                            "Are you sure you want to remove the user?",
+                                            "Are you sure you want to remove this user?",
                                             [
                                               {
                                                 text: "Yes",
@@ -218,15 +210,13 @@ export default function ProfileOverViewScreen({
                                             'Leave household "' +
                                               householdData.name +
                                               '"',
-                                            "Are you you want to leave the household?",
+                                            "Are you certain want to leave the household?",
                                             [
                                               {
                                                 text: "Yes",
                                                 onPress: () => {
-                                                  // Lägg in kod för att faktiskt se till att profilen lämnar hushåll här.
-
                                                   Alert.alert(
-                                                    'leave household "' +
+                                                    'left household "' +
                                                       householdData.name +
                                                       '"'
                                                   );
@@ -268,16 +258,11 @@ export default function ProfileOverViewScreen({
                         </View>
                       </Card>
                     )}
-                    {/* Visa bara följande för att se att logik funkar! */}
-                    {/* {profile.householdId !== householdData.id && (
-                    <Text>{profile.name} tillhör annat hushåll</Text>
-                  )} */}
                   </View>
                 );
               }}
             />
           </View>
-          {/* </ScrollView> */}
         </SafeAreaView>
       </>
     );
@@ -291,118 +276,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-{
-  /* IF current user is a admin */
-}
-{
-  /* user 0 is normal user, set to 1 to test admin mode, that user is admin */
-}
-{
-  /* {currentProfile[12].role === "Admin" && (
-              <FlatList
-                style={{ flex: 1, width: "100%" }}
-                data={profileData}
-                keyExtractor={(profile) => profile.id.toString()}
-                renderItem={({ item: profile }) => (
-                  <View>
-                    {profile.householdId === householdData.id && (
-                      <Card
-                        style={{
-                          backgroundColor: getAvatar(profile.avatar).color,
-                          borderRadius: 10,
-                          borderColor: "#000",
-                          marginBottom: 10,
-                        }}
-                      >
-                        <View
-                          style={{
-                            margin: 10,
-                            alignItems: "center",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <Text style={{ fontWeight: "bold" }}>
-                            {profile.name}
-                          </Text> */
-}
-
-{
-  /* This should only be displayed if currentuser === item.id*/
-}
-{
-  /* <TouchableOpacity
-                            onPress={() =>
-                              Alert.alert(
-                                profile.name,
-                                householdData.name,
-                                [
-                                  {
-                                    text: "Kasta ur hushåll",
-                                    onPress: () => {
-                                      Alert.alert(
-                                        "Ta bort " +
-                                          profile.name +
-                                          ' ifrån "' +
-                                          householdData.name +
-                                          '"',
-                                        "Är du säker att du vill ta bort användaren?",
-                                        [
-                                          {
-                                            text: "Ja",
-                                            onPress: () => {
-                                              // Lägg in kod för att faktiskt se till att profilen lämnar hushåll här.
-                                              Alert.alert(
-                                                profile.name +
-                                                  ' har tagits bort ur hushåll "' +
-                                                  householdData.name +
-                                                  '"'
-                                              );
-                                            },
-                                          },
-                                          {
-                                            text: "Nej",
-                                          },
-                                        ]
-                                      );
-                                    },
-                                  },
-                                  {
-                                    text: "Avbryt",
-                                  },
-                                ],
-                                {
-                                  cancelable: true,
-                                  onDismiss: () =>
-                                    Alert.alert(
-                                      "Avbröt uppdatering av användare"
-                                    ),
-                                }
-                              )
-                            }
-                          >
-                            <Text>✒️</Text>
-                          </TouchableOpacity>
-
-                          <Text style={{ fontSize: 17 }}>
-                            {getAvatar(profile.avatar).icon}
-                          </Text>
-                        </View>
-                      </Card>
-                    )} */
-}
-{
-  /* Visa bara följande för att se att logik funkar! */
-}
-{
-  /* {item.householdId !== householdData.id && (
-                      <Text>{item.name} tillhör annat hushåll</Text>
-                    )} */
-}
-{
-  /* </View>
-                )}
-              />
-            )} */
-}
