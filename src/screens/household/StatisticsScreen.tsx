@@ -37,23 +37,28 @@ export default function StatisticsScreen({
     <ScrollView contentContainerStyle={styles.container}>
       <View>
         {/* OVERALL "CONTRIBUTION" */}
-        <Text style={{ fontSize: 22, textAlign: "center" }}>
-          Household Tasks
-        </Text>
+        <Text style={{ fontSize: 22, textAlign: "center" }}>Tasks</Text>
         {chores.map((c) => (
           <View key={c.title}>
-            <Text>{c.title}</Text>
+            <Text>title {c.title}</Text>
+            <Text>data {c.data}</Text>
+            <Text>scale {c.colorScale}</Text>
+            <Text>lab {c.labels}</Text>
             <VictoryPie
               labels={c.labels}
               width={300}
               height={300}
               colorScale={c.colorScale}
-              data={c.data}
+              data={[
+                { y: c.data[0] + 1 },
+                { y: c.data[1] + 1 },
+                { y: c.data[2] + 1 },
+              ]}
             />
           </View>
         ))}
       </View>
-      <View>{/* OVERALL "CONTRIBUTION" */}</View>
+      {/* <View>OVERALL "CONTRIBUTION"</View>
       <View>
         <VictoryPie
           width={300}
@@ -61,7 +66,7 @@ export default function StatisticsScreen({
           colorScale={[av[0].color]}
           data={[{ y: 5 }]}
         />
-      </View>
+      </View> */}
     </ScrollView>
   );
 }
