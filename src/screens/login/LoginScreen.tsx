@@ -13,7 +13,7 @@ export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
     email: yup
       .string()
       .email("Please enter valid email")
-      .required("Email Address is Required"),
+      .required("Email address is Required"),
     password: yup
       .string()
       .min(6, ({ min }) => `Password must be at least ${min} characters`)
