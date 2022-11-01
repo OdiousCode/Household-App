@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import RootStackNavigator, {
   RootScreenProps,
 } from "../../navigation/RootStackNavigator";
@@ -92,7 +92,7 @@ export default function CreateTask({
     return (
       <>
         <SafeAreaView style={styles.container}>
-          <Text style={styles.title}>Skapa en ny syssla</Text>
+          <Text style={styles.title}>Create a new task</Text>
 
           <Formik
             validateOnChange={true}
@@ -256,7 +256,7 @@ export default function CreateTask({
                         handleSubmit();
                       }}
                     >
-                      Spara
+                      Save
                     </Button>
                     <Button
                       icon="close"
@@ -265,7 +265,7 @@ export default function CreateTask({
                       style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
                       onPress={() => navigation.goBack()}
                     >
-                      Stäng
+                      Close
                     </Button>
                   </View>
                 </KeyboardAwareScrollView>
@@ -289,24 +289,26 @@ export default function CreateTask({
   } else {
     return (
       <View style={styles.container}>
-        <Text>View Task "Screen"</Text>
-        <Button onPress={() => navigation.goBack()}> Go Back</Button>
-
-        <Text>{startStateName}</Text>
-        <Text>{startStateDesc}</Text>
-        <Text>{startStateDiff}</Text>
-        <Text>{startStateFreq}</Text>
-
+        <View style={styles.container2}>
+          <Text style={styles.text}>Task</Text>
+          <Text>{startStateName}</Text>
+          <Text style={styles.text}>Description: </Text>
+          <Text>{startStateDesc}</Text>
+          <Text style={styles.text}>Difficulty: </Text>
+          <Text>{startStateDiff}</Text>
+          <Text style={styles.text}>Frequency: </Text>
+          <Text>{startStateFreq}</Text>
+        </View>
         <View>
-          <Button
+          <Pressable style={styles.button}
             onPress={async () => {
               navigation.replace("HouseholdTopTabNavigator", {
                 screen: "TaskOverviewScreen",
               });
             }}
           >
-            Go Back
-          </Button>
+            <Text>Go Back</Text>
+          </Pressable>
         </View>
       </View>
     );
@@ -358,6 +360,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F2F2F2",
     alignItems: "center",
+    justifyContent: "center",
+
+  },
+  container2: {
+    marginTop: 15,
+    flex: 1,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "90%",
+    borderRadius: 10
+
   },
   title: {
     fontSize: 32,
@@ -370,5 +384,20 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: "center",
     width: 350,
+    fontSize: 17
   },
+  text: {
+    fontSize: 18,
+    margin: 20
+  },
+  button: {
+    margin: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "#7DB2C5",
+  }
 });

@@ -98,10 +98,11 @@ export default function PendingApplicationScreen({
               <View>
                 <Card
                   style={{
-                    backgroundColor: getAvatar(profile.avatar).color,
+                    backgroundColor: "#E5EDF0", //getAvatar(profile.avatar).color,
                     borderRadius: 10,
                     borderColor: "#000",
                     marginBottom: 10,
+                    alignItems: "center"
                   }}
                 >
                   <View
@@ -124,22 +125,22 @@ export default function PendingApplicationScreen({
                             activeHousehold!.name,
                             [
                               {
-                                text: "Neka tillåtelse till hushåll",
+                                text: "Deny access to household",
                                 onPress: () => {
                                   Alert.alert(
-                                    "Ta bort " +
+                                    "Remove" +
                                       profile.email +
-                                      ' ifrån "' +
+                                      'from' +
                                       activeHousehold!.name +
                                       '"',
-                                    "Är du säker att du vill ta bort användaren?",
+                                    "Are you sure you want to remove the user?",
                                     [
                                       {
-                                        text: "Ja",
+                                        text: "Yes",
                                         onPress: () => {
                                           Alert.alert(
                                             profile.email +
-                                              ' har tagits bort ur hushåll "' +
+                                              ' have been removed from household "' +
                                               activeHousehold!.name +
                                               '"'
                                           );
@@ -147,25 +148,25 @@ export default function PendingApplicationScreen({
                                         },
                                       },
                                       {
-                                        text: "Nej",
+                                        text: "No",
                                       },
                                     ]
                                   );
                                 },
                               },
                               {
-                                text: "Avbryt",
+                                text: "Cancel",
                               },
                             ],
                             {
                               cancelable: true,
                               onDismiss: () =>
-                                Alert.alert("Avbröt uppdatering av användare"),
+                                Alert.alert("Cancel update of user"),
                             }
                           )
                         }
                       >
-                        <Text>❌</Text>
+                        <Text style={styles.cancelIcon}>❌</Text>
                       </TouchableOpacity>
                       <Text
                         style={{ fontWeight: "bold", alignItems: "center" }}
@@ -180,49 +181,49 @@ export default function PendingApplicationScreen({
                           activeHousehold!.name,
                           [
                             {
-                              text: "Tillåt användaren till hushåll",
+                              text: "Allow user access to household",
                               onPress: () => {
                                 Alert.alert(
-                                  "Lägg till " +
+                                  "Add " +
                                     profile.email +
-                                    ' till "' +
+                                    ' to "' +
                                     activeHousehold!.name +
                                     '"',
-                                  "Är du säker att du vill lägga till användaren?",
+                                  "Are you sure you want to add the user?",
                                   [
                                     {
-                                      text: "Ja",
+                                      text: "Yes",
                                       onPress: () => {
                                         // Lägg in kod för att faktiskt se till att profilen lämnar hushåll här.
                                         allowUser(profile);
                                         Alert.alert(
                                           profile.email +
-                                            ' har lagts till i hushållet"' +
+                                            ' have been added to the household "' +
                                             activeHousehold!.name +
                                             '"'
                                         );
                                       },
                                     },
                                     {
-                                      text: "Nej",
+                                      text: "No",
                                     },
                                   ]
                                 );
                               },
                             },
                             {
-                              text: "Avbryt",
+                              text: "Cancel",
                             },
                           ],
                           {
                             cancelable: true,
                             onDismiss: () =>
-                              Alert.alert("Avbröt uppdatering av användare"),
+                              Alert.alert("canceled update of the user"),
                           }
                         )
                       }
                     >
-                      <Text style={{ fontSize: 17 }}>✔</Text>
+                      <Text style={styles.acceptIcon}>✔</Text>
                     </TouchableOpacity>
                   </View>
                 </Card>
@@ -248,4 +249,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  cancelIcon: {
+    marginRight: 80
+  },
+  acceptIcon: {
+    marginLeft: 80,
+    fontSize: 17
+  }
 });

@@ -47,7 +47,7 @@ export default function TaskScreen({
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>Skapa en ny syssla</Text>
+        <Text style={styles.title}>Create a new task</Text>
         <Formik
           validateOnChange={true}
           validationSchema={TaskValidationSchema}
@@ -212,7 +212,7 @@ export default function TaskScreen({
                     handleSubmit();
                   }}
                 >
-                  Spara
+                  Save
                 </Button>
                 <Button
                   icon="close"
@@ -221,7 +221,7 @@ export default function TaskScreen({
                   style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
                   onPress={() => navigation.navigate("TaskOverviewScreen")}
                 >
-                  Stäng
+                  Close
                 </Button>
               </View>
             </>

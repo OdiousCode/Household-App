@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import RootStackNavigator, {
   RootScreenProps,
 } from "../../navigation/RootStackNavigator";
@@ -14,6 +14,7 @@ import {
 } from "../../store/slices/profileSlice";
 import { Profile, ProfileDTO } from "../../data/APItypes";
 import {} from "../../store/slices/householdSlice";
+import ProfileOverViewScreen from "../../screens/household/ProfileOverviewScreen";
 import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
 
 // import { setName } from "../store/profileSlice";
@@ -74,9 +75,7 @@ export default function CreateAvatar({
 
   return (
     <View style={styles.container}>
-      <Text>Create avatar Screen</Text>
-      <Button onPress={() => navigation.goBack()}> Go Back</Button>
-
+      <Text style={styles.title}>Create avatar Screen</Text>
       <TextInput
         style={styles.input}
         onChangeText={(name) => setName(name)}
@@ -84,12 +83,12 @@ export default function CreateAvatar({
         defaultValue={name}
       ></TextInput>
 
-      <View>
         <View
           style={{
             backgroundColor: getAvatar(avaibleAvatars[avatarIndex]).color,
             padding: 20,
             borderRadius: 50,
+            width: 75,
           }}
         >
           <Text style={{ fontSize: 30 }}>
@@ -97,7 +96,19 @@ export default function CreateAvatar({
           </Text>
         </View>
 
-        <Button
+        <View style={styles.container2}>
+          <Pressable style={styles.selectButton}
+            onPress={() => {
+              if (avatarIndex === 0) {
+                setAvatarIndex(avaibleAvatars.length - 1);
+              } else {
+                setAvatarIndex(avatarIndex - 1);
+              }
+            }}
+          >
+            <Text>Prev</Text>
+          </Pressable>
+          <Pressable style={styles.selectButton}
           onPress={() => {
             if (avatarIndex === avaibleAvatars.length - 1) {
               setAvatarIndex(0);
@@ -106,22 +117,14 @@ export default function CreateAvatar({
             }
           }}
         >
-          Next
-        </Button>
+          <Text>Next</Text>
+        </Pressable>
+        </View>
 
-        <Button
-          onPress={() => {
-            if (avatarIndex === 0) {
-              setAvatarIndex(avaibleAvatars.length - 1);
-            } else {
-              setAvatarIndex(avatarIndex - 1);
-            }
-          }}
-        >
-          Previous
-        </Button>
+        <View style={styles.container2}>
 
-        <Button
+        <Pressable style={styles.cancelButton} onPress={() => navigation.navigate("HouseholdTopTabNavigator", {screen: "ProfileOverViewScreen",})}><Text style={styles.text}>Cancel</Text></Pressable>
+        <Pressable style={styles.submitButton}
           onPress={async () => {
             // TODO
             //update Profile? currentprofile to name + avatar as wished
@@ -162,11 +165,11 @@ export default function CreateAvatar({
               }
             }
           }}
-        >
-          Submit
-        </Button>
+        >    
+          <Text style={styles.text}>Submit</Text>
+        </Pressable>
+        </View>
       </View>
-    </View>
   );
 }
 
@@ -177,12 +180,59 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  title: {
+    fontSize: 25,
+    marginBottom: 50
+  },
   avatar: {
     padding: 10,
     borderRadius: 50,
   },
   input: {
     color: "black",
-    margin: 10,
+    margin: 20,
+    fontSize: 20,
   },
+  selectButton: {
+    margin: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: "#ABB2B4",
+  },
+  container2: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  submitButton: {
+    marginTop: 50,
+    marginLeft: 25,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "#7DB2C5",
+  },
+  cancelButton: {
+    marginTop: 50,
+    marginRight: 25,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "#7DB2C5",
+  },
+  text: {
+    fontSize: 18,
+  }
+
+
 });

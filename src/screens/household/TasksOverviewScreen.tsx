@@ -69,13 +69,14 @@ export default function TaskOverviewScreen({
   let d = new Date();
 
   const weekday = [
-    "Söndag",
-    "Måndag",
-    "Tisdag",
-    "Onsdag",
-    "Torsdag",
-    "Fredag",
-    "Lördag",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+
   ];
   const [visible, setVisible] = useState(false);
   const showDialog = () => {
@@ -86,7 +87,7 @@ export default function TaskOverviewScreen({
     setVisible(false);
   };
   const handleOk = (newName: string) => {
-    Alert.alert("Bytt namn till", newName);
+    Alert.alert("Change name to", newName);
     // let newHH = activeHousehold;
     let newHH: Household = {
       name: newName,
@@ -105,31 +106,31 @@ export default function TaskOverviewScreen({
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
-          Hej {activeProfile?.name}
+        <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 8 }}>
+          Hello {activeProfile?.name}
         </Text>
-        <Text>
+        <Text style={styles.date}>
           {day}: {getCurrentDate()}
         </Text>
         {activeProfile?.role === "Admin" ? (
           <Pressable onPress={showDialog}>
-            <Text>Sysslor för {activeHousehold?.name}</Text>
+            <Text style={styles.date}>New task: {activeHousehold?.name}</Text>
           </Pressable>
         ) : (
-          <Text style={{ fontSize: 14, fontWeight: "bold", marginBottom: 5 }}>
-            Sysslor för {activeHousehold?.name}
+          <Text style={{ fontSize: 14, fontWeight: "bold", marginBottom: 10 }}>
+            New task: {activeHousehold?.name}
           </Text>
         )}
         <Dialog.Container visible={visible}>
-          <Dialog.Title>Namnbyte på hushåll</Dialog.Title>
-          <Dialog.Description>Vad vill du byta namnet till?</Dialog.Description>
+          <Dialog.Title>Name changes for household</Dialog.Title>
+          <Dialog.Description>What is your prefer name?</Dialog.Description>
           <Dialog.Input
-            label="Nytt namn"
+            label="New name"
             onChangeText={(text: string) => {
               setHouseName(text);
             }}
           ></Dialog.Input>
-          <Dialog.Button label="Avbryt" onPress={handleCancel} />
+          <Dialog.Button label="Cancel" onPress={handleCancel} />
           <Dialog.Button label="Ok" onPress={() => handleOk(newHouseName)} />
         </Dialog.Container>
         {/* <Button title="Go back" onPress={() => navigation.goBack()} /> */}
@@ -150,11 +151,11 @@ export default function TaskOverviewScreen({
                 );
 
                 if (tempHolder === 0) {
-                  daysToMostRecent = "Idag";
+                  daysToMostRecent = "Today";
                 } else if (tempHolder == -1) {
-                  daysToMostRecent = "Igår";
+                  daysToMostRecent = "Yesterday";
                 } else if (tempHolder == -2) {
-                  daysToMostRecent = "Iförrgår";
+                  daysToMostRecent = "Before yesterday";
                 } else {
                   daysToMostRecent = tempHolder.toString();
                 }
@@ -173,11 +174,11 @@ export default function TaskOverviewScreen({
 
                 if (dateShouldBeDone < Date.now()) {
                   if (tempHolder === 0) {
-                    shouldBeDone = "idag";
+                    shouldBeDone = "Today";
                   } else if (tempHolder == -1) {
-                    shouldBeDone = "igårr";
+                    shouldBeDone = "Yesterday";
                   } else if (tempHolder == -2) {
-                    shouldBeDone = "iförrgår";
+                    shouldBeDone = "Before yesterday";
                   } else {
                     shouldBeDone = tempHolder.toString();
                   }
@@ -186,7 +187,7 @@ export default function TaskOverviewScreen({
                   if (tempHolder === 0) {
                     shouldBeDone = "idag";
                   } else if (tempHolder === 1) {
-                    shouldBeDone = "imorgon";
+                    shouldBeDone = "Yesterday";
                   } else {
                     shouldBeDone = "+" + tempHolder.toString();
                   }
@@ -237,7 +238,7 @@ export default function TaskOverviewScreen({
                 </Card>
               ) : (
                 <Text style={{ textDecorationLine: "line-through" }}>
-                  {task.name} - arkiverad
+                  {task.name} - active
                 </Text>
               );
             }}
@@ -260,12 +261,12 @@ export default function TaskOverviewScreen({
               mode="contained"
               buttonColor="#DCCFCF"
               textColor="#000"
-              style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+              style={{ borderRadius: 4, borderWidth: 1, width: 150, backgroundColor: "#7DB2C5" }}
               onPress={() => {
                 navigation.navigate("CreateTask");
               }}
             >
-              Lägg till
+              Add
             </Button>
           </View>
         )}
@@ -281,7 +282,7 @@ export default function TaskOverviewScreen({
             task.description,
             [
               {
-                text: "Se mer",
+                text: "See more",
                 onPress: () => {
                   navigation.navigate("CreateTask", {
                     taskId: task.id,
@@ -290,22 +291,23 @@ export default function TaskOverviewScreen({
                 },
               },
               {
-                text: "Ändra",
+                text: "Change",
                 onPress: () => {
                   navigation.navigate("CreateTask", { taskId: task.id });
                 },
               },
               {
-                text: "Klar?",
+                text: "done?",
                 onPress: async () => {
-                  Alert.alert('Syssla "' + task.name + '" avklarad!');
+                  Alert.alert( task.name + '" completed');
                   let r = await dispatch(createHouseholdTaskHistory(task));
                 },
               },
             ],
             {
               cancelable: true,
-              onDismiss: () => Alert.alert("Avbröt uppdatering av syssla"),
+              onDismiss: () => Alert.alert("Cancel updating of new task"),
+
             }
           )
         : Alert.alert(
@@ -313,7 +315,7 @@ export default function TaskOverviewScreen({
             task.description,
             [
               {
-                text: "Se mer",
+                text: "See more",
                 onPress: () => {
                   navigation.navigate("CreateTask", {
                     taskId: task.id,
@@ -322,16 +324,17 @@ export default function TaskOverviewScreen({
                 },
               },
               {
-                text: "Klar?",
+                text: "Done?",
                 onPress: async () => {
-                  Alert.alert('Syssla "' + task.name + '" avklarad!');
+                  Alert.alert(task.name + '" completed!');
                   let r = await dispatch(createHouseholdTaskHistory(task));
                 },
               },
             ],
             {
               cancelable: true,
-              onDismiss: () => Alert.alert("Avbröt uppdatering av syssla"),
+              onDismiss: () => Alert.alert("Cancel updating of new task"),
+
             }
           );
     }
@@ -345,4 +348,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  date: {
+    margin: 5
+  }
 });
