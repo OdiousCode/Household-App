@@ -10,7 +10,7 @@ import {
   ref,
   set,
 } from "firebase/database";
-import { date } from "yup";
+import { date, number } from "yup";
 import {
   getAllAvatars,
   getAvatar,
@@ -92,10 +92,6 @@ export type PeriodString =
 export const selectHistoryForPeriod =
   (period: PeriodString) =>
   (state: AppState): AllChoreStatistics => {
-    // const av = getAllAvatars();
-    // const allHistories = selectActiveHouseholdTaskHistories(state);
-    // const allTasks = selectActiveHouseholdTask(state);
-
     const allFilteredHistories = selectFilteredHistoryFromPeriodString(
       period,
       state
@@ -165,8 +161,14 @@ export const selectHistoryForPeriod =
           total.data.push(0);
           total.colorScale.push(color);
         }
+        let totalIndex = total.labels.findIndex((l) => l === label);
+        let choreIndex = chore.labels.findIndex((l) => l === label);
 
-        total.data[index] += +chore.data[index];
+        let storedNumb: number = total.data[totalIndex];
+        let additionNumb = chore.data[choreIndex];
+        let totalNumb = storedNumb + additionNumb;
+
+        total.data[totalIndex] = totalNumb;
       });
     });
 
