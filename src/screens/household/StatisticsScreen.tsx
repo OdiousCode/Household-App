@@ -163,6 +163,13 @@ export default function StatisticsScreen({
             height={300}
             colorScale={total.colorScale}
             data={total.data}
+            style={{
+              data: {
+                fillOpacity: 0.9,
+                stroke: "#000",
+                strokeWidth: 0.5,
+              },
+            }}
           />
         </View>
         <View style={styles.container2}>
@@ -178,6 +185,13 @@ export default function StatisticsScreen({
                   height={175}
                   colorScale={c.colorScale}
                   data={c.data}
+                  style={{
+                    data: {
+                      fillOpacity: 0.9,
+                      stroke: "#000",
+                      strokeWidth: 0.5,
+                    },
+                  }}
                 />
               </View>
             );
