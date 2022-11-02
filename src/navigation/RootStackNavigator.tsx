@@ -16,10 +16,10 @@ import RoomApplication from "../screens/login/RoomApplicationScreen";
 // } from "./HouseholdStackNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import Navigation from "../navigation/Index";
-import { logOut, signin } from "../store/slices/userSlice";
+import { logIn, logOut, signin } from "../store/slices/userSlice";
 import { auth } from "../data/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CreateHouseHoldScreen from "../screens/login/CreateHouseholdScreen";
 import HouseholdTopTabNavigator, {
   HouseholdTopTabParamList,
@@ -54,29 +54,22 @@ export type RootScreenProps<Screen extends keyof RootStackParamList> =
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootStackNavigator() {
-  const user = useAppSelector((state) => state.user.user);
-
+  let user = useAppSelector((state) => state.user?.user);
+  
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (userAuth) => {
-      if (userAuth) {
-        // user is logged in, send the user's details to redux, store the current user in the state
-        console.log("Log In");
-        // dispatch(
-        //   signin({
-        //     email: userAuth.email,
-        //     password: userAuth. // if we save pass
-        //   })
-        // );
+    auth.onAuthStateChanged(userAuth => {
+      if (userAuth != null)
+        user = userAuth;
+   
+      if (userAuth?.email == user?.email) { 
+        dispatch(logIn(user));
       } else {
-        console.log("LogOut");
-        //TODO look at this
-        // auth.signOut();
-        // dispatch(logOut());
+        dispatch(logOut());
       }
     });
-  }, []);
+    }, []);
 
   return (
     <Stack.Navigator
