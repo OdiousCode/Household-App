@@ -215,7 +215,7 @@ export default function TaskOverviewScreen({
           <View
             style={{
               position: "absolute",
-              justifyContent: "space-between",
+              justifyContent: "center",
               alignItems: "center",
               flexDirection: "row",
               width: "100%",
@@ -226,13 +226,13 @@ export default function TaskOverviewScreen({
             <Button
               icon="plus-circle-outline"
               mode="contained"
-              buttonColor="#DCCFCF"
+              buttonColor="#FFF"
               textColor="#000"
               style={{
-                borderRadius: 4,
-                borderWidth: 1,
-                width: 150,
-                backgroundColor: "#7DB2C5",
+                borderRadius: 10,
+                borderWidth: 0.5,
+                width: 200,
+                borderColor: "#000",
               }}
               onPress={() => {
                 navigation.navigate("CreateTask");

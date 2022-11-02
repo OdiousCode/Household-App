@@ -84,7 +84,6 @@ export default function RootStackNavigator() {
         header: () => (
           <CustomNavigationBar
             title={"Household"}
-
             userEmail={user?.email?.toString()}
           />
         ),
