@@ -189,41 +189,42 @@ export default function TaskOverviewScreen({
             // height: 600,
             width: "90%",
             alignItems: "center",
+            marginTop: 8,
             // justifyContent: "",
           }}
         >
           {lateTasks.length > 0 && (
-            <View style={{ width: "90%", alignItems: "center" }}>
-              <Text>Late Tasks</Text>
+            <View style={styles.taskView}>
+              <Text style={styles.tasktext}> Late Tasks</Text>
             </View>
           )}
           {FlatListFast(lateTasks)}
 
           {todayTasks.length > 0 && (
-            <View style={{ width: "90%", alignItems: "center" }}>
-              <Text>Today Tasks</Text>
+            <View style={styles.taskView}>
+              <Text style={styles.tasktext}> Today Tasks</Text>
             </View>
           )}
           {FlatListFast(todayTasks)}
 
           {currentWeekTasks.length > 0 && (
-            <View style={{ width: "90%", alignItems: "center" }}>
-              <Text>Current week Tasks</Text>
+            <View style={styles.taskView}>
+              <Text style={styles.tasktext}> Current week Tasks</Text>
             </View>
           )}
           {FlatListFast(currentWeekTasks)}
 
           {nextWeekTasks.length > 0 && (
-            <View style={{ width: "90%", alignItems: "center" }}>
-              <Text>Next week Tasks</Text>
+            <View style={styles.taskView}>
+              <Text style={styles.tasktext}> Next week Tasks</Text>
             </View>
           )}
           {FlatListFast(nextWeekTasks)}
 
           {laterThenTHatTask.length > 0 ||
             (noTimeFrameTasks.length > 0 && (
-              <View style={{ width: "90%", alignItems: "center" }}>
-                <Text> Other Tasks</Text>
+              <View style={styles.taskView}>
+                <Text style={styles.tasktext}> Other Tasks</Text>
               </View>
             ))}
           {FlatListFast(laterThenTHatTask)}
@@ -455,5 +456,13 @@ const styles = StyleSheet.create({
   },
   date: {
     margin: 5,
+  },
+  taskView: {
+    width: "90%",
+    alignItems: "center",
+  },
+  tasktext: {
+    fontSize: 20,
+    fontWeightold: "bold",
   },
 });
