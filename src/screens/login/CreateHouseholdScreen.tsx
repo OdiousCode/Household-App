@@ -71,6 +71,22 @@ export default function CreateHouseHoldScreen({
       >
         Create household
       </Button>
+      <Button
+        icon="arrow-u-left-top"
+        mode="contained"
+        buttonColor="#FFF"
+        textColor="#000"
+        style={{
+          borderRadius: 50,
+          borderWidth: 0.5,
+          width: 150,
+          borderColor: "#000",
+          margin: 10,
+        }}
+        onPress={() => navigation.goBack()}
+      >
+        Go back
+      </Button>
     </View>
   );
 }

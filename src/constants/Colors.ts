@@ -5,4 +5,6 @@ export const avatarColors = {
   avatar_Pig: "#f5997a",
   avatar_Whale: "#4a9bff",
   avatar_Frog: "#00a303",
+  avatar_Owl: "#967447",
+  avatar_Unicorn: "#834796",
 };
