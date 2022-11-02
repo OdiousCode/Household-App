@@ -75,7 +75,7 @@ export default function CreateAvatar({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create avatar Screen</Text>
+      <Text style={styles.title}>Create new profile</Text>
       <TextInput
         style={styles.input}
         onChangeText={(name) => setName(name)}
@@ -157,7 +157,7 @@ export default function CreateAvatar({
             //TODO take screen as param and move to screen?
             if (r.meta.requestStatus === "fulfilled") {
               if (!newProfile.pending && newProfile.avatar != -1) {
-                console.log("Go To Profile Screen");
+                console.log("Go to Profile Screen");
 
                 if (!isEditing) {
                   dispatch(setActiveProfile(newProfile.id));
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 25,
-    marginBottom: 50,
+    marginBottom: 50,,
   },
   avatar: {
     padding: 10,

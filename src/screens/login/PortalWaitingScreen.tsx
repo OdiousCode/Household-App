@@ -65,7 +65,9 @@ export default function PortalWaitingScreen({
       } else if (!currentProfile.pending && currentProfile.avatar === -1) {
         return (
           <View style={styles.container}>
-            <Text>You have been accepted but you need to create a profile</Text>
+            <Text>
+              You have been accepted, but you need to create a profile
+            </Text>
             <Button
               title="Create avatar"
               onPress={() => {

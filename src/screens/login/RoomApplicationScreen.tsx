@@ -28,17 +28,18 @@ export default function RoomApplication({
       <TextInput
         style={styles.input}
         onChangeText={(code) => setEntranceCode(code)}
-        placeholder="entrance code"
+        placeholder="Entrance code"
         value={entrenceCode}
       ></TextInput>
 
       <View style={styles.container2}>
         <Pressable style={styles.button} onPress={() => navigation.goBack()}>
-            <Text>Cancel</Text>
+          <Text>Cancel</Text>
         </Pressable>
-        <Pressable style={styles.button}
+        <Pressable
+          style={styles.button}
           onPress={async () => {
-            if (allH.find((h) => h.entrenceCode.substring(14,20) === entrenceCode)) {
+            if (allH.find((h) => h.entrenceCode === entrenceCode)) {
               
               const profile: ProfileDTO = {
                 avatar: -1,
@@ -61,9 +62,9 @@ export default function RoomApplication({
             }
           }}
         >
-          <Text>Join household</Text>
+          <Text>Join</Text>
         </Pressable>
-      </View>  
+      </View>
     </View>
   );
 }
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 25,
-    margin: 50
+    margin: 50,
   },
   button: {
     margin: 20,

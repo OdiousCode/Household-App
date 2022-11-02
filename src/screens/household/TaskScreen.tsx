@@ -24,17 +24,17 @@ export default function TaskScreen({
   const dispatch = useAppDispatch();
 
   const TaskValidationSchema = yup.object().shape({
-    name: yup.string().required("Title Address is Required"),
-    description: yup.string().required("Deacription is required"),
+    name: yup.string().required("Task title is Required"),
+    description: yup.string().required("Description is required"),
     difficulty: yup
       .number()
-      .max(5, `Difficulty should be number between 1-5`)
-      .min(1, `Difficulty should be number between 1-5`)
-      .required("Difficulty is Required"),
+      .max(5, `Difficulty should be a number between 1-5`)
+      .min(1, `Difficulty should be a number between 1-5`)
+      .required("A difficulty is required"),
     frequency: yup
       .number()
-      .min(1, `Frequency should be number between 1-5`)
-      .required("Frequency is Required"),
+      .min(1, `Frequency should be a number between 1-5`)
+      .required("Frequency is required"),
   });
 
   async function handleFormSubmit(values: Task) {
@@ -176,7 +176,6 @@ export default function TaskScreen({
                     onChangeText={handleChange("frequency")}
                     onBlur={handleBlur("frequency")}
                     value={values.frequency.toString()}
-                    maxLength={1}
                     keyboardType={"numeric"}
                   />
                   {errors.frequency && touched.frequency && (

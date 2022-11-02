@@ -76,7 +76,6 @@ export default function TaskOverviewScreen({
     "Thursday",
     "Friday",
     "Saturday",
-
   ];
   const [visible, setVisible] = useState(false);
   const showDialog = () => {
@@ -107,18 +106,27 @@ export default function TaskOverviewScreen({
     <>
       <SafeAreaView style={styles.container}>
         <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 8 }}>
-          Hello {activeProfile?.name}
+          Hello {activeProfile?.role === "Admin" && "[Admin] "}
+          {activeProfile?.name}
         </Text>
         <Text style={styles.date}>
           {day}: {getCurrentDate()}
         </Text>
         {activeProfile?.role === "Admin" ? (
-          <Pressable onPress={showDialog}>
-            <Text style={styles.date}>New task: {activeHousehold?.name}</Text>
-          </Pressable>
+          <View>
+            <Text style={styles.date}>
+              Tasks for{" "}
+              <Text style={{ fontWeight: "bold" }}>
+                {activeHousehold?.name}
+              </Text>
+              <Pressable onPress={showDialog}>
+                <Text>🖋️</Text>
+              </Pressable>
+            </Text>
+          </View>
         ) : (
           <Text style={{ fontSize: 14, fontWeight: "bold", marginBottom: 10 }}>
-            New task: {activeHousehold?.name}
+            Tasks for {activeHousehold?.name}
           </Text>
         )}
         <Dialog.Container visible={visible}>
@@ -261,7 +269,12 @@ export default function TaskOverviewScreen({
               mode="contained"
               buttonColor="#DCCFCF"
               textColor="#000"
-              style={{ borderRadius: 4, borderWidth: 1, width: 150, backgroundColor: "#7DB2C5" }}
+              style={{
+                borderRadius: 4,
+                borderWidth: 1,
+                width: 150,
+                backgroundColor: "#7DB2C5",
+              }}
               onPress={() => {
                 navigation.navigate("CreateTask");
               }}
@@ -299,7 +312,7 @@ export default function TaskOverviewScreen({
               {
                 text: "done?",
                 onPress: async () => {
-                  Alert.alert( task.name + '" completed');
+                  Alert.alert(task.name + '" completed');
                   let r = await dispatch(createHouseholdTaskHistory(task));
                 },
               },
@@ -307,7 +320,6 @@ export default function TaskOverviewScreen({
             {
               cancelable: true,
               onDismiss: () => Alert.alert("Cancel updating of new task"),
-
             }
           )
         : Alert.alert(
@@ -334,7 +346,6 @@ export default function TaskOverviewScreen({
             {
               cancelable: true,
               onDismiss: () => Alert.alert("Cancel updating of new task"),
-
             }
           );
     }
@@ -349,6 +360,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   date: {
-    margin: 5
-  }
+    margin: 5,
+  },
 });

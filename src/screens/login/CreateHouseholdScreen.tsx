@@ -23,12 +23,12 @@ export default function CreateHouseHoldScreen({
 
   return (
     <View style={styles.container}>
-      <Text>Room Application Screen</Text>
+      <Text style={{ fontSize: 20, fontWeight: "bold" }}>New household</Text>
 
       <TextInput
         style={styles.input}
         onChangeText={(name) => setName(name)}
-        placeholder="name"
+        placeholder="Name"
       ></TextInput>
 
       {/* //TODO better */}
@@ -40,7 +40,7 @@ export default function CreateHouseHoldScreen({
         style={{
           borderRadius: 50,
           borderWidth: 0.5,
-          width: 150,
+          width: 200,
           borderColor: "#000",
         }}
         onPress={async () => {
