@@ -165,20 +165,9 @@ export const selectHistoryForPeriod =
         let choreIndex = chore.labels.findIndex((l) => l === label);
 
         let storedNumb: number = total.data[totalIndex];
-        if (Number.isNaN(storedNumb)) {
-          storedNumb = 0;
-        }
-
         let additionNumb = chore.data[choreIndex];
-
-        if (Number.isNaN(additionNumb) || additionNumb == undefined) {
-          additionNumb = 0;
-        }
-
         let totalNumb = storedNumb + additionNumb;
-        if (Number.isNaN(totalNumb)) {
-          totalNumb = 0;
-        }
+
         total.data[totalIndex] = totalNumb;
       });
     });
