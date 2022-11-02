@@ -5,7 +5,7 @@ import RootStackNavigator, {
 } from "../../navigation/RootStackNavigator";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { Task } from "../../data/APItypes";
-import {} from "../../store/slices/householdSlice";
+import { } from "../../store/slices/householdSlice";
 import { Button } from "react-native-paper";
 import {
   createHouseholdTask,
@@ -16,6 +16,7 @@ import * as yup from "yup";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Formik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Slider from "@react-native-community/slider";
 
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
@@ -30,6 +31,9 @@ export default function CreateTask({
   let baseTask = useAppSelector((state) =>
     state.tasks.householdTasks.find((t) => t.id === route.params?.taskId)
   );
+
+  const [sliderValueDifficulty, setSliderValueDifficulty] = useState(1);
+  const [sliderValueFrequency, setSliderValyeFrequency] = useState(1);
 
   if (!baseProfile) {
     //TODO 404
@@ -92,223 +96,203 @@ export default function CreateTask({
   if (viewOnly === false) {
     return (
       <>
-        <SafeAreaView style={styles.container}>
-          <Text style={styles.title}>Task</Text>
 
-          <Formik
-            validateOnChange={true}
-            validationSchema={TaskValidationSchema}
-            initialValues={{
-              name: startStateName,
-              description: startStateDesc,
-              difficulty: startStateDiff,
-              frequency: startStateFreq,
-              isArchived: false,
-              householdId: "",
-              id: "",
-            }}
-            onSubmit={(values) => {
-              handleFormSubmit(values);
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              handleBlur,
-              values,
-              errors,
-              touched,
-              isValid,
-            }) => (
-              <>
-                <KeyboardAwareScrollView>
-                  <View>
+        <Text style={styles.title}>Task</Text>
+
+        <Formik
+          validateOnChange={true}
+          validationSchema={TaskValidationSchema}
+          initialValues={{
+            name: startStateName,
+            description: startStateDesc,
+            difficulty: startStateDiff,
+            frequency: startStateFreq,
+            isArchived: false,
+            householdId: "",
+            id: "",
+          }}
+          onSubmit={(values) => {
+            handleFormSubmit(values);
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            values,
+            errors,
+            touched,
+            isValid,
+          }) => (
+            <>
+              <KeyboardAwareScrollView>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      fontWeight: "400",
+                      color: "black",
+                    }}
+                  >
+                    Title
+                  </Text>
+                  <TextInput
+                    placeholder="Title"
+                    style={styles.input}
+                    onChangeText={handleChange("name")}
+                    onBlur={handleBlur("name")}
+                    value={values.name}
+                  />
+                  {errors.name && touched.name && (
                     <Text
                       style={{
-                        fontSize: 17,
-                        fontWeight: "400",
-                        color: "black",
+                        color: "red",
                       }}
                     >
-                      Title
+                      {errors.name}
                     </Text>
-                    <TextInput
-                      placeholder="Title"
-                      style={styles.input}
-                      onChangeText={handleChange("name")}
-                      onBlur={handleBlur("name")}
-                      value={values.name}
-                    />
-                    {errors.name && touched.name && (
-                      <Text
-                        style={{
-                          color: "red",
-                        }}
-                      >
-                        {errors.name}
-                      </Text>
-                    )}
+                  )}
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      fontWeight: "400",
+                      color: "black",
+                    }}
+                  >
+                    Description
+                  </Text>
+                  <TextInput
+                    placeholder="Description"
+                    style={styles.input}
+                    onChangeText={handleChange("description")}
+                    onBlur={handleBlur("description")}
+                    value={values.description}
+                  />
+                  {errors.description && touched.description && (
                     <Text
                       style={{
-                        fontSize: 17,
-                        fontWeight: "400",
-                        color: "black",
+                        color: "red",
                       }}
                     >
-                      Description
+                      {errors.description}
                     </Text>
-                    <TextInput
-                      placeholder="Description"
-                      style={{
-                        color: "black",
-                        margin: 10,
-                        backgroundColor: "#E8E8E8",
-                        padding: 15,
-                        alignContent: "flex-start",
-                        width: 350,
-                        height: 100,
-                      }}
-                      onChangeText={handleChange("description")}
-                      onBlur={handleBlur("description")}
-                      value={values.description}
-                    />
-                    {errors.description && touched.description && (
-                      <Text
-                        style={{
-                          color: "red",
-                        }}
-                      >
-                        {errors.description}
-                      </Text>
-                    )}
+                  )}
+
+                  <View style={{ alignItems: 'center' }}>
                     <Text
                       style={{
-                        fontSize: 17,
+                        fontSize: 20,
                         fontWeight: "400",
                         color: "black",
                       }}
                     >
                       Difficulty
                     </Text>
-                    <TextInput
-                      placeholder="Difficulty"
-                      style={styles.input}
-                      onChangeText={handleChange("difficulty")}
-                      onBlur={handleBlur("difficulty")}
-                      value={values.difficulty.toString()}
-                      maxLength={1}
-                      keyboardType={"numeric"}
+                    <Text>{sliderValueDifficulty}</Text>
+                    <Slider style={{ width: 200, height: 40 }}
+                      minimumValue={1}
+                      maximumValue={5}
+                      onValueChange={(value) => setSliderValueDifficulty(value)}
+                      step={1}
+                      value={values.difficulty = sliderValueDifficulty}
+                      maximumTrackTintColor="#ff0000"
+                      minimumTrackTintColor="#00ff00"
                     />
-                    {errors.difficulty && touched.difficulty && (
-                      <Text
-                        style={{
-                          color: "red",
-                        }}
-                      >
-                        {errors.difficulty}
-                      </Text>
-                    )}
+
                     <Text
                       style={{
-                        fontSize: 17,
+                        fontSize: 20,
                         fontWeight: "400",
                         color: "black",
                       }}
                     >
                       Frequency
                     </Text>
-                    <TextInput
-                      placeholder="Frequency"
-                      style={styles.input}
-                      onChangeText={handleChange("frequency")}
-                      onBlur={handleBlur("frequency")}
-                      value={values.frequency.toString()}
-                      maxLength={1}
-                      keyboardType={"numeric"}
+                    <Text>{sliderValueFrequency}</Text>
+                    <Slider style={{ width: 200, height: 40 }}
+                      minimumValue={1}
+                      maximumValue={31}
+                      onValueChange={(value) => setSliderValyeFrequency(value)}
+                      step={1}
+                      value={values.frequency = sliderValueFrequency}
+                      maximumTrackTintColor="#ff0000"
+                      minimumTrackTintColor="#00ff00"
                     />
-                    {errors.frequency && touched.frequency && (
-                      <Text
-                        style={{
-                          color: "red",
-                        }}
-                      >
-                        {errors.frequency}
-                      </Text>
-                    )}
                   </View>
+                </View>
 
-                  {baseProfile?.role === "Admin" && isEditing && (
-                    <Button
-                      icon="plus-circle-outline"
-                      mode="contained"
-                      buttonColor="#DCCFCF"
-                      textColor="#000"
-                      style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                      onPress={async () => {
-                        const r = await dispatch(
-                          deleteTask({
-                            task: baseTask!,
-                          })
-                        );
+                {baseProfile?.role === "Admin" && isEditing && (
+                  <Button
+                    icon="plus-circle-outline"
+                    mode="contained"
+                    buttonColor="#DCCFCF"
+                    textColor="#000"
+                    style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+                    onPress={async () => {
+                      const r = await dispatch(
+                        deleteTask({
+                          task: baseTask!,
+                        })
+                      );
 
-                        if (r.meta.requestStatus === "fulfilled") {
-                          navigation.goBack();
-                        }
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  )}
-
-                  <View
-                    style={{
-                      position: "relative",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      flexDirection: "row",
-                      width: "92%",
-                      bottom: 5,
-                      padding: 5,
+                      if (r.meta.requestStatus === "fulfilled") {
+                        navigation.goBack();
+                      }
                     }}
                   >
-                    <Button
-                      icon="plus-circle-outline"
-                      mode="contained"
-                      buttonColor="#DCCFCF"
-                      textColor="#000"
-                      style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                      onPress={() => {
-                        handleSubmit();
-                      }}
-                    >
-                      Save
-                    </Button>
-                    <Button
-                      icon="close"
-                      mode="contained-tonal"
-                      buttonColor="#DCCFCF"
-                      style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                      onPress={() => navigation.goBack()}
-                    >
-                      Close
-                    </Button>
-                  </View>
-                </KeyboardAwareScrollView>
-              </>
-            )}
-          </Formik>
-          <View
-            style={{
-              position: "absolute",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
-              width: "100%",
-              bottom: 25,
-              padding: 10,
-            }}
-          ></View>
-        </SafeAreaView>
+                    Delete
+                  </Button>
+                )}
+
+                <View
+                  style={{
+                    position: "relative",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    flexDirection: "row",
+                    width: "92%",
+                    bottom: 5,
+                    padding: 5,
+                  }}
+                >
+                  <Button
+                    icon="plus-circle-outline"
+                    mode="contained"
+                    buttonColor="#DCCFCF"
+                    textColor="#000"
+                    style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+                    onPress={() => {
+                      handleSubmit();
+                    }}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    icon="close"
+                    mode="contained-tonal"
+                    buttonColor="#DCCFCF"
+                    style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+                    onPress={() => navigation.goBack()}
+                  >
+                    Close
+                  </Button>
+                </View>
+              </KeyboardAwareScrollView>
+            </>
+          )}
+        </Formik>
+        <View
+          style={{
+            position: "absolute",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexDirection: "row",
+            width: "100%",
+            bottom: 25,
+            padding: 10,
+          }}
+        ></View>
+
       </>
     );
   } else {
