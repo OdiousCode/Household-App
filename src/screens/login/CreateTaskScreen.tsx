@@ -351,8 +351,8 @@ export default function CreateTask({
 
         description: task.description,
         name: task.name,
-        frequency: task.frequency,
-        difficulty: task.difficulty,
+        frequency: +task.frequency,
+        difficulty: +task.difficulty,
       };
       const r = await dispatch(
         updateHouseholdTask({
@@ -371,8 +371,8 @@ export default function CreateTask({
 
         description: task.description,
         name: task.name,
-        frequency: task.frequency,
-        difficulty: task.difficulty,
+        frequency: +task.frequency,
+        difficulty: +task.difficulty,
       };
 
       const r = await dispatch(createHouseholdTask(createdTask));
