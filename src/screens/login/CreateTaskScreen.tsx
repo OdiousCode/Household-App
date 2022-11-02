@@ -245,57 +245,47 @@ export default function CreateTask({
                       Delete
                     </Button>
                   )}
+                </KeyboardAwareScrollView>
 
-                  <View
-                    style={{
-                      position: "relative",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      flexDirection: "row",
-                      width: "92%",
-                      bottom: 5,
-                      padding: 5,
+                <View
+                  style={{
+                    position: 'relative',
+                    justifyContent: 'space-around',
+                    alignItems: "center",
+                    flexDirection: "row",
+                    bottom: 15,
+
+
+                  }}
+                >
+
+                  <Button
+                    icon="plus-circle-outline"
+                    mode="contained"
+                    buttonColor="#DCCFCF"
+                    textColor="#000"
+                    style={{ right: '90%', borderRadius: 50, borderWidth: 1, width: 150 }}
+                    onPress={() => {
+                      handleSubmit();
                     }}
                   >
-                    <Button
-                      icon="plus-circle-outline"
-                      mode="contained"
-                      buttonColor="#DCCFCF"
-                      textColor="#000"
-                      style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                      onPress={() => {
-                        handleSubmit();
-                      }}
-                    >
-                      Save
-                    </Button>
-                    <Button
-                      icon="close"
-                      mode="contained-tonal"
-                      buttonColor="#DCCFCF"
-                      style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                      onPress={() => navigation.goBack()}
-                    >
-                      Close
-                    </Button>
-                  </View>
-                </KeyboardAwareScrollView>
+                    Save
+                  </Button>
+                  <Button
+                    icon="close"
+                    mode="contained-tonal"
+                    buttonColor="#DCCFCF"
+                    style={{ left: '90%', borderRadius: 50, borderWidth: 1, width: 150 }}
+                    onPress={() => navigation.goBack()}
+                  >
+                    Close
+                  </Button>
+                </View>
+
               </SafeAreaView>
             </>
           )}
         </Formik>
-        <View
-          style={{
-            position: "absolute",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexDirection: "row",
-            width: "100%",
-            bottom: 25,
-            padding: 10,
-          }}
-        ></View>
-
       </>
     );
   } else {
@@ -381,16 +371,16 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
-    width: "90%",
+    width: "100%",
     borderRadius: 10,
   },
   title: {
     fontSize: 32,
-    paddingBottom: 50,
+    paddingBottom: 15,
   },
   input: {
     color: "black",
-    margin: 10,
+
     backgroundColor: "#E8E8E8",
     padding: 15,
     alignItems: "center",
