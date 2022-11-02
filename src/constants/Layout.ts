@@ -50,3 +50,12 @@ export function getAvatar(index: number): Avatar {
   }
   return avatars[index];
 }
+
+export function getColorByAvatar(avatar: string): string {
+  let allAvatars = getAllAvatars();
+  allAvatars.push({ icon: "❓", color: "#3d3635" });
+
+  let index = allAvatars.findIndex((a) => a.icon === avatar);
+
+  return allAvatars[index].color;
+}

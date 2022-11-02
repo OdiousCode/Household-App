@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   Alert,
   FlatList,
@@ -31,10 +31,23 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Profile, ProfileDTO } from "../../data/APItypes";
 import { wait } from "../login/ProfileScreen";
+import { useFocusEffect } from "@react-navigation/native";
+import {
+  getUserTaskHistories,
+  getUserTasks,
+} from "../../store/slices/taskSlice";
 
 export default function ProfileOverViewScreen({
   navigation,
 }: HouseholdScreenProps<"ProfileOverViewScreen">) {
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getUserTasks());
+      dispatch(getUserTaskHistories());
+      dispatch(getUserProfiles());
+    }, [])
+  );
+
   const currentProfile = useAppSelector(
     (state) => state.profiles.activeProfile
   );
@@ -51,6 +64,7 @@ export default function ProfileOverViewScreen({
   //   dispatch(getUserHouseholds());
   //   wait(2000).then(() => setRefreshing(false));
   // }, []);
+
   const householdData = useAppSelector(selectActiveHousehold);
   const dispatch = useAppDispatch();
 
@@ -197,7 +211,7 @@ export default function ProfileOverViewScreen({
                                       {
                                         text: "Edit profile",
                                         onPress: () => {
-                                          navigation.replace("CreateAvatar", {
+                                          navigation.navigate("CreateAvatar", {
                                             profileId: profile.id,
                                             isEditing: true,
                                           });

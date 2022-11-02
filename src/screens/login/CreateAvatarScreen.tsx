@@ -82,6 +82,7 @@ export default function CreateAvatar({
         placeholder="Name"
         defaultValue={name}
       ></TextInput>
+
       <Text style={{ fontSize: 20, margin: 5 }}>Choose your avatar</Text>
       <View
         style={{
@@ -126,11 +127,7 @@ export default function CreateAvatar({
       <View style={styles.container2}>
         <Pressable
           style={styles.cancelButton}
-          onPress={() =>
-            navigation.navigate("HouseholdTopTabNavigator", {
-              screen: "ProfileOverViewScreen",
-            })
-          }
+          onPress={() => navigation.goBack()}
         >
           <Text style={styles.text}>Cancel</Text>
         </Pressable>
@@ -165,11 +162,12 @@ export default function CreateAvatar({
 
                 if (!isEditing) {
                   dispatch(setActiveProfile(newProfile.id));
+                  navigation.replace("HouseholdTopTabNavigator", {
+                    screen: "ProfileOverViewScreen",
+                  });
                 }
 
-                navigation.replace("HouseholdTopTabNavigator", {
-                  screen: "ProfileOverViewScreen",
-                });
+                navigation.goBack();
               } else {
                 console.log("Go back");
                 navigation.goBack();
