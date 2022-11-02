@@ -83,6 +83,7 @@ export default function CreateAvatar({
         defaultValue={name}
       ></TextInput>
 
+      <Text style={{ fontSize: 20, margin: 5 }}>Choose your avatar</Text>
       <View
         style={{
           backgroundColor: getAvatar(avaibleAvatars[avatarIndex]).color,
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 25,
-    marginBottom: 50,,
+    marginBottom: 50,
   },
   avatar: {
     padding: 10,
