@@ -1,6 +1,7 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Button,
+  Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -24,6 +25,7 @@ import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
   getUserTaskHistories,
   getUserTasks,
+  PeriodString,
   selectActiveHouseholdTask,
   selectActiveHouseholdTaskHistories,
   selectHistoryForPeriod as selectStatisticsForPeriod,
@@ -58,14 +60,17 @@ export default function StatisticsScreen({
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const av = getAllAvatars();
+  const [statisticIndex, setStatisticIndex] = useState(0);
+  const allPeriods: PeriodString[] = [
+    "Current Week",
+    "Previous Week",
+    "Previous Month",
+    "All Time",
+  ];
 
   const { chores, total } = useAppSelector(
-    selectStatisticsForPeriod("Current Week")
+    selectStatisticsForPeriod(allPeriods[statisticIndex])
   );
-
-  console.log("total");
-  console.log(total);
 
   if (!total.data) {
     return (
@@ -91,6 +96,37 @@ export default function StatisticsScreen({
         <Text style={{ fontSize: 22, textAlign: "center" }}>
           Household Tasks
         </Text>
+
+        <Text style={{ fontSize: 22, textAlign: "center" }}>
+          {allPeriods[statisticIndex]}
+        </Text>
+
+        <View style={styles.container2}>
+          <Pressable
+            style={styles.selectButton}
+            onPress={() => {
+              if (statisticIndex === 0) {
+                setStatisticIndex(allPeriods.length - 1);
+              } else {
+                setStatisticIndex(statisticIndex - 1);
+              }
+            }}
+          >
+            <Text>Prev</Text>
+          </Pressable>
+          <Pressable
+            style={styles.selectButton}
+            onPress={() => {
+              if (statisticIndex === allPeriods.length - 1) {
+                setStatisticIndex(0);
+              } else {
+                setStatisticIndex(statisticIndex + 1);
+              }
+            }}
+          >
+            <Text>Next</Text>
+          </Pressable>
+        </View>
 
         <View style={styles.container}>
           <Text style={{ fontSize: 18, textAlign: "center" }}>
@@ -137,4 +173,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   chart: {},
+  selectButton: {
+    margin: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: "#ABB2B4",
+  },
+  container2: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

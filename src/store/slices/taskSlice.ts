@@ -320,6 +320,37 @@ export const updateTask = createAsyncThunk<
   }
 });
 
+export const deleteTask = createAsyncThunk<
+  Task,
+  { task: Task },
+  { rejectValue: string; state: AppState }
+>("tasks/deleteTask", async ({ task }, thunkApi) => {
+  try {
+    const state = thunkApi.getState();
+    if (!state.user.user) {
+      return thunkApi.rejectWithValue(
+        "Must be valid Profile + Household combination"
+      );
+    }
+    //profile.id = uid todo.
+
+    const db = getDatabase(app);
+
+    await set(ref(db, "app/tasks/" + task.id), null);
+
+    //TODO look for error?
+    return task;
+  } catch (error) {
+    console.error(error);
+    if (error instanceof FirebaseError) {
+      return thunkApi.rejectWithValue(error.message);
+    }
+    return thunkApi.rejectWithValue(
+      "Could not signup please contact our support."
+    );
+  }
+});
+
 export const getUserTasks = createAsyncThunk<
   Task[],
   void,
@@ -408,6 +439,24 @@ const taskSlice = createSlice({
       state.error = action.payload || "Unknown error";
     });
 
+    builder.addCase(deleteTask.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(deleteTask.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.householdTasks = state.householdTasks.map((item, index) => {
+        if (item.id !== action.payload.id) {
+          return item;
+        } else {
+          return action.payload;
+        }
+      });
+    });
+    builder.addCase(deleteTask.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload || "Unknown error";
+    });
+
     //----- TASK HISTORIES ------
     //GET
     builder.addCase(getUserTaskHistories.pending, (state) => {
@@ -443,16 +492,37 @@ const taskSlice = createSlice({
 export const taskReducer = taskSlice.reducer;
 
 function selectFilteredHistoryFromPeriodString(
-  period: string,
+  period: PeriodString,
   state: AppState
 ) {
   const allHistories = selectActiveHouseholdTaskHistories(state);
-
+  // oldest first
   const allOrderdHistories = allHistories.sort((a, b) => b.date - a.date);
 
-  const aWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-  const index = allHistories.findIndex((p) => p.date > aWeekAgo);
-  const allFilteredHistories = allOrderdHistories.slice(index);
+  if (period !== "All Time") {
+    let daysToCut = 0;
+    switch (period) {
+      case "Current Week": {
+        daysToCut = 7;
+        break;
+      }
+      case "Previous Month": {
+        daysToCut = 30;
+        break;
+      }
+      case "Previous Week": {
+        daysToCut = 14;
+        //TODO ^
+        break;
+      }
+    }
 
-  return allFilteredHistories;
+    const timeStamp = Date.now() - daysToCut * 24 * 60 * 60 * 1000;
+    const index = allHistories.findIndex((p) => p.date <= timeStamp);
+    const allFilteredHistories = allOrderdHistories.slice(0, index);
+
+    return allFilteredHistories;
+  }
+
+  return allOrderdHistories;
 }
