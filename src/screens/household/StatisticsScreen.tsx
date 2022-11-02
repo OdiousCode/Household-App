@@ -114,7 +114,7 @@ export default function StatisticsScreen({
             <SegmentedButtons
               value={""}
               onValueChange={() => null}
-              density="high"
+              density="medium"
               buttons={[
                 {
                   value: "Previous",
@@ -181,8 +181,8 @@ export default function StatisticsScreen({
                 </Text>
                 <VictoryPie
                   labels={c.labels}
-                  width={175}
-                  height={175}
+                  width={190}
+                  height={190}
                   colorScale={c.colorScale}
                   data={c.data}
                   style={{
