@@ -85,12 +85,12 @@ export default function ProfileScreen({
           style={{
             borderRadius: 50,
             borderWidth: 0.5,
-            width: 150,
+            width: 175,
             borderColor: "#000",
           }}
           onPress={() => navigation.navigate("RoomApplication")}
         >
-          Join household
+          Join
         </Button>
         <Button
           icon="plus-circle-outline"
@@ -99,12 +99,12 @@ export default function ProfileScreen({
           style={{
             borderRadius: 50,
             borderWidth: 0.5,
-            width: 150,
+            width: 175,
             borderColor: "#000",
           }}
           onPress={() => navigation.navigate("CreateHousehold")}
         >
-          New household
+          Create new
         </Button>
       </View>
       <View style={{ alignItems: "center" }}>
@@ -131,7 +131,12 @@ export default function ProfileScreen({
                 }}
                 onPress={openMenu}
               >
-                Pick household
+                {profile.name
+                  ? profile.name +
+                    " - " +
+                    allHouseHolds.find((h) => h.id === profile.householdId)
+                      ?.name
+                  : "Pick household"}
               </Button>
             }
           >
