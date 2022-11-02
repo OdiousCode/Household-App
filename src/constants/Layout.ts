@@ -8,6 +8,8 @@ export const AvatarIcon = {
   icon_Whale: "🐳",
   icon_Chicken: "🐤",
   icon_Pig: "🐷",
+  icon_Owl: "🦉",
+  icon_Unicorn: "🦄",
 };
 
 const avatars: Avatar[] = [
@@ -34,6 +36,14 @@ const avatars: Avatar[] = [
   {
     color: avatarColors.avatar_Pig,
     icon: AvatarIcon.icon_Pig,
+  },
+  {
+    color: avatarColors.avatar_Owl,
+    icon: AvatarIcon.icon_Owl,
+  },
+  {
+    color: avatarColors.avatar_Unicorn,
+    icon: AvatarIcon.icon_Unicorn,
   },
 ];
 export function getAllAvatars(): Avatar[] {
