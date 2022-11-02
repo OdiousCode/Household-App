@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import {
-  Button,
+  Alert,
+  GestureResponderEvent,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -35,6 +36,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { getUserProfiles } from "../../store/slices/profileSlice";
 import { getUserHouseholds } from "../../store/slices/householdSlice";
 import { wait } from "../login/ProfileScreen";
+import { Button, SegmentedButtons } from "react-native-paper";
 
 // Vecka Månadg, All-Time
 
@@ -67,7 +69,8 @@ export default function StatisticsScreen({
     "Previous Month",
     "All Time",
   ];
-
+  // let period : string = "";
+  const [period, setPeriod] = React.useState("");
   const { chores, total } = useAppSelector(
     selectStatisticsForPeriod(allPeriods[statisticIndex])
   );
@@ -91,7 +94,7 @@ export default function StatisticsScreen({
 
   return (
     <ScrollView>
-      <View>
+      <View style={{ alignItems: "center" }}>
         {/* OVERALL "CONTRIBUTION" */}
         <Text style={{ fontSize: 22, textAlign: "center" }}>
           Household Tasks
@@ -103,7 +106,6 @@ export default function StatisticsScreen({
 
         <View style={styles.container2}>
           <Pressable
-            style={styles.selectButton}
             onPress={() => {
               if (statisticIndex === 0) {
                 setStatisticIndex(allPeriods.length - 1);
@@ -112,10 +114,39 @@ export default function StatisticsScreen({
               }
             }}
           >
-            <Text>Prev</Text>
+            <SegmentedButtons
+              value={""}
+              onValueChange={() => null}
+              density="high"
+              buttons={[
+                {
+                  value: "Previous",
+                  label: "",
+                  icon: "arrow-left-drop-circle",
+                  onPress: () => {
+                    if (statisticIndex === 0) {
+                      setStatisticIndex(allPeriods.length - 1);
+                    } else {
+                      setStatisticIndex(statisticIndex - 1);
+                    }
+                  },
+                },
+                {
+                  value: "Next",
+                  label: "",
+                  icon: "arrow-right-drop-circle",
+                  onPress: () => {
+                    if (statisticIndex === allPeriods.length - 1) {
+                      setStatisticIndex(0);
+                    } else {
+                      setStatisticIndex(statisticIndex + 1);
+                    }
+                  },
+                },
+              ]}
+            />
           </Pressable>
           <Pressable
-            style={styles.selectButton}
             onPress={() => {
               if (statisticIndex === allPeriods.length - 1) {
                 setStatisticIndex(0);
@@ -123,9 +154,7 @@ export default function StatisticsScreen({
                 setStatisticIndex(statisticIndex + 1);
               }
             }}
-          >
-            <Text>Next</Text>
-          </Pressable>
+          ></Pressable>
         </View>
 
         <View style={styles.container}>
@@ -167,7 +196,7 @@ export default function StatisticsScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
     flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "center",
