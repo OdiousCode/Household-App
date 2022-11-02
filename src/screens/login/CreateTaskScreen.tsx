@@ -5,10 +5,11 @@ import RootStackNavigator, {
 } from "../../navigation/RootStackNavigator";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { Task } from "../../data/APItypes";
-import { } from "../../store/slices/householdSlice";
+import {} from "../../store/slices/householdSlice";
 import { Button } from "react-native-paper";
 import {
   createHouseholdTask,
+  deleteTask,
   updateTask as updateHouseholdTask,
 } from "../../store/slices/taskSlice";
 import * as yup from "yup";
@@ -92,7 +93,7 @@ export default function CreateTask({
     return (
       <>
         <SafeAreaView style={styles.container}>
-          <Text style={styles.title}>Create a new task</Text>
+          <Text style={styles.title}>Task</Text>
 
           <Formik
             validateOnChange={true}
@@ -235,6 +236,30 @@ export default function CreateTask({
                       </Text>
                     )}
                   </View>
+
+                  {baseProfile?.role === "Admin" && isEditing && (
+                    <Button
+                      icon="plus-circle-outline"
+                      mode="contained"
+                      buttonColor="#DCCFCF"
+                      textColor="#000"
+                      style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+                      onPress={async () => {
+                        const r = await dispatch(
+                          deleteTask({
+                            task: baseTask!,
+                          })
+                        );
+
+                        if (r.meta.requestStatus === "fulfilled") {
+                          navigation.goBack();
+                        }
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  )}
+
                   <View
                     style={{
                       position: "relative",
@@ -300,7 +325,8 @@ export default function CreateTask({
           <Text>{startStateFreq}</Text>
         </View>
         <View>
-          <Pressable style={styles.button}
+          <Pressable
+            style={styles.button}
             onPress={async () => {
               navigation.replace("HouseholdTopTabNavigator", {
                 screen: "TaskOverviewScreen",
@@ -361,7 +387,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2F2F2",
     alignItems: "center",
     justifyContent: "center",
-
   },
   container2: {
     marginTop: 15,
@@ -370,8 +395,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "90%",
-    borderRadius: 10
-
+    borderRadius: 10,
   },
   title: {
     fontSize: 32,
@@ -384,11 +408,11 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: "center",
     width: 350,
-    fontSize: 17
+    fontSize: 17,
   },
   text: {
     fontSize: 18,
-    margin: 20
+    margin: 20,
   },
   button: {
     margin: 30,
@@ -399,5 +423,5 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     backgroundColor: "#7DB2C5",
-  }
+  },
 });
