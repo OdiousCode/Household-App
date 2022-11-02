@@ -91,7 +91,6 @@ export default function StatisticsScreen({
       </ScrollView>
     );
   }
-
   return (
     <ScrollView>
       <View style={{ alignItems: "center" }}>
@@ -99,11 +98,9 @@ export default function StatisticsScreen({
         <Text style={{ fontSize: 22, textAlign: "center" }}>
           Household Tasks
         </Text>
-
         <Text style={{ fontSize: 22, textAlign: "center" }}>
           {allPeriods[statisticIndex]}
         </Text>
-
         <View style={styles.container2}>
           <Pressable
             onPress={() => {
@@ -156,31 +153,29 @@ export default function StatisticsScreen({
             }}
           ></Pressable>
         </View>
-
         <View style={styles.container}>
           <Text style={{ fontSize: 18, textAlign: "center" }}>
             {total.title}
           </Text>
           <VictoryPie
             labels={total.labels}
-            width={200}
-            height={200}
+            width={300}
+            height={300}
             colorScale={total.colorScale}
             data={total.data}
           />
         </View>
-
-        <View style={styles.container}>
+        <View style={styles.container2}>
           {chores.map((c) => {
             return (
               <View key={c.title}>
                 <Text style={{ fontSize: 18, textAlign: "center" }}>
-                  {c.title}
+                  Task: {c.title}
                 </Text>
                 <VictoryPie
                   labels={c.labels}
-                  width={200}
-                  height={200}
+                  width={175}
+                  height={175}
                   colorScale={c.colorScale}
                   data={c.data}
                 />
@@ -214,7 +209,8 @@ const styles = StyleSheet.create({
   },
   container2: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
-    justifyContent: "center",
+    alignContent: "center",
   },
 });
