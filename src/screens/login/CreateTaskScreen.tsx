@@ -302,16 +302,27 @@ export default function CreateTask({
           <Text>{startStateFreq}</Text>
         </View>
         <View>
-          <Pressable
-            style={styles.button}
+
+          <Button
+            icon="arrow-u-left-top"
+            mode="contained"
+            buttonColor="#FFF"
+            textColor="#000"
+            style={{
+              borderRadius: 50,
+              borderWidth: 0.5,
+              width: 150,
+              borderColor: "#000",
+              margin: 10,
+            }}
             onPress={async () => {
               navigation.replace("HouseholdTopTabNavigator", {
                 screen: "TaskOverviewScreen",
               });
             }}
           >
-            <Text>Go Back</Text>
-          </Pressable>
+            Go back
+          </Button>
         </View>
       </View>
     );
