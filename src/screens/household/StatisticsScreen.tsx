@@ -96,6 +96,19 @@ export default function StatisticsScreen({
         <Text style={{ fontSize: 22, textAlign: "center" }}>
           Household Tasks
         </Text>
+        <Text>tit: {total.title}</Text>
+        <Text>dat0: {total.data[0]}</Text>
+        <Text>dat0: {total.data[1]}</Text>
+        <Text>dat0: {total.data[2]}</Text>
+        <Text>dat0: {total.data[3]}</Text>
+        <Text>dat0: {total.data[4]}</Text>
+        <Text>dat0: {total.data[5]}</Text>
+        <Text>Label 0: {total.labels[0]}</Text>
+        <Text>Label 0: {total.labels[1]}</Text>
+        <Text>Label 0: {total.labels[2]}</Text>
+        <Text>Label 0: {total.labels[3]}</Text>
+        <Text>Label 0: {total.labels[4]}</Text>
+        <Text>Label 0: {total.labels[5]}</Text>
 
         <Text style={{ fontSize: 22, textAlign: "center" }}>
           {allPeriods[statisticIndex]}
