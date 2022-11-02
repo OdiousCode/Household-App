@@ -176,7 +176,6 @@ export default function TaskScreen({
                     onChangeText={handleChange("frequency")}
                     onBlur={handleBlur("frequency")}
                     value={values.frequency.toString()}
-                    maxLength={1}
                     keyboardType={"numeric"}
                   />
                   {errors.frequency && touched.frequency && (
