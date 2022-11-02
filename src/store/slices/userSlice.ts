@@ -28,7 +28,6 @@ interface UserState {
 //   errorMessage: "",
 // };
 const initialState: UserState = {
-  user: { uid: "123", email: "test@test.com" } as User,
   isLoading: false,
   errorMessage: "",
 };
