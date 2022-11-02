@@ -271,7 +271,8 @@ export default function ProfileOverViewScreen({
                             <Text style={{ fontSize: 17 }}>
                               {getAvatar(profile.avatar).icon}
                             </Text>
-                            {currentProfile?.role === "Admin" && (
+                            {(currentProfile?.role === "Admin",
+                            profile.role === "User") && (
                               <TouchableOpacity
                                 onPress={() =>
                                   Alert.alert(
