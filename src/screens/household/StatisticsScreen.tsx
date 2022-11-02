@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import {
-  Button,
+  Alert,
+  GestureResponderEvent,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -35,6 +36,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { getUserProfiles } from "../../store/slices/profileSlice";
 import { getUserHouseholds } from "../../store/slices/householdSlice";
 import { wait } from "../login/ProfileScreen";
+import { Button, SegmentedButtons } from "react-native-paper";
 
 // Vecka Månadg, All-Time
 
@@ -67,7 +69,8 @@ export default function StatisticsScreen({
     "Previous Month",
     "All Time",
   ];
-
+  // let period : string = "";
+  const [period, setPeriod] = React.useState("");
   const { chores, total } = useAppSelector(
     selectStatisticsForPeriod(allPeriods[statisticIndex])
   );
@@ -88,35 +91,19 @@ export default function StatisticsScreen({
       </ScrollView>
     );
   }
-
   return (
     <ScrollView>
-      <View>
+      <View style={{ alignItems: "center" }}>
         {/* OVERALL "CONTRIBUTION" */}
         <Text style={{ fontSize: 22, textAlign: "center" }}>
           Household Tasks
         </Text>
-        <Text>tit: {total.title}</Text>
-        <Text>dat0: {total.data[0]}</Text>
-        <Text>dat0: {total.data[1]}</Text>
-        <Text>dat0: {total.data[2]}</Text>
-        <Text>dat0: {total.data[3]}</Text>
-        <Text>dat0: {total.data[4]}</Text>
-        <Text>dat0: {total.data[5]}</Text>
-        <Text>Label 0: {total.labels[0]}</Text>
-        <Text>Label 0: {total.labels[1]}</Text>
-        <Text>Label 0: {total.labels[2]}</Text>
-        <Text>Label 0: {total.labels[3]}</Text>
-        <Text>Label 0: {total.labels[4]}</Text>
-        <Text>Label 0: {total.labels[5]}</Text>
 
         <Text style={{ fontSize: 22, textAlign: "center" }}>
           {allPeriods[statisticIndex]}
         </Text>
-
         <View style={styles.container2}>
           <Pressable
-            style={styles.selectButton}
             onPress={() => {
               if (statisticIndex === 0) {
                 setStatisticIndex(allPeriods.length - 1);
@@ -125,10 +112,39 @@ export default function StatisticsScreen({
               }
             }}
           >
-            <Text>Prev</Text>
+            <SegmentedButtons
+              value={""}
+              onValueChange={() => null}
+              density="medium"
+              buttons={[
+                {
+                  value: "Previous",
+                  label: "",
+                  icon: "arrow-left-drop-circle",
+                  onPress: () => {
+                    if (statisticIndex === 0) {
+                      setStatisticIndex(allPeriods.length - 1);
+                    } else {
+                      setStatisticIndex(statisticIndex - 1);
+                    }
+                  },
+                },
+                {
+                  value: "Next",
+                  label: "",
+                  icon: "arrow-right-drop-circle",
+                  onPress: () => {
+                    if (statisticIndex === allPeriods.length - 1) {
+                      setStatisticIndex(0);
+                    } else {
+                      setStatisticIndex(statisticIndex + 1);
+                    }
+                  },
+                },
+              ]}
+            />
           </Pressable>
           <Pressable
-            style={styles.selectButton}
             onPress={() => {
               if (statisticIndex === allPeriods.length - 1) {
                 setStatisticIndex(0);
@@ -136,37 +152,47 @@ export default function StatisticsScreen({
                 setStatisticIndex(statisticIndex + 1);
               }
             }}
-          >
-            <Text>Next</Text>
-          </Pressable>
+          ></Pressable>
         </View>
-
         <View style={styles.container}>
           <Text style={{ fontSize: 18, textAlign: "center" }}>
             {total.title}
           </Text>
           <VictoryPie
             labels={total.labels}
-            width={200}
-            height={200}
+            width={300}
+            height={300}
             colorScale={total.colorScale}
             data={total.data}
+            style={{
+              data: {
+                fillOpacity: 0.9,
+                stroke: "#000",
+                strokeWidth: 0.5,
+              },
+            }}
           />
         </View>
-
-        <View style={styles.container}>
+        <View style={styles.container2}>
           {chores.map((c) => {
             return (
               <View key={c.title}>
                 <Text style={{ fontSize: 18, textAlign: "center" }}>
-                  {c.title}
+                  Task: {c.title}
                 </Text>
                 <VictoryPie
                   labels={c.labels}
-                  width={200}
-                  height={200}
+                  width={190}
+                  height={190}
                   colorScale={c.colorScale}
                   data={c.data}
+                  style={{
+                    data: {
+                      fillOpacity: 0.9,
+                      stroke: "#000",
+                      strokeWidth: 0.5,
+                    },
+                  }}
                 />
               </View>
             );
@@ -180,7 +206,7 @@ export default function StatisticsScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
     flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "center",
@@ -198,7 +224,8 @@ const styles = StyleSheet.create({
   },
   container2: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
-    justifyContent: "center",
+    alignContent: "center",
   },
 });
