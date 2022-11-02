@@ -17,6 +17,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Formik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Slider from "@react-native-community/slider";
+import { Style } from "victory-core";
 
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
@@ -125,159 +126,161 @@ export default function CreateTask({
             isValid,
           }) => (
             <>
-              <KeyboardAwareScrollView>
-                <View>
-                  <Text
-                    style={{
-                      fontSize: 17,
-                      fontWeight: "400",
-                      color: "black",
-                    }}
-                  >
-                    Title
-                  </Text>
-                  <TextInput
-                    placeholder="Title"
-                    style={styles.input}
-                    onChangeText={handleChange("name")}
-                    onBlur={handleBlur("name")}
-                    value={values.name}
-                  />
-                  {errors.name && touched.name && (
+              <SafeAreaView style={styles.container}>
+                <KeyboardAwareScrollView>
+                  <View>
                     <Text
                       style={{
-                        color: "red",
-                      }}
-                    >
-                      {errors.name}
-                    </Text>
-                  )}
-                  <Text
-                    style={{
-                      fontSize: 17,
-                      fontWeight: "400",
-                      color: "black",
-                    }}
-                  >
-                    Description
-                  </Text>
-                  <TextInput
-                    placeholder="Description"
-                    style={styles.input}
-                    onChangeText={handleChange("description")}
-                    onBlur={handleBlur("description")}
-                    value={values.description}
-                  />
-                  {errors.description && touched.description && (
-                    <Text
-                      style={{
-                        color: "red",
-                      }}
-                    >
-                      {errors.description}
-                    </Text>
-                  )}
-
-                  <View style={{ alignItems: 'center' }}>
-                    <Text
-                      style={{
-                        fontSize: 20,
+                        fontSize: 17,
                         fontWeight: "400",
                         color: "black",
                       }}
                     >
-                      Difficulty
+                      Title
                     </Text>
-                    <Text>{sliderValueDifficulty}</Text>
-                    <Slider style={{ width: 200, height: 40 }}
-                      minimumValue={1}
-                      maximumValue={5}
-                      onValueChange={(value) => setSliderValueDifficulty(value)}
-                      step={1}
-                      value={values.difficulty = sliderValueDifficulty}
-                      maximumTrackTintColor="#ff0000"
-                      minimumTrackTintColor="#00ff00"
+                    <TextInput
+                      placeholder="Title"
+                      style={styles.input}
+                      onChangeText={handleChange("name")}
+                      onBlur={handleBlur("name")}
+                      value={values.name}
                     />
-
+                    {errors.name && touched.name && (
+                      <Text
+                        style={{
+                          color: "red",
+                        }}
+                      >
+                        {errors.name}
+                      </Text>
+                    )}
                     <Text
                       style={{
-                        fontSize: 20,
+                        fontSize: 17,
                         fontWeight: "400",
                         color: "black",
                       }}
                     >
-                      Frequency
+                      Description
                     </Text>
-                    <Text>{sliderValueFrequency}</Text>
-                    <Slider style={{ width: 200, height: 40 }}
-                      minimumValue={1}
-                      maximumValue={31}
-                      onValueChange={(value) => setSliderValyeFrequency(value)}
-                      step={1}
-                      value={values.frequency = sliderValueFrequency}
-                      maximumTrackTintColor="#ff0000"
-                      minimumTrackTintColor="#00ff00"
+                    <TextInput
+                      placeholder="Description"
+                      style={styles.input}
+                      onChangeText={handleChange("description")}
+                      onBlur={handleBlur("description")}
+                      value={values.description}
                     />
+                    {errors.description && touched.description && (
+                      <Text
+                        style={{
+                          color: "red",
+                        }}
+                      >
+                        {errors.description}
+                      </Text>
+                    )}
+
+                    <View style={{ alignItems: 'center' }}>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          fontWeight: "400",
+                          color: "black",
+                        }}
+                      >
+                        Difficulty
+                      </Text>
+                      <Text>{sliderValueDifficulty}</Text>
+                      <Slider style={{ width: 200, height: 40 }}
+                        minimumValue={1}
+                        maximumValue={5}
+                        onValueChange={(value) => setSliderValueDifficulty(value)}
+                        step={1}
+                        value={values.difficulty = sliderValueDifficulty}
+                        maximumTrackTintColor="#ff0000"
+                        minimumTrackTintColor="#00ff00"
+                      />
+
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          fontWeight: "400",
+                          color: "black",
+                        }}
+                      >
+                        Frequency
+                      </Text>
+                      <Text>{sliderValueFrequency}</Text>
+                      <Slider style={{ width: 200, height: 40 }}
+                        minimumValue={1}
+                        maximumValue={31}
+                        onValueChange={(value) => setSliderValyeFrequency(value)}
+                        step={1}
+                        value={values.frequency = sliderValueFrequency}
+                        maximumTrackTintColor="#ff0000"
+                        minimumTrackTintColor="#00ff00"
+                      />
+                    </View>
                   </View>
-                </View>
 
-                {baseProfile?.role === "Admin" && isEditing && (
-                  <Button
-                    icon="plus-circle-outline"
-                    mode="contained"
-                    buttonColor="#DCCFCF"
-                    textColor="#000"
-                    style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                    onPress={async () => {
-                      const r = await dispatch(
-                        deleteTask({
-                          task: baseTask!,
-                        })
-                      );
+                  {baseProfile?.role === "Admin" && isEditing && (
+                    <Button
+                      icon="plus-circle-outline"
+                      mode="contained"
+                      buttonColor="#DCCFCF"
+                      textColor="#000"
+                      style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+                      onPress={async () => {
+                        const r = await dispatch(
+                          deleteTask({
+                            task: baseTask!,
+                          })
+                        );
 
-                      if (r.meta.requestStatus === "fulfilled") {
-                        navigation.goBack();
-                      }
+                        if (r.meta.requestStatus === "fulfilled") {
+                          navigation.goBack();
+                        }
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  )}
+
+                  <View
+                    style={{
+                      position: "relative",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      flexDirection: "row",
+                      width: "92%",
+                      bottom: 5,
+                      padding: 5,
                     }}
                   >
-                    Delete
-                  </Button>
-                )}
-
-                <View
-                  style={{
-                    position: "relative",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    flexDirection: "row",
-                    width: "92%",
-                    bottom: 5,
-                    padding: 5,
-                  }}
-                >
-                  <Button
-                    icon="plus-circle-outline"
-                    mode="contained"
-                    buttonColor="#DCCFCF"
-                    textColor="#000"
-                    style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                    onPress={() => {
-                      handleSubmit();
-                    }}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    icon="close"
-                    mode="contained-tonal"
-                    buttonColor="#DCCFCF"
-                    style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                    onPress={() => navigation.goBack()}
-                  >
-                    Close
-                  </Button>
-                </View>
-              </KeyboardAwareScrollView>
+                    <Button
+                      icon="plus-circle-outline"
+                      mode="contained"
+                      buttonColor="#DCCFCF"
+                      textColor="#000"
+                      style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+                      onPress={() => {
+                        handleSubmit();
+                      }}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      icon="close"
+                      mode="contained-tonal"
+                      buttonColor="#DCCFCF"
+                      style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
+                      onPress={() => navigation.goBack()}
+                    >
+                      Close
+                    </Button>
+                  </View>
+                </KeyboardAwareScrollView>
+              </SafeAreaView>
             </>
           )}
         </Formik>
