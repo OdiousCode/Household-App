@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { useSelector } from "react-redux";
 import { Household, Profile, ProfileDTO } from "../../data/APItypes";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
@@ -11,9 +11,6 @@ import { createProfile } from "../../store/slices/profileSlice";
 import {} from "../../store/slices/userSlice";
 import { useAppDispatch } from "../../store/store";
 import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
-
-// import { setName } from "../store/profileSlice";
-// import { useAppDispatch, useAppSelector } from "../store/store";
 
 export default function CreateHouseHoldScreen({
   navigation,
@@ -31,7 +28,6 @@ export default function CreateHouseHoldScreen({
         placeholder="Name"
       ></TextInput>
 
-      {/* //TODO better */}
       <Button
         icon="login"
         mode="contained"
@@ -71,6 +67,9 @@ export default function CreateHouseHoldScreen({
       >
         Create household
       </Button>
+      <Pressable style={styles.button} onPress={() => navigation.goBack()}>
+          <Text>Cancel</Text>
+        </Pressable>
     </View>
   );
 }
@@ -86,4 +85,7 @@ const styles = StyleSheet.create({
     color: "black",
     margin: 10,
   },
+  button: {
+    marginTop: 20
+  }
 });

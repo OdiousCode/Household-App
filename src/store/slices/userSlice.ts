@@ -22,13 +22,8 @@ interface UserState {
   errorMessage: string;
 }
 
-// const initialState: UserState = {
-//   user: undefined,
-//   isLoading: false,
-//   errorMessage: "",
-// };
 const initialState: UserState = {
-  user: { uid: "123", email: "test@test.com" } as User,
+  user: undefined,
   isLoading: false,
   errorMessage: "",
 };
@@ -125,9 +120,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logOut } = userSlice.actions;
-// export const selectUser = (state: UserState) => {
-//   return state.user;
-// };
-
+export const { logOut, logIn } = userSlice.actions;
 export const userReducer = userSlice.reducer;

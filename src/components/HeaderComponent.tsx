@@ -59,7 +59,7 @@ function CustomNavigationBar(props: Props) {
       <Appbar.Header style={styles.header}>
         {checkIfProfileActive() ? (
           <>
-            <Appbar.Content style={styles.title} title={props.title} />
+            <Appbar.Content style={styles.title} title={props.userEmail} />
             <Menu
               visible={visible}
               onDismiss={closeMenu}
