@@ -41,24 +41,37 @@ export default function HouseholdTopTabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
+        tabBarIndicatorStyle: {
+          height: 1,
+          backgroundColor: "#000",
+        },
         tabBarInactiveTintColor: "#444",
-        tabBarLabel: "",
-        tabBarStyle: { backgroundColor: "orange", height: 1 },
+        tabBarStyle: { backgroundColor: "#ddd", height: 35 },
       }}
     >
       <Tab.Screen
         name="ProfileOverViewScreen"
         component={ProfileOverViewScreen}
+        options={{ tabBarLabel: "🤦" }}
       />
       {/* TODO remove */}
       {/* <Tab.Screen name="TaskScreen" component={TaskScreen} /> */}
-      <Tab.Screen name="StatisticsScreen" component={StatisticsScreen} />
-      <Tab.Screen name="TaskOverviewScreen" component={TaskOverviewScreen} />
+      <Tab.Screen
+        name="StatisticsScreen"
+        component={StatisticsScreen}
+        options={{ tabBarLabel: "📑" }}
+      />
+      <Tab.Screen
+        name="TaskOverviewScreen"
+        component={TaskOverviewScreen}
+        options={{ tabBarLabel: "✔️" }}
+      />
       {myProfile?.role === "Admin" && (
         <Tab.Screen
           name="PendingApplicationScreen"
           //TODO fix later (temporary fix for CI) V
           component={PendingApplicationScreen as any}
+          options={{ tabBarLabel: "⏱️" }}
         />
       )}
     </Tab.Navigator>

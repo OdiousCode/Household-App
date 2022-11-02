@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -22,6 +22,7 @@ import {
   selectProfilesByActiveHousehold,
   selectUserProfiles,
   selectValidProfilesByActiveHousehold,
+  updateProfile,
 } from "../../store/slices/profileSlice";
 import {
   getUserHouseholds,
@@ -266,9 +267,75 @@ export default function ProfileOverViewScreen({
                               {profile.name}
                             </Text>
                           </View>
-                          <Text style={{ fontSize: 17 }}>
-                            {getAvatar(profile.avatar).icon}
-                          </Text>
+                          <View style={{ flexDirection: "row" }}>
+                            <Text style={{ fontSize: 17 }}>
+                              {getAvatar(profile.avatar).icon}
+                            </Text>
+                            {currentProfile?.role === "Admin" && (
+                              <TouchableOpacity
+                                onPress={() =>
+                                  Alert.alert(
+                                    profile.name,
+                                    householdData.name,
+                                    [
+                                      {
+                                        text: "Make this user Admin",
+                                        onPress: () => {
+                                          Alert.alert(
+                                            "Give admin rights to " +
+                                              profile.name,
+                                            "Are you sure you want to make this user an admin?",
+                                            [
+                                              {
+                                                text: "Yes",
+                                                onPress: async () => {
+                                                  // TODO
+                                                  //update Profile? currentprofile to name + avatar as wished
+
+                                                  let newProfile: Profile = {
+                                                    avatar: profile.avatar,
+                                                    name: profile.name,
+                                                    email: profile.email,
+                                                    householdId:
+                                                      profile.householdId,
+                                                    id: profile.id,
+                                                    pending: profile.pending,
+                                                    role: "Admin",
+                                                    userId: profile.userId,
+                                                  };
+
+                                                  const r = await dispatch(
+                                                    updateProfile({
+                                                      profile: newProfile,
+                                                    })
+                                                  );
+                                                },
+                                              },
+                                              {
+                                                text: "No",
+                                              },
+                                            ]
+                                          );
+                                        },
+                                      },
+                                      {
+                                        text: "Cancel",
+                                      },
+                                    ],
+                                    {
+                                      cancelable: true,
+                                      onDismiss: () =>
+                                        Alert.alert(
+                                          "Canceled update of the user"
+                                        ),
+                                    }
+                                  )
+                                }
+                              >
+                                <Text>👑</Text>
+                              </TouchableOpacity>
+                            )}
+                          </View>
                         </View>
                       </Card>
                     )}

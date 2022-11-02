@@ -1,13 +1,12 @@
-import {
-  useNavigation,
-} from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Appbar, Menu } from "react-native-paper";
 import { Text, StyleSheet } from "react-native";
 import { auth } from "../data/firebase/config";
-import { logOut} from "../store/slices/userSlice";
+import { logOut } from "../store/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { getAvatar } from "../constants/Layout";
+import { selectActiveHousehold } from "../store/slices/householdSlice";
 
 export type Props = {
   title: string;
@@ -22,8 +21,13 @@ function CustomNavigationBar(props: Props) {
   const sayHello = () => navigation.goBack();
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const activeHouseHold = useAppSelector((state) => state.profiles.activeProfile?.householdId);
-
+  const activeHouseHold = useAppSelector(
+    (state) => state.profiles.activeProfile?.householdId
+  );
+  const activeProfileName = useAppSelector(
+    (state) => state.profiles.activeProfile?.name
+  );
+  const householdData = useAppSelector(selectActiveHousehold);
   function logOutOfapp() {
     dispatch(logOut());
     auth.signOut();
@@ -42,7 +46,15 @@ function CustomNavigationBar(props: Props) {
       return false;
     }
   }
+  const getCurrentDate = () => {
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
 
+    //Alert.alert(date + '-' + month + '-' + year);
+    // You can turn it in to your desired format
+    return date + "-" + month + "-" + year; //format: d-m-y;
+  };
   let activeProfile = useAppSelector((state) => state.profiles.activeProfile);
   const appbarIcon = ({}) => {
     return <Text>{getAvatar(activeProfile!.avatar).icon}</Text>;
@@ -59,7 +71,8 @@ function CustomNavigationBar(props: Props) {
       <Appbar.Header style={styles.header}>
         {checkIfProfileActive() ? (
           <>
-            <Appbar.Content style={styles.title} title={props.title} />
+            <Text style={styles.household}>{householdData?.name}</Text>
+            <Appbar.Content style={styles.title} title={activeProfileName} />
             <Menu
               visible={visible}
               onDismiss={closeMenu}
@@ -85,6 +98,7 @@ function CustomNavigationBar(props: Props) {
           </>
         ) : (
           <>
+            <Text>{getCurrentDate()}</Text>
             <Appbar.Content style={styles.title} title={props.title} />
             <Menu
               visible={visible}
@@ -128,15 +142,19 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    height: 80,
-    justifyContent: "space-between",
+    height: 25,
+    justifyContent: "space-evenly",
     alignItems: "center",
-    flexDirection: "column",
-    backgroundColor: "orange",
+    flexDirection: "row",
+    backgroundColor: "#DDD",
   },
   container: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  household: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
