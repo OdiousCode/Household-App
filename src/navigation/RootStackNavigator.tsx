@@ -27,6 +27,7 @@ import HouseholdTopTabNavigator, {
 import { Profile } from "../data/APItypes";
 import PortalWaitingScreen from "../screens/login/PortalWaitingScreen";
 import CreateTask from "../screens/login/CreateTaskScreen";
+import { legacy_createStore } from "redux";
 
 // import LoginScreen from "../screens/LoginScreen";
 
@@ -54,6 +55,7 @@ export type RootScreenProps<Screen extends keyof RootStackParamList> =
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootStackNavigator() {
+
   let user = useAppSelector((state) => state.user?.user);
   
   const dispatch = useAppDispatch();
@@ -63,7 +65,7 @@ export default function RootStackNavigator() {
       if (userAuth != null)
         user = userAuth;
    
-      if (userAuth?.email == user?.email) { 
+      if (userAuth) { 
         dispatch(logIn(user));
       } else {
         dispatch(logOut());
