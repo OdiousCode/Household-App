@@ -130,7 +130,7 @@ export default function TaskOverviewScreen({
         lateTasks.push(task);
       } else if (DaysToDue == 0) {
         todayTasks.push(task);
-      } else if (DaysToDue <= 5) {
+      } else if (DaysToDue <= 7) {
         currentWeekTasks.push(task);
       } else if (DaysToDue <= 14) {
         nextWeekTasks.push(task);
@@ -197,16 +197,49 @@ export default function TaskOverviewScreen({
         </Dialog.Container>
         {/* <Button title="Go back" onPress={() => navigation.goBack()} /> */}
 
-        <View style={{ height: 700, width: "90%" }}>
-          {lateTasks.length > 0 && <Text>Late Tasks</Text>}
+        <View
+          style={{
+            height: 500,
+            // height: 600,
+            width: "90%",
+            alignItems: "center",
+            // justifyContent: "",
+          }}
+        >
+          {lateTasks.length > 0 && (
+            <View style={{ width: "90%", alignItems: "center" }}>
+              <Text>Late Tasks</Text>
+            </View>
+          )}
           {FlatListFast(lateTasks)}
-          {todayTasks.length > 0 && <Text>Today Tasks</Text>}
+
+          {todayTasks.length > 0 && (
+            <View style={{ width: "90%", alignItems: "center" }}>
+              <Text>Today Tasks</Text>
+            </View>
+          )}
           {FlatListFast(todayTasks)}
-          {currentWeekTasks.length > 0 && <Text>Current week Tasks</Text>}
+
+          {currentWeekTasks.length > 0 && (
+            <View style={{ width: "90%", alignItems: "center" }}>
+              <Text>Current week Tasks</Text>
+            </View>
+          )}
           {FlatListFast(currentWeekTasks)}
-          {nextWeekTasks.length > 0 && <Text>Next week Tasks</Text>}
+
+          {nextWeekTasks.length > 0 && (
+            <View style={{ width: "90%", alignItems: "center" }}>
+              <Text>Next week Tasks</Text>
+            </View>
+          )}
           {FlatListFast(nextWeekTasks)}
-          {laterThenTHatTask.length > 0 && <Text> Future Tasks</Text>}
+
+          {laterThenTHatTask.length > 0 ||
+            (noTimeFrameTasks.length > 0 && (
+              <View style={{ width: "90%", alignItems: "center" }}>
+                <Text> Other Tasks</Text>
+              </View>
+            ))}
           {FlatListFast(laterThenTHatTask)}
           {FlatListFast(noTimeFrameTasks)}
         </View>
