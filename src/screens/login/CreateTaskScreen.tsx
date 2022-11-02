@@ -5,7 +5,7 @@ import RootStackNavigator, {
 } from "../../navigation/RootStackNavigator";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { Task } from "../../data/APItypes";
-import {} from "../../store/slices/householdSlice";
+import { } from "../../store/slices/householdSlice";
 import { Button } from "react-native-paper";
 import {
   createHouseholdTask,
@@ -16,6 +16,8 @@ import * as yup from "yup";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Formik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Slider from "@react-native-community/slider";
+import { Style } from "victory-core";
 
 // import { setName } from "../store/profileSlice";
 // import { useAppDispatch, useAppSelector } from "../store/store";
@@ -30,6 +32,9 @@ export default function CreateTask({
   let baseTask = useAppSelector((state) =>
     state.tasks.householdTasks.find((t) => t.id === route.params?.taskId)
   );
+
+  const [sliderValueDifficulty, setSliderValueDifficulty] = useState(1);
+  const [sliderValueFrequency, setSliderValyeFrequency] = useState(1);
 
   if (!baseProfile) {
     //TODO 404
@@ -92,35 +97,36 @@ export default function CreateTask({
   if (viewOnly === false) {
     return (
       <>
-        <SafeAreaView style={styles.container}>
-          <Text style={styles.title}>Task</Text>
 
-          <Formik
-            validateOnChange={true}
-            validationSchema={TaskValidationSchema}
-            initialValues={{
-              name: startStateName,
-              description: startStateDesc,
-              difficulty: startStateDiff,
-              frequency: startStateFreq,
-              isArchived: false,
-              householdId: "",
-              id: "",
-            }}
-            onSubmit={(values) => {
-              handleFormSubmit(values);
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              handleBlur,
-              values,
-              errors,
-              touched,
-              isValid,
-            }) => (
-              <>
+        <Text style={styles.title}>Task</Text>
+
+        <Formik
+          validateOnChange={true}
+          validationSchema={TaskValidationSchema}
+          initialValues={{
+            name: startStateName,
+            description: startStateDesc,
+            difficulty: startStateDiff,
+            frequency: startStateFreq,
+            isArchived: false,
+            householdId: "",
+            id: "",
+          }}
+          onSubmit={(values) => {
+            handleFormSubmit(values);
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            values,
+            errors,
+            touched,
+            isValid,
+          }) => (
+            <>
+              <SafeAreaView style={styles.container}>
                 <KeyboardAwareScrollView>
                   <View>
                     <Text
@@ -159,15 +165,7 @@ export default function CreateTask({
                     </Text>
                     <TextInput
                       placeholder="Description"
-                      style={{
-                        color: "black",
-                        margin: 10,
-                        backgroundColor: "#E8E8E8",
-                        padding: 15,
-                        alignContent: "flex-start",
-                        width: 350,
-                        height: 100,
-                      }}
+                      style={styles.input}
                       onChangeText={handleChange("description")}
                       onBlur={handleBlur("description")}
                       value={values.description}
@@ -181,60 +179,48 @@ export default function CreateTask({
                         {errors.description}
                       </Text>
                     )}
-                    <Text
-                      style={{
-                        fontSize: 17,
-                        fontWeight: "400",
-                        color: "black",
-                      }}
-                    >
-                      Difficulty
-                    </Text>
-                    <TextInput
-                      placeholder="Difficulty"
-                      style={styles.input}
-                      onChangeText={handleChange("difficulty")}
-                      onBlur={handleBlur("difficulty")}
-                      value={values.difficulty.toString()}
-                      maxLength={1}
-                      keyboardType={"numeric"}
-                    />
-                    {errors.difficulty && touched.difficulty && (
+
+                    <View style={{ alignItems: 'center' }}>
                       <Text
                         style={{
-                          color: "red",
+                          fontSize: 20,
+                          fontWeight: "400",
+                          color: "black",
                         }}
                       >
-                        {errors.difficulty}
+                        Difficulty
                       </Text>
-                    )}
-                    <Text
-                      style={{
-                        fontSize: 17,
-                        fontWeight: "400",
-                        color: "black",
-                      }}
-                    >
-                      Frequency
-                    </Text>
-                    <TextInput
-                      placeholder="Frequency"
-                      style={styles.input}
-                      onChangeText={handleChange("frequency")}
-                      onBlur={handleBlur("frequency")}
-                      value={values.frequency.toString()}
-                      maxLength={1}
-                      keyboardType={"numeric"}
-                    />
-                    {errors.frequency && touched.frequency && (
+                      <Text>{sliderValueDifficulty}</Text>
+                      <Slider style={{ width: 200, height: 40 }}
+                        minimumValue={1}
+                        maximumValue={5}
+                        onValueChange={(value) => setSliderValueDifficulty(value)}
+                        step={1}
+                        value={values.difficulty = sliderValueDifficulty}
+                        maximumTrackTintColor="#ff0000"
+                        minimumTrackTintColor="#00ff00"
+                      />
+
                       <Text
                         style={{
-                          color: "red",
+                          fontSize: 20,
+                          fontWeight: "400",
+                          color: "black",
                         }}
                       >
-                        {errors.frequency}
+                        Frequency
                       </Text>
-                    )}
+                      <Text>{sliderValueFrequency}</Text>
+                      <Slider style={{ width: 200, height: 40 }}
+                        minimumValue={1}
+                        maximumValue={31}
+                        onValueChange={(value) => setSliderValyeFrequency(value)}
+                        step={1}
+                        value={values.frequency = sliderValueFrequency}
+                        maximumTrackTintColor="#ff0000"
+                        minimumTrackTintColor="#00ff00"
+                      />
+                    </View>
                   </View>
 
                   {baseProfile?.role === "Admin" && isEditing && (
@@ -259,56 +245,47 @@ export default function CreateTask({
                       Delete
                     </Button>
                   )}
+                </KeyboardAwareScrollView>
 
-                  <View
-                    style={{
-                      position: "relative",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      flexDirection: "row",
-                      width: "92%",
-                      bottom: 5,
-                      padding: 5,
+                <View
+                  style={{
+                    position: 'relative',
+                    justifyContent: 'space-around',
+                    alignItems: "center",
+                    flexDirection: "row",
+                    bottom: 15,
+
+
+                  }}
+                >
+
+                  <Button
+                    icon="plus-circle-outline"
+                    mode="contained"
+                    buttonColor="#DCCFCF"
+                    textColor="#000"
+                    style={{ right: '90%', borderRadius: 50, borderWidth: 1, width: 150 }}
+                    onPress={() => {
+                      handleSubmit();
                     }}
                   >
-                    <Button
-                      icon="plus-circle-outline"
-                      mode="contained"
-                      buttonColor="#DCCFCF"
-                      textColor="#000"
-                      style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                      onPress={() => {
-                        handleSubmit();
-                      }}
-                    >
-                      Save
-                    </Button>
-                    <Button
-                      icon="close"
-                      mode="contained-tonal"
-                      buttonColor="#DCCFCF"
-                      style={{ borderRadius: 50, borderWidth: 1, width: 150 }}
-                      onPress={() => navigation.goBack()}
-                    >
-                      Close
-                    </Button>
-                  </View>
-                </KeyboardAwareScrollView>
-              </>
-            )}
-          </Formik>
-          <View
-            style={{
-              position: "absolute",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
-              width: "100%",
-              bottom: 25,
-              padding: 10,
-            }}
-          ></View>
-        </SafeAreaView>
+                    Save
+                  </Button>
+                  <Button
+                    icon="close"
+                    mode="contained-tonal"
+                    buttonColor="#DCCFCF"
+                    style={{ left: '90%', borderRadius: 50, borderWidth: 1, width: 150 }}
+                    onPress={() => navigation.goBack()}
+                  >
+                    Close
+                  </Button>
+                </View>
+
+              </SafeAreaView>
+            </>
+          )}
+        </Formik>
       </>
     );
   } else {
@@ -325,16 +302,27 @@ export default function CreateTask({
           <Text>{startStateFreq}</Text>
         </View>
         <View>
-          <Pressable
-            style={styles.button}
+
+          <Button
+            icon="arrow-u-left-top"
+            mode="contained"
+            buttonColor="#FFF"
+            textColor="#000"
+            style={{
+              borderRadius: 50,
+              borderWidth: 0.5,
+              width: 150,
+              borderColor: "#000",
+              margin: 10,
+            }}
             onPress={async () => {
               navigation.replace("HouseholdTopTabNavigator", {
                 screen: "TaskOverviewScreen",
               });
             }}
           >
-            <Text>Go Back</Text>
-          </Pressable>
+            Go back
+          </Button>
         </View>
       </View>
     );
@@ -394,16 +382,16 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
-    width: "90%",
+    width: "100%",
     borderRadius: 10,
   },
   title: {
     fontSize: 32,
-    paddingBottom: 50,
+    paddingBottom: 15,
   },
   input: {
     color: "black",
-    margin: 10,
+
     backgroundColor: "#E8E8E8",
     padding: 15,
     alignItems: "center",
