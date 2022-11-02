@@ -7,6 +7,10 @@ import { householdReducer } from "./slices/householdSlice";
 import { taskReducer } from "./slices/taskSlice";
 
 export const store = configureStore({
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
   reducer: {
     user: userReducer,
     profiles: profileReducer,
