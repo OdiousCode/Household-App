@@ -46,37 +46,6 @@ export default function TaskOverviewScreen({
       dispatch(getUserProfiles());
     }, [])
   );
-
-  const householdTasks = useAppSelector(selectActiveHouseholdTask);
-  const allProfs = useAppSelector((p) => p.profiles.profiles);
-
-  const householdTaskHistory = useAppSelector(
-    selectActiveHouseholdTaskHistories
-  );
-  const activeProfile = useAppSelector((state) => state.profiles.activeProfile);
-  householdTaskHistory.sort((a, b) => b.date - a.date);
-  const activeHousehold = useAppSelector(selectActiveHousehold);
-  const getCurrentDate = () => {
-    var date = new Date().getDate();
-    var month = new Date().getMonth() + 1;
-    var year = new Date().getFullYear();
-
-    //Alert.alert(date + '-' + month + '-' + year);
-    // You can turn it in to your desired format
-    return date + "-" + month + "-" + year; //format: d-m-y;
-  };
-
-  let d = new Date();
-
-  const weekday = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
   const [visible, setVisible] = useState(false);
   const showDialog = () => {
     setVisible(true);
@@ -85,6 +54,7 @@ export default function TaskOverviewScreen({
   const handleCancel = () => {
     setVisible(false);
   };
+
   const handleOk = (newName: string) => {
     Alert.alert("Change name to", newName);
     // let newHH = activeHousehold;
@@ -100,7 +70,91 @@ export default function TaskOverviewScreen({
     // ...Your logic
     setVisible(false);
   };
-  let day = weekday[d.getDay()];
+
+  const getCurrentDate = () => {
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    // You can turn it in to your desired format
+    return date + "-" + month + "-" + year; //format: d-m-y;
+  };
+  let currentDate = new Date();
+  const weekday = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  let day = weekday[currentDate.getDay()];
+
+  const allProfs = useAppSelector((p) => p.profiles.profiles);
+  const activeProfile = useAppSelector((state) => state.profiles.activeProfile);
+  const activeHousehold = useAppSelector(selectActiveHousehold);
+
+  const householdTasks = useAppSelector(selectActiveHouseholdTask);
+  const householdTaskHistory = useAppSelector(
+    selectActiveHouseholdTaskHistories
+  );
+
+  householdTaskHistory.sort((a, b) => b.date - a.date);
+
+  //TODO order by due date
+  let orderByDueTasks = new Map<TaskHistory | undefined, Task>();
+
+  let lateTasks: Task[] = [];
+  let todayTasks: Task[] = [];
+  let currentWeekTasks: Task[] = [];
+  let nextWeekTasks: Task[] = [];
+
+  let laterThenTHatTask: Task[] = [];
+  let noTimeFrameTasks: Task[] = [];
+
+  householdTasks.forEach((task) => {
+    let taskHistory = householdTaskHistory.find(
+      (hth) => hth.taskId === task.id
+    );
+    if (taskHistory) {
+      var whenTaskWasDone = taskHistory.date;
+      var numberOfDaysToAdd = task.frequency;
+      let dateShouldBeDone =
+        whenTaskWasDone + numberOfDaysToAdd * 24 * 60 * 60 * 1000;
+
+      let DaysToDue = Math.ceil(
+        (dateShouldBeDone - Date.now()) / (1000 * 3600 * 24)
+      );
+
+      if (DaysToDue < 0) {
+        lateTasks.push(task);
+      } else if (DaysToDue == 0) {
+        todayTasks.push(task);
+      } else if (DaysToDue <= 5) {
+        currentWeekTasks.push(task);
+      } else if (DaysToDue <= 14) {
+        nextWeekTasks.push(task);
+      } else {
+        laterThenTHatTask.push(task);
+      }
+    } else {
+      noTimeFrameTasks.push(task);
+    }
+  });
+  // now i have a list with tasks and due dates
+
+  console.log("lateTasks" + lateTasks);
+  console.log("todayTasks" + todayTasks);
+  console.log("currentWeekTasks" + currentWeekTasks);
+  console.log("nextWeekTasks" + nextWeekTasks);
+  console.log("laterThenTHatTask" + laterThenTHatTask);
+  console.log("noTimeFrameTasks" + noTimeFrameTasks);
+
+  console.log("---------------");
+  console.log(currentWeekTasks);
+  console.log("---------------");
+
+  console.log(householdTasks);
 
   return (
     <>
@@ -142,116 +196,21 @@ export default function TaskOverviewScreen({
           <Dialog.Button label="Ok" onPress={() => handleOk(newHouseName)} />
         </Dialog.Container>
         {/* <Button title="Go back" onPress={() => navigation.goBack()} /> */}
-        <View style={{ height: 500, width: "90%" }}>
-          <FlatList
-            style={{ flex: 1, width: "100%" }}
-            data={householdTasks}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item: task }) => {
-              let taskHistory = householdTaskHistory.find(
-                (hth) => hth.taskId === task.id
-              );
 
-              let daysToMostRecent = "?";
-              if (taskHistory) {
-                let tempHolder = Math.ceil(
-                  (taskHistory.date - Date.now()) / (1000 * 3600 * 24)
-                );
-
-                if (tempHolder === 0) {
-                  daysToMostRecent = "Today";
-                } else if (tempHolder == -1) {
-                  daysToMostRecent = "Yesterday";
-                } else if (tempHolder == -2) {
-                  daysToMostRecent = "Before yesterday";
-                } else {
-                  daysToMostRecent = tempHolder.toString();
-                }
-              }
-
-              let shouldBeDone = "0";
-              if (taskHistory) {
-                var whenTaskWasDone = taskHistory?.date;
-                var numberOfDaysToAdd = task.frequency;
-                let dateShouldBeDone =
-                  whenTaskWasDone + numberOfDaysToAdd * 24 * 60 * 60 * 1000;
-
-                let tempHolder = Math.ceil(
-                  (dateShouldBeDone - Date.now()) / (1000 * 3600 * 24)
-                );
-
-                if (dateShouldBeDone < Date.now()) {
-                  if (tempHolder === 0) {
-                    shouldBeDone = "Today";
-                  } else if (tempHolder == -1) {
-                    shouldBeDone = "Yesterday";
-                  } else if (tempHolder == -2) {
-                    shouldBeDone = "Before yesterday";
-                  } else {
-                    shouldBeDone = tempHolder.toString();
-                  }
-                } else {
-                  console.log(tempHolder);
-                  if (tempHolder === 0) {
-                    shouldBeDone = "idag";
-                  } else if (tempHolder === 1) {
-                    shouldBeDone = "Yesterday";
-                  } else {
-                    shouldBeDone = "+" + tempHolder.toString();
-                  }
-                }
-              }
-
-              let latestProfileDoneTask = getAvatar(-1).icon;
-              if (taskHistory) {
-                let tempHolder = allProfs.find(
-                  (p) => p.id === taskHistory?.profileId
-                );
-
-                if (tempHolder) {
-                  latestProfileDoneTask = getAvatar(tempHolder?.avatar).icon;
-                }
-              }
-
-              return !task.isArchived ? (
-                <Card
-                  onPress={() => {
-                    OnPressFunc(task);
-                  }}
-                  style={{
-                    backgroundColor: "#fff",
-                    borderRadius: 10,
-                    borderColor: "#000",
-                    marginBottom: 10,
-                  }}
-                >
-                  <View
-                    style={{
-                      margin: 10,
-                      alignItems: "center",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text style={{ fontWeight: "bold" }}>{task.name}</Text>
-                    <Text style={{ fontWeight: "bold" }}>
-                      {latestProfileDoneTask}
-                      {daysToMostRecent}
-                    </Text>
-                    <Text style={{ fontWeight: "bold" }}>
-                      Due:
-                      {shouldBeDone}
-                    </Text>
-                  </View>
-                </Card>
-              ) : (
-                <Text style={{ textDecorationLine: "line-through" }}>
-                  {task.name} - active
-                </Text>
-              );
-            }}
-          />
+        <View style={{ height: 700, width: "90%" }}>
+          {lateTasks.length > 0 && <Text>Late Tasks</Text>}
+          {FlatListFast(lateTasks)}
+          {todayTasks.length > 0 && <Text>Today Tasks</Text>}
+          {FlatListFast(todayTasks)}
+          {currentWeekTasks.length > 0 && <Text>Current week Tasks</Text>}
+          {FlatListFast(currentWeekTasks)}
+          {nextWeekTasks.length > 0 && <Text>Next week Tasks</Text>}
+          {FlatListFast(nextWeekTasks)}
+          {laterThenTHatTask.length > 0 && <Text> Future Tasks</Text>}
+          {FlatListFast(laterThenTHatTask)}
+          {FlatListFast(noTimeFrameTasks)}
         </View>
+
         {activeProfile?.role === "Admin" && (
           <View
             style={{
@@ -286,6 +245,122 @@ export default function TaskOverviewScreen({
       </SafeAreaView>
     </>
   );
+
+  function FlatListFast(data: Task[]) {
+    if (data.length <= 0) {
+      return;
+    }
+
+    return (
+      <FlatList
+        style={{ flex: 1, width: "100%" }}
+        data={data}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item: task }) => {
+          let taskHistory = householdTaskHistory.find(
+            (hth) => hth.taskId === task.id
+          );
+
+          let daysToMostRecent = "?";
+          if (taskHistory) {
+            let tempHolder = Math.ceil(
+              (taskHistory.date - Date.now()) / (1000 * 3600 * 24)
+            );
+
+            if (tempHolder === 0) {
+              daysToMostRecent = "Today";
+            } else if (tempHolder == -1) {
+              daysToMostRecent = "Yesterday";
+            } else if (tempHolder == -2) {
+              daysToMostRecent = "Before yesterday";
+            } else {
+              daysToMostRecent = tempHolder.toString();
+            }
+          }
+
+          let shouldBeDone = "0";
+          if (taskHistory) {
+            var whenTaskWasDone = taskHistory?.date;
+            var numberOfDaysToAdd = task.frequency;
+            let dateShouldBeDone =
+              whenTaskWasDone + numberOfDaysToAdd * 24 * 60 * 60 * 1000;
+
+            let tempHolder = Math.ceil(
+              (dateShouldBeDone - Date.now()) / (1000 * 3600 * 24)
+            );
+
+            if (dateShouldBeDone < Date.now()) {
+              if (tempHolder === 0) {
+                shouldBeDone = "Today";
+              } else if (tempHolder == -1) {
+                shouldBeDone = "Yesterday";
+              } else if (tempHolder == -2) {
+                shouldBeDone = "Before yesterday";
+              } else {
+                shouldBeDone = tempHolder.toString();
+              }
+            } else {
+              if (tempHolder === 0) {
+                shouldBeDone = "Today";
+              } else if (tempHolder === 1) {
+                shouldBeDone = "Tomorrow";
+              } else {
+                shouldBeDone = "+" + tempHolder.toString();
+              }
+            }
+          }
+
+          let latestProfileDoneTask = getAvatar(-1).icon;
+          if (taskHistory) {
+            let tempHolder = allProfs.find(
+              (p) => p.id === taskHistory?.profileId
+            );
+
+            if (tempHolder) {
+              latestProfileDoneTask = getAvatar(tempHolder?.avatar).icon;
+            }
+          }
+
+          return !task.isArchived ? (
+            <Card
+              onPress={() => {
+                OnPressFunc(task);
+              }}
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                borderColor: "#000",
+                marginBottom: 10,
+              }}
+            >
+              <View
+                style={{
+                  margin: 10,
+                  alignItems: "center",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={{ fontWeight: "bold" }}>{task.name}</Text>
+                <Text style={{ fontWeight: "bold" }}>
+                  {latestProfileDoneTask}
+                  {daysToMostRecent}
+                </Text>
+                <Text style={{ fontWeight: "bold" }}>
+                  Due:
+                  {shouldBeDone}
+                </Text>
+              </View>
+            </Card>
+          ) : (
+            <Text style={{ textDecorationLine: "line-through" }}>
+              {task.name} - active
+            </Text>
+          );
+        }}
+      />
+    );
+  }
 
   function OnPressFunc(task: Task) {
     {
