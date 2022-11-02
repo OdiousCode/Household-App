@@ -72,6 +72,11 @@ export default function StatisticsScreen({
     selectStatisticsForPeriod(allPeriods[statisticIndex])
   );
 
+  // console.log("chores[0]");
+  // console.log(chores[3]);
+  console.log("total");
+  console.log(total);
+
   if (!total.data) {
     return (
       <ScrollView

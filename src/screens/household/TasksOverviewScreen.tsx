@@ -142,20 +142,6 @@ export default function TaskOverviewScreen({
     }
   });
   // now i have a list with tasks and due dates
-
-  console.log("lateTasks" + lateTasks);
-  console.log("todayTasks" + todayTasks);
-  console.log("currentWeekTasks" + currentWeekTasks);
-  console.log("nextWeekTasks" + nextWeekTasks);
-  console.log("laterThenTHatTask" + laterThenTHatTask);
-  console.log("noTimeFrameTasks" + noTimeFrameTasks);
-
-  console.log("---------------");
-  console.log(currentWeekTasks);
-  console.log("---------------");
-
-  console.log(householdTasks);
-
   return (
     <>
       <SafeAreaView style={styles.container}>
