@@ -443,16 +443,42 @@ const taskSlice = createSlice({
 export const taskReducer = taskSlice.reducer;
 
 function selectFilteredHistoryFromPeriodString(
-  period: string,
+  period: PeriodString,
   state: AppState
 ) {
   const allHistories = selectActiveHouseholdTaskHistories(state);
-
+  // oldest first
   const allOrderdHistories = allHistories.sort((a, b) => b.date - a.date);
 
-  const aWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-  const index = allHistories.findIndex((p) => p.date > aWeekAgo);
-  const allFilteredHistories = allOrderdHistories.slice(index);
+  if (period !== "All Time") {
+    let daysToCut = 0;
+    switch (period) {
+      case "Current Week": {
+        daysToCut = 7;
+        break;
+      }
+      case "Previous Month": {
+        daysToCut = 30;
+        break;
+      }
+      case "Previous Week": {
+        daysToCut = 14;
+        //TODO ^
+        break;
+      }
+    }
 
-  return allFilteredHistories;
+    console.log("days to cut" + daysToCut);
+
+    const timeStamp = Date.now() - daysToCut * 24 * 60 * 60 * 1000;
+    const index = allHistories.findIndex((p) => p.date <= timeStamp);
+    const allFilteredHistories = allOrderdHistories.slice(0, index);
+
+    console.log("1 - find me");
+    console.log(allFilteredHistories);
+
+    return allFilteredHistories;
+  }
+
+  return allOrderdHistories;
 }
