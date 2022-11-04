@@ -502,29 +502,46 @@ function selectFilteredHistoryFromPeriodString(
   const allOrderdHistories = allHistories.sort((a, b) => b.date - a.date);
 
   if (period !== "All Time") {
-    let daysToCut = 0;
+    let daysToCutEnd = 0;
+    let daysToCutStart: number = -1;
     switch (period) {
       case "Current Week": {
-        daysToCut = 7;
+        daysToCutEnd = 7;
         break;
       }
       case "Previous Month": {
-        daysToCut = 30;
+        // realy wierd way of doing it but idc
+        daysToCutEnd = 60;
+        daysToCutStart = 30;
         break;
       }
       case "Previous Week": {
-        daysToCut = 14;
-        //TODO ^
+        daysToCutEnd = 14;
+        daysToCutStart = 7;
+
         break;
       }
     }
 
-    const timeStamp = Date.now() - daysToCut * 24 * 60 * 60 * 1000;
-    const index = allHistories.findIndex((p) => p.date <= timeStamp);
+    let timeStamp = Date.now() - daysToCutEnd * 24 * 60 * 60 * 1000;
+    let index = allHistories.findIndex((p) => p.date <= timeStamp);
 
     let allFilteredHistories = allOrderdHistories;
     if (index !== -1) {
       allFilteredHistories = allOrderdHistories.slice(0, index);
+    }
+
+    // techniclly dont need the if statement, but prob slightly better optimized.
+    if (daysToCutStart !== -1) {
+      timeStamp = Date.now() - daysToCutStart * 24 * 60 * 60 * 1000;
+      index = allFilteredHistories.findIndex((p) => p.date <= timeStamp);
+
+      if (index !== -1) {
+        allFilteredHistories = allFilteredHistories.slice(index, undefined);
+      } else {
+        // if no found = nothing older then X, therefore there cant possbile be anything inbeetween.
+        allFilteredHistories = [];
+      }
     }
 
     return allFilteredHistories;
