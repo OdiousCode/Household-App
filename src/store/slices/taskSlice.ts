@@ -521,7 +521,11 @@ function selectFilteredHistoryFromPeriodString(
 
     const timeStamp = Date.now() - daysToCut * 24 * 60 * 60 * 1000;
     const index = allHistories.findIndex((p) => p.date <= timeStamp);
-    const allFilteredHistories = allOrderdHistories.slice(0, index);
+
+    let allFilteredHistories = allOrderdHistories;
+    if (index !== -1) {
+      allFilteredHistories = allOrderdHistories.slice(0, index);
+    }
 
     return allFilteredHistories;
   }

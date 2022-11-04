@@ -221,13 +221,18 @@ export default function TaskOverviewScreen({
           )}
           {FlatListFast(nextWeekTasks)}
 
-          {laterThenTHatTask.length > 0 ||
-            (noTimeFrameTasks.length > 0 && (
-              <View style={styles.taskView}>
-                <Text style={styles.tasktext}> Other Tasks</Text>
-              </View>
-            ))}
+          {laterThenTHatTask.length > 0 && (
+            <View style={styles.taskView}>
+              <Text style={styles.tasktext}> Future Tasks</Text>
+            </View>
+          )}
           {FlatListFast(laterThenTHatTask)}
+
+          {noTimeFrameTasks.length > 0 && (
+            <View style={styles.taskView}>
+              <Text style={styles.tasktext}> Other Tasks</Text>
+            </View>
+          )}
           {FlatListFast(noTimeFrameTasks)}
         </View>
 

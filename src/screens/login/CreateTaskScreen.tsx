@@ -5,7 +5,7 @@ import RootStackNavigator, {
 } from "../../navigation/RootStackNavigator";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { Task } from "../../data/APItypes";
-import { } from "../../store/slices/householdSlice";
+import {} from "../../store/slices/householdSlice";
 import { Button } from "react-native-paper";
 import {
   createHouseholdTask,
@@ -32,9 +32,6 @@ export default function CreateTask({
   let baseTask = useAppSelector((state) =>
     state.tasks.householdTasks.find((t) => t.id === route.params?.taskId)
   );
-
-  const [sliderValueDifficulty, setSliderValueDifficulty] = useState(1);
-  const [sliderValueFrequency, setSliderValyeFrequency] = useState(1);
 
   if (!baseProfile) {
     //TODO 404
@@ -65,6 +62,10 @@ export default function CreateTask({
     startStateFreq = baseTask!.frequency;
   }
 
+  const [sliderValueDifficulty, setSliderValueDifficulty] =
+    useState(startStateDiff);
+  const [sliderValueFrequency, setSliderValyeFrequency] =
+    useState(startStateFreq);
   // const [name, setName] = useState(startStateName);
   // const [description, setDescription] = useState(startStateDesc);
   // const [frequency, setFrequency] = useState(startStateFreq);
@@ -97,7 +98,6 @@ export default function CreateTask({
   if (viewOnly === false) {
     return (
       <>
-
         <Text style={styles.title}>Task</Text>
 
         <Formik
@@ -180,7 +180,7 @@ export default function CreateTask({
                       </Text>
                     )}
 
-                    <View style={{ alignItems: 'center' }}>
+                    <View style={{ alignItems: "center" }}>
                       <Text
                         style={{
                           fontSize: 20,
@@ -191,12 +191,15 @@ export default function CreateTask({
                         Difficulty
                       </Text>
                       <Text>{sliderValueDifficulty}</Text>
-                      <Slider style={{ width: 200, height: 40 }}
+                      <Slider
+                        style={{ width: 200, height: 40 }}
                         minimumValue={1}
                         maximumValue={5}
-                        onValueChange={(value) => setSliderValueDifficulty(value)}
+                        onValueChange={(value) =>
+                          setSliderValueDifficulty(value)
+                        }
                         step={1}
-                        value={values.difficulty = sliderValueDifficulty}
+                        value={(values.difficulty = sliderValueDifficulty)}
                         maximumTrackTintColor="#ff0000"
                         minimumTrackTintColor="#00ff00"
                       />
@@ -211,12 +214,15 @@ export default function CreateTask({
                         Frequency
                       </Text>
                       <Text>{sliderValueFrequency}</Text>
-                      <Slider style={{ width: 200, height: 40 }}
+                      <Slider
+                        style={{ width: 200, height: 40 }}
                         minimumValue={1}
                         maximumValue={31}
-                        onValueChange={(value) => setSliderValyeFrequency(value)}
+                        onValueChange={(value) =>
+                          setSliderValyeFrequency(value)
+                        }
                         step={1}
-                        value={values.frequency = sliderValueFrequency}
+                        value={(values.frequency = sliderValueFrequency)}
                         maximumTrackTintColor="#ff0000"
                         minimumTrackTintColor="#00ff00"
                       />
@@ -249,22 +255,24 @@ export default function CreateTask({
 
                 <View
                   style={{
-                    position: 'relative',
-                    justifyContent: 'space-around',
+                    position: "relative",
+                    justifyContent: "space-around",
                     alignItems: "center",
                     flexDirection: "row",
                     bottom: 15,
-
-
                   }}
                 >
-
                   <Button
                     icon="plus-circle-outline"
                     mode="contained"
                     buttonColor="#DCCFCF"
                     textColor="#000"
-                    style={{ right: '90%', borderRadius: 50, borderWidth: 1, width: 150 }}
+                    style={{
+                      right: "90%",
+                      borderRadius: 50,
+                      borderWidth: 1,
+                      width: 150,
+                    }}
                     onPress={() => {
                       handleSubmit();
                     }}
@@ -275,13 +283,17 @@ export default function CreateTask({
                     icon="close"
                     mode="contained-tonal"
                     buttonColor="#DCCFCF"
-                    style={{ left: '90%', borderRadius: 50, borderWidth: 1, width: 150 }}
+                    style={{
+                      left: "90%",
+                      borderRadius: 50,
+                      borderWidth: 1,
+                      width: 150,
+                    }}
                     onPress={() => navigation.goBack()}
                   >
                     Close
                   </Button>
                 </View>
-
               </SafeAreaView>
             </>
           )}
@@ -302,7 +314,6 @@ export default function CreateTask({
           <Text>{startStateFreq}</Text>
         </View>
         <View>
-
           <Button
             icon="arrow-u-left-top"
             mode="contained"
