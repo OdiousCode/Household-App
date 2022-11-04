@@ -1,12 +1,8 @@
-import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
-import {
-  createNativeStackNavigator,
-  NativeStackScreenProps,
-} from "@react-navigation/native-stack";
-import React, { useCallback } from "react";
+import { CompositeScreenProps } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React from "react";
 import { RootStackParamList } from "./RootStackNavigator";
 
-import TaskScreen from "../screens/household/TaskScreen";
 import PendingApplicationScreen from "../screens/household/PendingApplicationsScreen";
 import ProfileOverViewScreen from "../screens/household/ProfileOverviewScreen";
 import StatisticsScreen from "../screens/household/StatisticsScreen";
@@ -33,7 +29,6 @@ export type HouseholdScreenProps<
 >;
 
 const Tab = createMaterialTopTabNavigator<HouseholdTopTabParamList>();
-// const Stack = createNativeStackNavigator<HouseholdStackParamList>();
 
 export default function HouseholdTopTabNavigator() {
   let myProfile = useAppSelector((state) => state.profiles.activeProfile);
@@ -52,14 +47,12 @@ export default function HouseholdTopTabNavigator() {
       <Tab.Screen
         name="ProfileOverViewScreen"
         component={ProfileOverViewScreen}
-        options={{ tabBarLabel: "🤦" }}
+        options={{ tabBarLabel: "🧑" }}
       />
-      {/* TODO remove */}
-      {/* <Tab.Screen name="TaskScreen" component={TaskScreen} /> */}
       <Tab.Screen
         name="StatisticsScreen"
         component={StatisticsScreen}
-        options={{ tabBarLabel: "📑" }}
+        options={{ tabBarLabel: "📈" }}
       />
       <Tab.Screen
         name="TaskOverviewScreen"
@@ -71,7 +64,7 @@ export default function HouseholdTopTabNavigator() {
           name="PendingApplicationScreen"
           //TODO fix later (temporary fix for CI) V
           component={PendingApplicationScreen as any}
-          options={{ tabBarLabel: "⏱️" }}
+          options={{ tabBarLabel: "✉️" }}
         />
       )}
     </Tab.Navigator>

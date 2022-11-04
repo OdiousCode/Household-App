@@ -1,10 +1,7 @@
 //TODO late
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { Profile } from "../../data/APItypes";
-import { auth } from "../../data/firebase/config";
-import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { getUserHouseholds } from "../../store/slices/householdSlice";
 import {
@@ -12,14 +9,11 @@ import {
   setActiveProfile,
 } from "../../store/slices/profileSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-// import { setName } from "../store/profileSlice";
-// import { useAppDispatch, useAppSelector } from "../store/store";
 
 export default function PortalWaitingScreen({
   navigation,
   route,
 }: RootScreenProps<"PortalWaiting">) {
-  //todo usestate mby?
   let profileId = route.params?.profileId;
   const dispatch = useAppDispatch();
 
@@ -36,8 +30,6 @@ export default function PortalWaitingScreen({
   let uid = useAppSelector((state) => state.user.user?.uid);
 
   useEffect(() => {
-    // console.log("UseEffect running");
-    console.log(currentProfile);
     if (
       currentProfile &&
       !currentProfile.pending &&

@@ -21,20 +21,13 @@ import {
   selectActiveHouseholdTask,
   selectActiveHouseholdTaskHistories,
 } from "../../store/slices/taskSlice";
-import { store, useAppDispatch, useAppSelector } from "../../store/store";
-import { date } from "yup/lib/locale";
-import {
-  getUserProfiles,
-  selectProfileById,
-} from "../../store/slices/profileSlice";
-import CreateTask from "../login/CreateTaskScreen";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { getUserProfiles } from "../../store/slices/profileSlice";
 import {
   selectActiveHousehold,
   updateHousehold,
 } from "../../store/slices/householdSlice";
-import { removeListener } from "@reduxjs/toolkit";
 import Dialog from "react-native-dialog";
-import { string } from "yup";
 export default function TaskOverviewScreen({
   navigation,
 }: HouseholdScreenProps<"TaskOverviewScreen">) {
@@ -181,16 +174,13 @@ export default function TaskOverviewScreen({
           <Dialog.Button label="Cancel" onPress={handleCancel} />
           <Dialog.Button label="Ok" onPress={() => handleOk(newHouseName)} />
         </Dialog.Container>
-        {/* <Button title="Go back" onPress={() => navigation.goBack()} /> */}
 
         <View
           style={{
             height: 500,
-            // height: 600,
             width: "90%",
             alignItems: "center",
             marginTop: 8,
-            // justifyContent: "",
           }}
         >
           {lateTasks.length > 0 && (
@@ -221,13 +211,18 @@ export default function TaskOverviewScreen({
           )}
           {FlatListFast(nextWeekTasks)}
 
-          {laterThenTHatTask.length > 0 ||
-            (noTimeFrameTasks.length > 0 && (
-              <View style={styles.taskView}>
-                <Text style={styles.tasktext}> Other Tasks</Text>
-              </View>
-            ))}
+          {laterThenTHatTask.length > 0 && (
+            <View style={styles.taskView}>
+              <Text style={styles.tasktext}> Future Tasks</Text>
+            </View>
+          )}
           {FlatListFast(laterThenTHatTask)}
+
+          {noTimeFrameTasks.length > 0 && (
+            <View style={styles.taskView}>
+              <Text style={styles.tasktext}> Other Tasks</Text>
+            </View>
+          )}
           {FlatListFast(noTimeFrameTasks)}
         </View>
 
@@ -280,7 +275,7 @@ export default function TaskOverviewScreen({
           let taskHistory = householdTaskHistory.find(
             (hth) => hth.taskId === task.id
           );
-
+          let warning = 0;
           let daysToMostRecent = "?";
           if (taskHistory) {
             let tempHolder = Math.ceil(
@@ -312,16 +307,21 @@ export default function TaskOverviewScreen({
             if (dateShouldBeDone < Date.now()) {
               if (tempHolder === 0) {
                 shouldBeDone = "Today";
+                warning = 1;
               } else if (tempHolder == -1) {
                 shouldBeDone = "Yesterday";
+                warning = 2;
               } else if (tempHolder == -2) {
                 shouldBeDone = "Before yesterday";
+                warning = 2;
               } else {
                 shouldBeDone = tempHolder.toString();
+                warning = 2;
               }
             } else {
               if (tempHolder === 0) {
                 shouldBeDone = "Today";
+                warning = 1;
               } else if (tempHolder === 1) {
                 shouldBeDone = "Tomorrow";
               } else {
@@ -340,14 +340,28 @@ export default function TaskOverviewScreen({
               latestProfileDoneTask = getAvatar(tempHolder?.avatar).icon;
             }
           }
-
+          let cardColor = "#fff";
+          switch (warning) {
+            case 1: {
+              cardColor = "orange";
+              break;
+            }
+            case 2: {
+              cardColor = "red";
+              break;
+            }
+            default: {
+              cardColor = "#fff";
+              break;
+            }
+          }
           return !task.isArchived ? (
             <Card
               onPress={() => {
                 OnPressFunc(task);
               }}
               style={{
-                backgroundColor: "#fff",
+                backgroundColor: cardColor,
                 borderRadius: 10,
                 borderColor: "#000",
                 marginBottom: 10,
@@ -405,7 +419,7 @@ export default function TaskOverviewScreen({
                 },
               },
               {
-                text: "done?",
+                text: "Done?",
                 onPress: async () => {
                   Alert.alert(task.name + '" completed');
                   let r = await dispatch(createHouseholdTaskHistory(task));

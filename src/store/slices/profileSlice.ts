@@ -1,17 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
-import {
-  get,
-  getDatabase,
-  orderByChild,
-  push,
-  query,
-  ref,
-  set,
-} from "firebase/database";
-import { Household, Profile, ProfileDTO } from "../../data/APItypes";
-import { app, auth } from "../../data/firebase/config";
-import { AppState, useAppSelector } from "../store";
+import { get, getDatabase, push, query, ref, set } from "firebase/database";
+import { Profile, ProfileDTO } from "../../data/APItypes";
+import { app } from "../../data/firebase/config";
+import { AppState } from "../store";
 
 interface ProfileState {
   isLoading: boolean;
@@ -49,23 +41,6 @@ const initialState: ProfileState = {
   ],
 };
 
-// // export const selectActiveProfile
-// export const selectCurrentProfile = (state: AppState) => {
-//   if (!state.households.activeHouseHold) {
-//     return;
-//   }
-//   const returnUserProfiles = state.profiles.profiles.filter(
-//     (p) => p.userId === state.user.user?.uid
-//   );
-
-//   const currentProfile = returnUserProfiles.find(
-//     (p) => p.householdId === state.households.activeHouseHold?.id
-//   );
-//   return currentProfile;
-// };
-
-//export const selectHouseHoldbyProfileId()
-
 export const selectProfileById = (id: string) => (state: AppState) => {
   const returnUserProfiles = state.profiles.profiles.find((p) => p.id === id);
 
@@ -101,8 +76,6 @@ export const selectPendingProfilesByActiveHousehold = (state: AppState) => {
   return pendingProfiles;
 };
 
-//TODO
-//TODO https://redux.js.org/usage/deriving-data-selectors
 export const selectUserProfiles = (state: AppState) => {
   const returnUserProfiles = state.profiles.profiles.filter(
     (p) => p.userId === state.user.user?.uid
@@ -110,8 +83,6 @@ export const selectUserProfiles = (state: AppState) => {
 
   return returnUserProfiles;
 };
-
-//const selectHouseholdProfiles;
 
 export const getUserProfiles = createAsyncThunk<
   Profile[],
@@ -132,7 +103,6 @@ export const getUserProfiles = createAsyncThunk<
       return snapshot.val();
     }
 
-    // mby dosent work
     throw "Snapshot does not exists";
   } catch (error) {
     console.error(error);
@@ -157,7 +127,6 @@ export const createProfile = createAsyncThunk<
         "Must be valid Profile + Household combination"
       );
     }
-    //profile.id = uid todo.
 
     const db = getDatabase(app);
     const reference = ref(db, "app/profiles");
@@ -168,8 +137,6 @@ export const createProfile = createAsyncThunk<
       name: profile.name,
       pending: profile.pending,
       role: profile.role,
-
-      //householdId:
       email: state.user.user.email!,
       userId: state.user.user.uid,
       householdId: houseHoldId,
@@ -178,7 +145,6 @@ export const createProfile = createAsyncThunk<
 
     await set(pushRef, returnProfile);
 
-    //TODO look for error?
     return returnProfile;
   } catch (error) {
     console.error(error);
@@ -203,13 +169,11 @@ export const deleteProfile = createAsyncThunk<
         "Must be valid Profile + Household combination"
       );
     }
-    //profile.id = uid todo.
 
     const db = getDatabase(app);
 
     await set(ref(db, "app/profiles/" + profile.id), null);
 
-    //TODO look for error?
     return profile;
   } catch (error) {
     console.error(error);
@@ -234,13 +198,11 @@ export const updateProfile = createAsyncThunk<
         "Must be valid Profile + Household combination"
       );
     }
-    //profile.id = uid todo.
 
     const db = getDatabase(app);
 
     await set(ref(db, "app/profiles/" + profile.id), profile);
 
-    //TODO look for error?
     return profile;
   } catch (error) {
     console.error(error);

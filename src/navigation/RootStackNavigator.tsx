@@ -1,35 +1,26 @@
-import { NavigatorScreenParams, useRoute } from "@react-navigation/native";
+import { NavigatorScreenParams } from "@react-navigation/native";
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
-import { Header } from "react-native/Libraries/NewAppScreen";
 import CustomNavigationBar from "../components/HeaderComponent";
-import TaskOverviewScreen from "../screens/household/TasksOverviewScreen";
 import CreateAccount from "../screens/login/CreateAccountScreen";
 import CreateAvatar from "../screens/login/CreateAvatarScreen";
 import LoginScreen from "../screens/login/LoginScreen";
 import ProfileScreen from "../screens/login/ProfileScreen";
 import RoomApplication from "../screens/login/RoomApplicationScreen";
-// import HouseholdStackNavigator, {
-//   HouseholdStackParamList,
-// } from "./HouseholdStackNavigator";
+
 import { useAppDispatch, useAppSelector } from "../store/store";
-import Navigation from "../navigation/Index";
-import { logIn, logOut, signin } from "../store/slices/userSlice";
 import { auth } from "../data/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import CreateHouseHoldScreen from "../screens/login/CreateHouseholdScreen";
 import HouseholdTopTabNavigator, {
   HouseholdTopTabParamList,
 } from "./HouseholdTopTabNavigator";
-import { Profile } from "../data/APItypes";
 import PortalWaitingScreen from "../screens/login/PortalWaitingScreen";
 import CreateTask from "../screens/login/CreateTaskScreen";
-import { legacy_createStore } from "redux";
-
-// import LoginScreen from "../screens/LoginScreen";
+import { logIn, logOut } from "../store/slices/userSlice";
 
 declare global {
   namespace ReactNavigation {
@@ -55,23 +46,21 @@ export type RootScreenProps<Screen extends keyof RootStackParamList> =
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootStackNavigator() {
-
   let user = useAppSelector((state) => state.user?.user);
-  
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    auth.onAuthStateChanged(userAuth => {
+    auth.onAuthStateChanged((userAuth) => {
       if (userAuth != null)
-        user = userAuth;
-   
-      if (userAuth) { 
-        dispatch(logIn(user));
-      } else {
-        dispatch(logOut());
-      }
+        if (userAuth) {
+          user = userAuth;
+          dispatch(logIn(user));
+        } else {
+          dispatch(logOut());
+        }
     });
-    }, []);
+  }, []);
 
   return (
     <Stack.Navigator

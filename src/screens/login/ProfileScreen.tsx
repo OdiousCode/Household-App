@@ -44,7 +44,6 @@ export default function ProfileScreen({
 
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
-    console.log("refreshing");
     setRefreshing(true);
     dispatch(getUserProfiles());
     dispatch(getUserHouseholds());
@@ -146,11 +145,9 @@ export default function ProfileScreen({
                   key={myProf.id}
                   onPress={() => {
                     closeMenu();
-                    // set active household
                     setAvatarNumber(myProf.avatar);
                     setProfile(myProf);
                   }}
-                  //TODO get name from householdId
                   title={
                     myProf.name +
                     " - " +
@@ -183,15 +180,10 @@ export default function ProfileScreen({
             borderColor: "#000",
           }}
           onPress={() => {
-            //TODO
-            // setActive Profile?
             if (profile.id !== undefined) {
               dispatch(setActiveProfile(profile.id));
 
-              //TODO navigate to correct screen
               if (!profile.pending && profile.avatar !== -1) {
-                console.log("Valid Profile");
-
                 navigation.navigate("HouseholdTopTabNavigator", {
                   screen: "ProfileOverViewScreen",
                 });

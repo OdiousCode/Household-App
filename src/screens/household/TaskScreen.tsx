@@ -1,20 +1,12 @@
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  KeyboardAvoidingView,
-} from "react-native";
+import React from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Card, Button } from "react-native-paper";
+import { Button } from "react-native-paper";
 import { Task } from "../../data/APItypes";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import { createHouseholdTask } from "../../store/slices/taskSlice";
-import { useAppDispatch, useAppSelector } from "../../store/store";
-import { Formik, prepareDataForValidation } from "formik";
-// import { setName } from "../store/profileSlice";
-// import { useAppDispatch, useAppSelector } from "../store/store";
+import { useAppDispatch } from "../../store/store";
+import { Formik } from "formik";
 import * as yup from "yup";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
@@ -38,8 +30,6 @@ export default function TaskScreen({
   });
 
   async function handleFormSubmit(values: Task) {
-    console.log("VALUES " + values);
-
     dispatch(createHouseholdTask(values));
     navigation.navigate("TaskOverviewScreen");
   }
