@@ -285,7 +285,7 @@ export default function TaskOverviewScreen({
           let taskHistory = householdTaskHistory.find(
             (hth) => hth.taskId === task.id
           );
-
+          let warning = 0;
           let daysToMostRecent = "?";
           if (taskHistory) {
             let tempHolder = Math.ceil(
@@ -317,16 +317,21 @@ export default function TaskOverviewScreen({
             if (dateShouldBeDone < Date.now()) {
               if (tempHolder === 0) {
                 shouldBeDone = "Today";
+                warning = 1;
               } else if (tempHolder == -1) {
                 shouldBeDone = "Yesterday";
+                warning = 2;
               } else if (tempHolder == -2) {
                 shouldBeDone = "Before yesterday";
+                warning = 2;
               } else {
                 shouldBeDone = tempHolder.toString();
+                warning = 2;
               }
             } else {
               if (tempHolder === 0) {
                 shouldBeDone = "Today";
+                warning = 1;
               } else if (tempHolder === 1) {
                 shouldBeDone = "Tomorrow";
               } else {
@@ -345,14 +350,28 @@ export default function TaskOverviewScreen({
               latestProfileDoneTask = getAvatar(tempHolder?.avatar).icon;
             }
           }
-
+          let cardColor = "#fff";
+          switch (warning) {
+            case 1: {
+              cardColor = "orange";
+              break;
+            }
+            case 2: {
+              cardColor = "red";
+              break;
+            }
+            default: {
+              cardColor = "#fff";
+              break;
+            }
+          }
           return !task.isArchived ? (
             <Card
               onPress={() => {
                 OnPressFunc(task);
               }}
               style={{
-                backgroundColor: "#fff",
+                backgroundColor: cardColor,
                 borderRadius: 10,
                 borderColor: "#000",
                 marginBottom: 10,
