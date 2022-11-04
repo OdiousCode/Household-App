@@ -47,7 +47,8 @@ const avatars: Avatar[] = [
   },
 ];
 export function getAllAvatars(): Avatar[] {
-  let allAvatars = avatars;
+  let avatarsAsCopy = JSON.parse(JSON.stringify(avatars));
+  let allAvatars = avatarsAsCopy;
   //allAvatars.push({ icon: "❓", color: "#3d3635" });
 
   return allAvatars;
