@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import {
   Alert,
   FlatList,
@@ -7,27 +7,19 @@ import {
   TouchableOpacity,
   View,
   Button as Butt,
-  ScrollView,
-  RefreshControl,
 } from "react-native";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
-import { Card, Button } from "react-native-paper";
+import { Card } from "react-native-paper";
 
-import { store, useAppDispatch, useAppSelector } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 import { getAvatar } from "../../constants/Layout";
-import { Item } from "react-native-paper/lib/typescript/components/List/List";
 import {
   deleteProfile,
   getUserProfiles,
-  selectProfilesByActiveHousehold,
-  selectUserProfiles,
   selectValidProfilesByActiveHousehold,
   updateProfile,
 } from "../../store/slices/profileSlice";
-import {
-  getUserHouseholds,
-  selectActiveHousehold,
-} from "../../store/slices/householdSlice";
+import { selectActiveHousehold } from "../../store/slices/householdSlice";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Profile, ProfileDTO } from "../../data/APItypes";
@@ -56,15 +48,6 @@ export default function ProfileOverViewScreen({
   const activeProfile = useAppSelector(
     (state) => state.profiles.activeProfile?.id
   );
-  // const currentProfile = useAppSelector(selectUserProfiles);
-  // const [refreshing, setRefreshing] = React.useState(false);
-  // const onRefresh = React.useCallback(() => {
-  //   console.log("refreshing");
-  //   setRefreshing(true);
-  //   dispatch(getUserProfiles());
-  //   dispatch(getUserHouseholds());
-  //   wait(2000).then(() => setRefreshing(false));
-  // }, []);
 
   const householdData = useAppSelector(selectActiveHousehold);
   const dispatch = useAppDispatch();
@@ -78,7 +61,6 @@ export default function ProfileOverViewScreen({
       );
       if (r.meta.requestStatus === "fulfilled") {
         if ((r.payload as Profile).id === currentProfile?.id)
-          // if(profile.role=== "Admin")
           navigation.navigate("Profile");
       }
     }
@@ -289,9 +271,6 @@ export default function ProfileOverViewScreen({
                                               {
                                                 text: "Yes",
                                                 onPress: async () => {
-                                                  // TODO
-                                                  //update Profile? currentprofile to name + avatar as wished
-
                                                   let newProfile: Profile = {
                                                     avatar: profile.avatar,
                                                     name: profile.name,

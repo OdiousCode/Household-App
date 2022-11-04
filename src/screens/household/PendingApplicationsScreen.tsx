@@ -1,6 +1,6 @@
 //TODO late
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import {
   Alert,
   FlatList,
@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { Button, Card } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getAvatar } from "../../constants/Layout";
 import { Profile } from "../../data/APItypes";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
 import {
@@ -29,9 +28,7 @@ import { useAppDispatch, useAppSelector } from "../../store/store";
 
 export default function PendingApplicationScreen({
   navigation,
-  route,
 }: HouseholdScreenProps<"PendingApplicationScreen">) {
-  //todo usestate mby?
   const dispatch = useAppDispatch();
 
   let myProfile = useAppSelector((state) => state.profiles.activeProfile);
@@ -107,7 +104,7 @@ export default function PendingApplicationScreen({
               <View>
                 <Card
                   style={{
-                    backgroundColor: "#E5EDF0", //getAvatar(profile.avatar).color,
+                    backgroundColor: "#E5EDF0",
                     borderRadius: 10,
                     borderColor: "#000",
                     marginBottom: 10,
@@ -203,7 +200,6 @@ export default function PendingApplicationScreen({
                                     {
                                       text: "Yes",
                                       onPress: () => {
-                                        // Lägg in kod för att faktiskt se till att profilen lämnar hushåll här.
                                         allowUser(profile);
                                         Alert.alert(
                                           profile.email +

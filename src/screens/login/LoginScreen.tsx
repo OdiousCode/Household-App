@@ -65,7 +65,6 @@ export default function LoginScreen({ navigation }: RootScreenProps<"Login">) {
         <BlurView intensity={100}>
           <View style={styles.logIn}>
             <Formik
-              //TODO idk where validateOnMount exists
               validateOnChange={true}
               validationSchema={loginValidationSchema}
               initialValues={{ email: "", password: "" }}
