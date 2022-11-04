@@ -47,12 +47,12 @@ export default function HouseholdTopTabNavigator() {
       <Tab.Screen
         name="ProfileOverViewScreen"
         component={ProfileOverViewScreen}
-        options={{ tabBarLabel: "🤦" }}
+        options={{ tabBarLabel: "🧑" }}
       />
       <Tab.Screen
         name="StatisticsScreen"
         component={StatisticsScreen}
-        options={{ tabBarLabel: "📑" }}
+        options={{ tabBarLabel: "📈" }}
       />
       <Tab.Screen
         name="TaskOverviewScreen"
@@ -64,7 +64,7 @@ export default function HouseholdTopTabNavigator() {
           name="PendingApplicationScreen"
           //TODO fix later (temporary fix for CI) V
           component={PendingApplicationScreen as any}
-          options={{ tabBarLabel: "⏱️" }}
+          options={{ tabBarLabel: "✉️" }}
         />
       )}
     </Tab.Navigator>
