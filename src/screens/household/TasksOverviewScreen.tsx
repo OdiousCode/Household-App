@@ -21,20 +21,13 @@ import {
   selectActiveHouseholdTask,
   selectActiveHouseholdTaskHistories,
 } from "../../store/slices/taskSlice";
-import { store, useAppDispatch, useAppSelector } from "../../store/store";
-import { date } from "yup/lib/locale";
-import {
-  getUserProfiles,
-  selectProfileById,
-} from "../../store/slices/profileSlice";
-import CreateTask from "../login/CreateTaskScreen";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { getUserProfiles } from "../../store/slices/profileSlice";
 import {
   selectActiveHousehold,
   updateHousehold,
 } from "../../store/slices/householdSlice";
-import { removeListener } from "@reduxjs/toolkit";
 import Dialog from "react-native-dialog";
-import { string } from "yup";
 export default function TaskOverviewScreen({
   navigation,
 }: HouseholdScreenProps<"TaskOverviewScreen">) {
@@ -181,16 +174,13 @@ export default function TaskOverviewScreen({
           <Dialog.Button label="Cancel" onPress={handleCancel} />
           <Dialog.Button label="Ok" onPress={() => handleOk(newHouseName)} />
         </Dialog.Container>
-        {/* <Button title="Go back" onPress={() => navigation.goBack()} /> */}
 
         <View
           style={{
             height: 500,
-            // height: 600,
             width: "90%",
             alignItems: "center",
             marginTop: 8,
-            // justifyContent: "",
           }}
         >
           {lateTasks.length > 0 && (

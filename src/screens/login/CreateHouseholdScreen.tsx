@@ -1,19 +1,12 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import { useSelector } from "react-redux";
 import { Household, Profile, ProfileDTO } from "../../data/APItypes";
 import { RootScreenProps } from "../../navigation/RootStackNavigator";
-import {
-  createHousehold,
-  getUserHouseholds,
-} from "../../store/slices/householdSlice";
+import { createHousehold } from "../../store/slices/householdSlice";
 import { createProfile } from "../../store/slices/profileSlice";
 import {} from "../../store/slices/userSlice";
 import { useAppDispatch } from "../../store/store";
-import { Button, Menu, Divider, Provider, Appbar } from "react-native-paper";
-
-// import { setName } from "../store/profileSlice";
-// import { useAppDispatch, useAppSelector } from "../store/store";
+import { Button } from "react-native-paper";
 
 export default function CreateHouseHoldScreen({
   navigation,

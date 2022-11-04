@@ -73,6 +73,8 @@ export default function CreateAvatar({
   const [avatarIndex, setAvatarIndex] = useState(indexStartState);
   //TODO limit based on existing avatars
 
+  console.log(avaibleAvatars);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create new profile</Text>

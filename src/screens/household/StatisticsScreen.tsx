@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from "react";
 import {
-  Alert,
-  GestureResponderEvent,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -9,36 +7,19 @@ import {
   Text,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { HouseholdScreenProps } from "../../navigation/HouseholdTopTabNavigator";
-// import { setName } from "../store/profileSlice";
-// import { useAppDispatch, useAppSelector } from "../store/store";
-
-import {
-  VictoryBar,
-  VictoryChart,
-  VictoryPie,
-  VictoryTheme,
-} from "victory-native";
-import { avatarColors } from "../../constants/Colors";
-import { getAllAvatars, getAvatar } from "../../constants/Layout";
+import { VictoryPie } from "victory-native";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
   getUserTaskHistories,
   getUserTasks,
   PeriodString,
-  selectActiveHouseholdTask,
-  selectActiveHouseholdTaskHistories,
   selectHistoryForPeriod as selectStatisticsForPeriod,
 } from "../../store/slices/taskSlice";
-import { Profile } from "../../data/APItypes";
 import { useFocusEffect } from "@react-navigation/native";
 import { getUserProfiles } from "../../store/slices/profileSlice";
-import { getUserHouseholds } from "../../store/slices/householdSlice";
 import { wait } from "../login/ProfileScreen";
-import { Button, SegmentedButtons } from "react-native-paper";
-
-// Vecka Månadg, All-Time
+import { SegmentedButtons } from "react-native-paper";
 
 export default function StatisticsScreen({
   navigation,
@@ -69,16 +50,10 @@ export default function StatisticsScreen({
     "Previous Month",
     "All Time",
   ];
-  // let period : string = "";
   const [period, setPeriod] = React.useState("");
   const { chores, total } = useAppSelector(
     selectStatisticsForPeriod(allPeriods[statisticIndex])
   );
-
-  // console.log("chores[0]");
-  // console.log(chores[3]);
-  console.log("total");
-  console.log(total);
 
   if (!total.data) {
     return (

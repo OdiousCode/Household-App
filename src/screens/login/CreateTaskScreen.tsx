@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import RootStackNavigator, {
-  RootScreenProps,
-} from "../../navigation/RootStackNavigator";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import { RootScreenProps } from "../../navigation/RootStackNavigator";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { Task } from "../../data/APItypes";
 import {} from "../../store/slices/householdSlice";
@@ -17,17 +15,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Formik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Slider from "@react-native-community/slider";
-import { Style } from "victory-core";
-
-// import { setName } from "../store/profileSlice";
-// import { useAppDispatch, useAppSelector } from "../store/store";
 
 export default function CreateTask({
   navigation,
   route,
 }: RootScreenProps<"CreateTask">) {
   const dispatch = useAppDispatch();
-  //TODO route.params not optional?
   let baseProfile = useAppSelector((state) => state.profiles.activeProfile);
   let baseTask = useAppSelector((state) =>
     state.tasks.householdTasks.find((t) => t.id === route.params?.taskId)
@@ -66,10 +59,6 @@ export default function CreateTask({
     useState(startStateDiff);
   const [sliderValueFrequency, setSliderValyeFrequency] =
     useState(startStateFreq);
-  // const [name, setName] = useState(startStateName);
-  // const [description, setDescription] = useState(startStateDesc);
-  // const [frequency, setFrequency] = useState(startStateFreq);
-  // const [difficulty, setdifficulty] = useState(startStateDiff);
 
   const TaskValidationSchema = yup.object().shape({
     name: yup.string().required("Title Address is Required"),
