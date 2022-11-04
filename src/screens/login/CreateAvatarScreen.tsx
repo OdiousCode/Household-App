@@ -73,8 +73,6 @@ export default function CreateAvatar({
   const [avatarIndex, setAvatarIndex] = useState(indexStartState);
   //TODO limit based on existing avatars
 
-  console.log(avaibleAvatars);
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create new profile</Text>
@@ -160,8 +158,6 @@ export default function CreateAvatar({
             //TODO take screen as param and move to screen?
             if (r.meta.requestStatus === "fulfilled") {
               if (!newProfile.pending && newProfile.avatar != -1) {
-                console.log("Go to Profile Screen");
-
                 if (!isEditing) {
                   dispatch(setActiveProfile(newProfile.id));
                   navigation.replace("HouseholdTopTabNavigator", {
@@ -171,7 +167,6 @@ export default function CreateAvatar({
 
                 navigation.goBack();
               } else {
-                console.log("Go back");
                 navigation.goBack();
               }
             }

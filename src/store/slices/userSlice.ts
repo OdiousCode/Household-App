@@ -35,7 +35,6 @@ export const signup = createAsyncThunk<
       username,
       password
     );
-    console.log(userCredential);
     return userCredential.user.toJSON() as User;
   } catch (error) {
     console.error(error);
@@ -59,7 +58,6 @@ export const signin = createAsyncThunk<
       username,
       password
     );
-    console.log(userCredential);
     return userCredential.user.toJSON() as User;
   } catch (error) {
     console.error(error);

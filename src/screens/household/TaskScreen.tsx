@@ -30,8 +30,6 @@ export default function TaskScreen({
   });
 
   async function handleFormSubmit(values: Task) {
-    console.log("VALUES " + values);
-
     dispatch(createHouseholdTask(values));
     navigation.navigate("TaskOverviewScreen");
   }

@@ -35,7 +35,6 @@ export default function StatisticsScreen({
 
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
-    console.log("refreshing");
     setRefreshing(true);
     dispatch(getUserTasks());
     dispatch(getUserTaskHistories());

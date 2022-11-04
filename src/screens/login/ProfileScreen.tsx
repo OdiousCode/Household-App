@@ -44,7 +44,6 @@ export default function ProfileScreen({
 
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
-    console.log("refreshing");
     setRefreshing(true);
     dispatch(getUserProfiles());
     dispatch(getUserHouseholds());
@@ -185,8 +184,6 @@ export default function ProfileScreen({
               dispatch(setActiveProfile(profile.id));
 
               if (!profile.pending && profile.avatar !== -1) {
-                console.log("Valid Profile");
-
                 navigation.navigate("HouseholdTopTabNavigator", {
                   screen: "ProfileOverViewScreen",
                 });

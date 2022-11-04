@@ -39,8 +39,6 @@ export default function PendingApplicationScreen({
 
   let uid = useAppSelector((state) => state.user.user?.uid);
 
-  console.log("pending App");
-
   useFocusEffect(
     useCallback(() => {
       dispatch(getUserProfiles());

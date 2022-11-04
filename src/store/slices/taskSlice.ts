@@ -1,19 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
-import {
-  get,
-  getDatabase,
-  push,
-  query,
-  ref,
-  set,
-} from "firebase/database";
+import { get, getDatabase, push, query, ref, set } from "firebase/database";
 
-import {
-  
-  getAvatar,
-  getColorByAvatar,
-} from "../../constants/Layout";
+import { getAvatar, getColorByAvatar } from "../../constants/Layout";
 import { Task, TaskHistory } from "../../data/APItypes";
 import { app } from "../../data/firebase/config";
 import { AppState } from "../store";

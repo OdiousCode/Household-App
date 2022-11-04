@@ -30,7 +30,6 @@ export default function PortalWaitingScreen({
   let uid = useAppSelector((state) => state.user.user?.uid);
 
   useEffect(() => {
-    console.log(currentProfile);
     if (
       currentProfile &&
       !currentProfile.pending &&
