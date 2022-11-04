@@ -1,18 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
 import {
-  equalTo,
   get,
   getDatabase,
-  orderByChild,
   push,
   query,
   ref,
   set,
 } from "firebase/database";
-import { date, number } from "yup";
+
 import {
-  getAllAvatars,
+  
   getAvatar,
   getColorByAvatar,
 } from "../../constants/Layout";
@@ -105,9 +103,6 @@ export const selectHistoryForPeriod =
     };
 
     let chores: ChoreStatistic[] = [];
-
-    //ALL FILTERED HISTORIES
-    // let ProfileHistory = new Map<string, string[]>();
 
     allFilteredHistories.forEach((history) => {
       const task = state.tasks.householdTasks.find(
@@ -238,7 +233,6 @@ export const createHouseholdTaskHistory = createAsyncThunk<
   { rejectValue: string; state: AppState }
 >("tasks/createHouseholdTaskHistory", async (task, thunkApi) => {
   try {
-    //TODO if household is valid
     const state = thunkApi.getState();
     const db = getDatabase(app);
     const reference = ref(db, "app/taskHistories");
@@ -255,7 +249,6 @@ export const createHouseholdTaskHistory = createAsyncThunk<
 
     return newT;
   } catch (error) {
-    //TODO look at davids firebase error thingi
     return thunkApi.rejectWithValue("Could not connect to server");
   }
 });
@@ -266,7 +259,6 @@ export const createHouseholdTask = createAsyncThunk<
   { rejectValue: string; state: AppState }
 >("tasks/createHouseholdTask", async (task, thunkApi) => {
   try {
-    //TODO if household is valid
     const state = thunkApi.getState();
     const findHouseHold = state.profiles.activeProfile!.householdId;
     const db = getDatabase(app);
@@ -287,7 +279,6 @@ export const createHouseholdTask = createAsyncThunk<
 
     return newT;
   } catch (error) {
-    //TODO look at davids firebase error thingi
     return thunkApi.rejectWithValue("Could not connect to server");
   }
 });
@@ -306,10 +297,8 @@ export const updateTask = createAsyncThunk<
     }
 
     const db = getDatabase(app);
-
     await set(ref(db, "app/tasks/" + task.id), task);
 
-    //TODO look for error?
     return task;
   } catch (error) {
     console.error(error);
@@ -334,13 +323,8 @@ export const deleteTask = createAsyncThunk<
         "Must be valid Profile + Household combination"
       );
     }
-    //profile.id = uid todo.
-
     const db = getDatabase(app);
-
     await set(ref(db, "app/tasks/" + task.id), null);
-
-    //TODO look for error?
     return task;
   } catch (error) {
     console.error(error);
@@ -367,7 +351,6 @@ export const getUserTasks = createAsyncThunk<
     }
 
     const db = getDatabase(app);
-
     const reference = ref(db, "app/tasks");
     const queryResult = query(reference);
     const snapshot = await get(queryResult);
@@ -375,8 +358,6 @@ export const getUserTasks = createAsyncThunk<
     if (snapshot.exists()) {
       return snapshot.val();
     }
-
-    // mby dosent work
     throw "Snapshot does not exists";
   } catch (error) {
     console.error(error);
@@ -504,6 +485,7 @@ function selectFilteredHistoryFromPeriodString(
   if (period !== "All Time") {
     let daysToCutEnd = 0;
     let daysToCutStart: number = -1;
+
     switch (period) {
       case "Current Week": {
         daysToCutEnd = 7;
@@ -518,19 +500,17 @@ function selectFilteredHistoryFromPeriodString(
       case "Previous Week": {
         daysToCutEnd = 14;
         daysToCutStart = 7;
-
         break;
       }
     }
 
     let timeStamp = Date.now() - daysToCutEnd * 24 * 60 * 60 * 1000;
     let index = allHistories.findIndex((p) => p.date <= timeStamp);
-
     let allFilteredHistories = allOrderdHistories;
+
     if (index !== -1) {
       allFilteredHistories = allOrderdHistories.slice(0, index);
     }
-
     // techniclly dont need the if statement, but prob slightly better optimized.
     if (daysToCutStart !== -1) {
       timeStamp = Date.now() - daysToCutStart * 24 * 60 * 60 * 1000;
@@ -543,9 +523,7 @@ function selectFilteredHistoryFromPeriodString(
         allFilteredHistories = [];
       }
     }
-
     return allFilteredHistories;
   }
-
   return allOrderdHistories;
 }

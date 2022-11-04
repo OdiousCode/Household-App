@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { profileReducer } from "./slices/profileSlice";
 import { userReducer } from "./slices/userSlice";
-// import { profileReducer } from "./bankSlice";
 import { householdReducer } from "./slices/householdSlice";
 import { taskReducer } from "./slices/taskSlice";
 

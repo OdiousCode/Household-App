@@ -6,11 +6,7 @@ import {
   signInWithEmailAndPassword,
   User as FirebaseUser,
 } from "firebase/auth";
-import { getDatabase, push, ref, set } from "firebase/database";
-import { useTheme } from "react-native-paper";
-import { Profile } from "../../data/APItypes";
 import { app, auth } from "../../data/firebase/config";
-import { getUserProfiles } from "./profileSlice";
 
 type User = Omit<
   FirebaseUser,
@@ -22,14 +18,7 @@ interface UserState {
   isLoading: boolean;
   errorMessage: string;
 }
-
-// const initialState: UserState = {
-//   user: undefined,
-//   isLoading: false,
-//   errorMessage: "",
-// };
 const initialState: UserState = {
- //user: { uid: auth.currentUser?.uid, email: auth.currentUser?.email } as User,
   isLoading: false,
   errorMessage: "",
 };
@@ -126,9 +115,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logOut,logIn } = userSlice.actions;
-// export const selectUser = (state: UserState) => {
-//   return state.user;
-// };
-
+export const { logOut, logIn } = userSlice.actions;
 export const userReducer = userSlice.reducer;
