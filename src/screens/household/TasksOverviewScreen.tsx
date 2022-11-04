@@ -419,7 +419,7 @@ export default function TaskOverviewScreen({
                 },
               },
               {
-                text: "done?",
+                text: "Done?",
                 onPress: async () => {
                   Alert.alert(task.name + '" completed');
                   let r = await dispatch(createHouseholdTaskHistory(task));
